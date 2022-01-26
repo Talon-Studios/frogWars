@@ -15,7 +15,7 @@ const config = {
         y: 1500
       },
       enableBody: true,
-      // debug: true
+      debug: true
     }
   },
   scene: {
@@ -24,3 +24,4 @@ const config = {
     update
   }
 };
+const phaserGame = new Phaser.Game(config);
