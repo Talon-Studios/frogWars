@@ -31,6 +31,9 @@ function create() {
     sprite.on("pointerout", () => {
       sprite.setTexture(sprite.textureKey);
     });
+    sprite.on("pointerdown", () => {
+      console.log(sprite.x, sprite.y);
+    });
   });
 }
 function update() {
