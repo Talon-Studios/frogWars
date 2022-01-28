@@ -19,7 +19,7 @@ function create() {
   let count = 0;
   const TILESIZE = 64;
   for (var x = TILESIZE / 2; x < game.width * TILESIZE; x += TILESIZE) {
-    for (var y = TILESIZE / 2; y < 5 * game.height; y += TILESIZE) {
+    for (var y = TILESIZE / 2; y < game.height * TILESIZE; y += TILESIZE) {
       if (count % 2 == 0) {
         let tile = game.tiles.create(x, y, "tile0").setScale(8).setInteractive();
         tile.textureKey = "tile0";
