@@ -5,6 +5,7 @@ function preload() {
   this.load.image("tile1", "assets/tile1.png");
   this.load.image("tile0select", "assets/tile0select.png");
   this.load.image("tile1select", "assets/tile1select.png");
+  this.load.image("frog", "assets/frog.png");
 }
 function create() {
   // Create tiles
@@ -23,16 +24,19 @@ function create() {
     }
   }
 
+  // Create group of frogs
+  game.frogs = this.physics.add.staticGroup();
+
   // All of the interaction
-  game.tiles.getChildren().forEach(sprite => {
-    sprite.on("pointerover", () => {
-      sprite.setTexture(sprite.textureKey + "select");
+  game.tiles.getChildren().forEach(tile => {
+    tile.on("pointerover", () => {
+      tile.setTexture(tile.textureKey + "select");
     });
-    sprite.on("pointerout", () => {
-      sprite.setTexture(sprite.textureKey);
+    tile.on("pointerout", () => {
+      tile.setTexture(tile.textureKey);
     });
-    sprite.on("pointerdown", () => {
-      console.log(sprite.x, sprite.y);
+    tile.on("pointerdown", () => {
+      game.frogs.create(tile.x, tile.y, "frog").setScale(8);
     });
   });
 }
