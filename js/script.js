@@ -1,5 +1,8 @@
 // Frog Wars
-let game = {};
+let game = {
+  width: 10,
+  height: 8
+};
 function preload() {
   this.load.image("tile0", "assets/tile0.png");
   this.load.image("tile1", "assets/tile1.png");
@@ -14,8 +17,9 @@ function create() {
   // Create tiles
   game.tiles = this.physics.add.staticGroup();
   let count = 0;
-  for (var x = 64 / 2; x < 5 * 64; x += 64) {
-    for (var y = 64 / 2; y < 5 * 64; y += 64) {
+  const TILESIZE = 64;
+  for (var x = TILESIZE / 2; x < game.width * TILESIZE; x += TILESIZE) {
+    for (var y = TILESIZE / 2; y < 5 * game.height; y += TILESIZE) {
       if (count % 2 == 0) {
         let tile = game.tiles.create(x, y, "tile0").setScale(8).setInteractive();
         tile.textureKey = "tile0";
