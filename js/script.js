@@ -1,7 +1,7 @@
 // Frog Wars
 let game = {
-  width: 10,
-  height: 8
+  width: 17,
+  height: 9
 };
 function preload() {
   this.load.image("tile0", "assets/tile0.png");
