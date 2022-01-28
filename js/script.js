@@ -5,7 +5,10 @@ function preload() {
   this.load.image("tile1", "assets/tile1.png");
   this.load.image("tile0select", "assets/tile0select.png");
   this.load.image("tile1select", "assets/tile1select.png");
-  this.load.image("frog", "assets/frog.png");
+  this.load.image("basicFrog0", "assets/basicFrog0.png");
+  this.load.image("basicFrog1", "assets/basicFrog1.png");
+  this.load.image("basicFrog2", "assets/basicFrog2.png");
+  this.load.image("basicFrog3", "assets/basicFrog3.png");
 }
 function create() {
   // Create tiles
@@ -36,9 +39,14 @@ function create() {
       tile.setTexture(tile.textureKey);
     });
     tile.on("pointerdown", () => {
-      game.frogs.create(tile.x, tile.y, "frog").setScale(8);
+      game.frogs.create(tile.x, tile.y, "basicFrog0").setScale(8);
     });
   });
+  setInterval(function () {
+    game.frogs.getChildren().forEach(frog => {
+      frog.x += game.tiles.getChildren()[0].width * 8;
+    });
+  }, 1000);
 }
 function update() {
 
