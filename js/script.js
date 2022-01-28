@@ -32,10 +32,7 @@ function create() {
 
   // Animation
   this.anims.create({
-    // Animation key
     key: "jump",
-
-    // Frames
     frames: [{
       key: "basicFrog0"
     }, {
@@ -45,10 +42,8 @@ function create() {
     }, {
       key: "basicFrog0"
     }],
-
-    // Options
     frameRate: 15,
-    repeat: 1
+    repeat: 0
   });
 
   // All of the interaction
@@ -65,8 +60,10 @@ function create() {
   });
   setInterval(function () {
     game.frogs.getChildren().forEach(frog => {
-      frog.x += game.tiles.getChildren()[0].width * 8;
-      frog.anims.play("jump", false);
+      frog.anims.play("jump", true);
+      setTimeout(function () {
+        frog.x += game.tiles.getChildren()[0].width * 8;
+      }, 50);
     });
   }, 1000);
 }
