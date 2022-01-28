@@ -59,7 +59,9 @@ function create() {
       tile.setTexture(tile.textureKey);
     });
     tile.on("pointerdown", () => {
-      game.frogs.create(tile.x, tile.y, "basicFrog0").setScale(8);
+      let frog = game.frogs.create(tile.x, tile.y, "basicFrog0").setScale(8);
+      tile.hasFrog = true;
+      tile.frog = frog;
     });
   });
   setInterval(function () {
