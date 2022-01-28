@@ -30,6 +30,27 @@ function create() {
   // Create group of frogs
   game.frogs = this.physics.add.staticGroup();
 
+  // Animation
+  this.anims.create({
+    // Animation key
+    key: "jump",
+
+    // Frames
+    frames: [{
+      key: "basicFrog0"
+    }, {
+      key: "basicFrog1"
+    }, {
+      key: "basicFrog2"
+    }, {
+      key: "basicFrog0"
+    }],
+
+    // Options
+    frameRate: 15,
+    repeat: 1
+  });
+
   // All of the interaction
   game.tiles.getChildren().forEach(tile => {
     tile.on("pointerover", () => {
@@ -45,6 +66,7 @@ function create() {
   setInterval(function () {
     game.frogs.getChildren().forEach(frog => {
       frog.x += game.tiles.getChildren()[0].width * 8;
+      frog.anims.play("jump", false);
     });
   }, 1000);
 }
