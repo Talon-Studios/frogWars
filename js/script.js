@@ -9,6 +9,8 @@ function preload() {
   this.load.image("basicFrog1", "assets/basicFrog1.png");
   this.load.image("basicFrog2", "assets/basicFrog2.png");
   this.load.image("basicFrog3", "assets/basicFrog3.png");
+  this.load.image("basicRobot0", "assets/basicRobot0.png");
+  this.load.image("basicRobot1", "assets/basicRobot1.png");
 }
 function create() {
   // Create tiles
