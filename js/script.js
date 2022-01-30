@@ -1,7 +1,8 @@
 // Frog Wars
 let game = {
   width: 17,
-  height: 9
+  height: 9,
+  TILESIZE: 64
 };
 function preload() {
   this.load.image("tile0", "assets/tile0.png");
@@ -19,9 +20,8 @@ function create() {
   // Create tiles
   game.tiles = this.physics.add.staticGroup();
   let count = 0;
-  const TILESIZE = 64;
-  for (var x = TILESIZE / 2; x < game.width * TILESIZE; x += TILESIZE) {
-    for (var y = TILESIZE / 2; y < game.height * TILESIZE; y += TILESIZE) {
+  for (var x = game.TILESIZE / 2; x < game.width * game.TILESIZE; x += game.TILESIZE) {
+    for (var y = game.TILESIZE / 2; y < game.height * game.TILESIZE; y += game.TILESIZE) {
       if (count % 2 == 0) {
         let tile = game.tiles.create(x, y, "tile0").setScale(8).setInteractive();
         tile.textureKey = "tile0";
@@ -33,8 +33,11 @@ function create() {
     }
   }
 
+  // Create robots
+  game.robots = this.physics.add.group();
+
   // Create group of frogs
-  game.frogs = this.physics.add.staticGroup();
+  game.frogs = this.physics.add.group();
 
   // Animation
   this.anims.create({
@@ -61,11 +64,18 @@ function create() {
       tile.setTexture(tile.textureKey);
     });
     tile.on("pointerdown", () => {
-      let frog = game.frogs.create(tile.x, tile.y, "basicFrog0").setScale(8);
+      let frog = game.frogs.create(tile.x, tile.y, "basicFrog0").setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0);
       tile.hasFrog = true;
       tile.frog = frog;
     });
   });
+
+  // Colliders
+  this.physics.add.overlap(game.frogs, game.robots, (frog, robot) => {
+    frog.destroy();
+    robot.destroy();
+  });
+
   setInterval(function () {
     game.frogs.getChildren().forEach(frog => {
       frog.anims.play("jump", true);
@@ -74,7 +84,14 @@ function create() {
       }, 50);
     });
   }, 1000);
+  setInterval(function () {
+    row = Math.floor(Math.random() * game.height);
+    game.robots.create(game.width * game.TILESIZE, game.TILESIZE / 2 + game.TILESIZE * row, "basicRobot0").setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0);
+  }, 500);
+
 }
 function update() {
-
+  game.robots.getChildren().forEach(robot => {
+    robot.x -= 0.2;
+  });
 }
