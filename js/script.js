@@ -2,7 +2,11 @@
 let game = {
   width: 17,
   height: 9,
-  TILESIZE: 64
+  TILESIZE: 64,
+  currencies: {
+    flies: 0,
+    lilyPads: 0
+  }
 };
 function preload() {
   this.load.image("tile0", "assets/tile0.png");
