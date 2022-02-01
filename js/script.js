@@ -58,6 +58,16 @@ function create() {
     frameRate: 10,
     repeat: 0
   });
+  this.anims.create({
+    key: "robotWalk",
+    frames: [{
+      key: "basicRobot0"
+    }, {
+      key: "basicRobot1"
+    }],
+    frameRate: 5,
+    repeat: -1
+  });
 
   // All of the interaction
   game.tiles.getChildren().forEach(tile => {
@@ -107,6 +117,7 @@ function create() {
 function update() {
   game.robots.getChildren().forEach(robot => {
     robot.x -= 0.2;
+    robot.anims.play("robotWalk", true);
   });
   game.tiles.getChildren().forEach(tile => {
     let hasFrog = null;
