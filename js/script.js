@@ -104,4 +104,13 @@ function update() {
   game.robots.getChildren().forEach(robot => {
     robot.x -= 0.2;
   });
+  game.tiles.getChildren().forEach(tile => {
+    let hasFrog = null;
+    game.frogs.getChildren().forEach(frog => {
+      if (frog.x == tile.x && frog.y == tile.y) {
+        hasFrog = frog;
+      }
+    });
+    tile.frog = hasFrog;
+  });
 }
