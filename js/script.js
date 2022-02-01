@@ -97,7 +97,7 @@ function create() {
   setInterval(function () {
     row = Math.floor(Math.random() * game.height);
     game.robots.create(game.width * game.TILESIZE, game.TILESIZE / 2 + game.TILESIZE * row, "basicRobot0").setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0);
-  }, 500);
+  }, Math.random() * (15000 - 500) + 500);
 
 }
 function update() {
