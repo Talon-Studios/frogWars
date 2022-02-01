@@ -64,9 +64,10 @@ function create() {
       tile.setTexture(tile.textureKey);
     });
     tile.on("pointerdown", () => {
-      let frog = game.frogs.create(tile.x, tile.y, "basicFrog0").setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0);
-      tile.hasFrog = true;
-      tile.frog = frog;
+      if (!tile.frog) {
+        let frog = game.frogs.create(tile.x, tile.y, "basicFrog0").setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0);
+        tile.frog = frog;
+      }
     });
   });
 
@@ -77,6 +78,15 @@ function create() {
   });
 
   setInterval(function () {
+    game.tiles.getChildren().forEach(tile => {
+      let hasFrog = null;
+      game.frogs.getChildren().forEach(frog => {
+        if (frog.x == tile.x && frog.y == tile.y) {
+          hasFrog = frog;
+        }
+      });
+      tile.frog = hasFrog;
+    });
     game.frogs.getChildren().forEach(frog => {
       frog.anims.play("jump", true);
       setTimeout(function () {
@@ -93,5 +103,14 @@ function create() {
 function update() {
   game.robots.getChildren().forEach(robot => {
     robot.x -= 0.2;
+  });
+  game.tiles.getChildren().forEach(tile => {
+    let hasFrog = null;
+    game.frogs.getChildren().forEach(frog => {
+      if (frog.x == tile.x && frog.y == tile.y) {
+        hasFrog = frog;
+      }
+    });
+    tile.frog = hasFrog;
   });
 }
