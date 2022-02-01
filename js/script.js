@@ -113,4 +113,9 @@ function update() {
     });
     tile.frog = hasFrog;
   });
+  game.frogs.getChildren().forEach(frog => {
+    if (frog.x > game.width * game.TILESIZE) {
+      frog.destroy();
+    }
+  });
 }
