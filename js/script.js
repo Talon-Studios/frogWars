@@ -78,12 +78,6 @@ function create() {
   });
 
   setInterval(function () {
-    game.frogs.getChildren().forEach(frog => {
-      frog.anims.play("jump", true);
-      setTimeout(function () {
-        frog.x += game.tiles.getChildren()[0].width * 8;
-      }, 50);
-    });
     game.tiles.getChildren().forEach(tile => {
       let hasFrog = null;
       game.frogs.getChildren().forEach(frog => {
@@ -92,6 +86,12 @@ function create() {
         }
       });
       tile.frog = hasFrog;
+    });
+    game.frogs.getChildren().forEach(frog => {
+      frog.anims.play("jump", true);
+      setTimeout(function () {
+        frog.x += game.tiles.getChildren()[0].width * 8;
+      }, 50);
     });
   }, 1000);
   setInterval(function () {
