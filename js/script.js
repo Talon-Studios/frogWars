@@ -51,7 +51,7 @@ function create() {
     }, {
       key: "basicFrog0"
     }],
-    frameRate: 15,
+    frameRate: 20,
     repeat: 0
   });
 
