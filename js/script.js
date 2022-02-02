@@ -5,6 +5,10 @@ let game = {
   TILESIZE: 64,
   robots: {
     speed: 0.2
+  },
+  currencies: {
+    flies: 0,
+    lilyPads: 0
   }
 };
 function preload() {
@@ -54,8 +58,18 @@ function create() {
     }, {
       key: "basicFrog0"
     }],
-    frameRate: 15,
+    frameRate: 10,
     repeat: 0
+  });
+  this.anims.create({
+    key: "robotWalk",
+    frames: [{
+      key: "basicRobot0"
+    }, {
+      key: "basicRobot1"
+    }],
+    frameRate: 5,
+    repeat: -1
   });
 
   // All of the interaction
@@ -67,9 +81,10 @@ function create() {
       tile.setTexture(tile.textureKey);
     });
     tile.on("pointerdown", () => {
-      let frog = game.frogs.create(tile.x, tile.y, "basicFrog0").setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0);
-      tile.hasFrog = true;
-      tile.frog = frog;
+      if (!tile.frog) {
+        let frog = game.frogs.create(tile.x, tile.y, "basicFrog0").setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0);
+        tile.frog = frog;
+      }
     });
   });
 
@@ -80,6 +95,15 @@ function create() {
   });
 
   setInterval(function () {
+    game.tiles.getChildren().forEach(tile => {
+      let hasFrog = null;
+      game.frogs.getChildren().forEach(frog => {
+        if (frog.x == tile.x && frog.y == tile.y) {
+          hasFrog = frog;
+        }
+      });
+      tile.frog = hasFrog;
+    });
     game.frogs.getChildren().forEach(frog => {
       frog.anims.play("jump", true);
       setTimeout(function () {
@@ -90,11 +114,30 @@ function create() {
   setInterval(function () {
     row = Math.floor(Math.random() * game.height);
     game.robots.create(game.width * game.TILESIZE, game.TILESIZE / 2 + game.TILESIZE * row, "basicRobot0").setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0);
-  }, 500);
+  }, Math.random() * (15000 - 500) + 500);
 
 }
 function update() {
   game.robots.getChildren().forEach(robot => {
+<<<<<<< HEAD
     robot.x -= game.robots.speed;
+=======
+    robot.x -= 0.2;
+    robot.anims.play("robotWalk", true);
+  });
+  game.tiles.getChildren().forEach(tile => {
+    let hasFrog = null;
+    game.frogs.getChildren().forEach(frog => {
+      if (frog.x == tile.x && frog.y == tile.y) {
+        hasFrog = frog;
+      }
+    });
+    tile.frog = hasFrog;
+  });
+  game.frogs.getChildren().forEach(frog => {
+    if (frog.x > game.width * game.TILESIZE) {
+      frog.destroy();
+    }
+>>>>>>> f37ce1b0acec326ef3c6ab1608af1f2215d4c406
   });
 }
