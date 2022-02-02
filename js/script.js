@@ -3,7 +3,7 @@ let game = {
   width: 17,
   height: 9,
   TILESIZE: 64,
-  robots: {
+  robot: {
     speed: 0.2
   },
   currencies: {
@@ -115,11 +115,10 @@ function create() {
     row = Math.floor(Math.random() * game.height);
     game.robots.create(game.width * game.TILESIZE, game.TILESIZE / 2 + game.TILESIZE * row, "basicRobot0").setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0);
   }, Math.random() * (15000 - 500) + 500);
-
 }
 function update() {
   game.robots.getChildren().forEach(robot => {
-    robot.x -= game.robots.speed;
+    robot.x -= game.robot.speed;
     robot.anims.play("robotWalk", true);
   });
   game.tiles.getChildren().forEach(tile => {
