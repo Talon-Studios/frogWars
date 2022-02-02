@@ -2,7 +2,10 @@
 let game = {
   width: 17,
   height: 9,
-  TILESIZE: 64
+  TILESIZE: 64,
+  robots: {
+    speed: 0.2
+  }
 };
 function preload() {
   this.load.image("tile0", "assets/tile0.png");
@@ -92,6 +95,6 @@ function create() {
 }
 function update() {
   game.robots.getChildren().forEach(robot => {
-    robot.x -= 0.2;
+    robot.x -= game.robots.speed;
   });
 }
