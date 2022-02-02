@@ -119,10 +119,7 @@ function create() {
 }
 function update() {
   game.robots.getChildren().forEach(robot => {
-<<<<<<< HEAD
     robot.x -= game.robots.speed;
-=======
-    robot.x -= 0.2;
     robot.anims.play("robotWalk", true);
   });
   game.tiles.getChildren().forEach(tile => {
@@ -138,6 +135,5 @@ function update() {
     if (frog.x > game.width * game.TILESIZE) {
       frog.destroy();
     }
->>>>>>> f37ce1b0acec326ef3c6ab1608af1f2215d4c406
   });
 }
