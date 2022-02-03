@@ -73,6 +73,17 @@ function create() {
     frameRate: 5,
     repeat: -1
   });
+  this.anims.create({
+    key: "shootCannonball",
+    frames: [{
+      key: "cannonFrog0"
+    }, {
+      key: "cannonFrog1"
+    }],
+    frameRate: 5,
+    repeat: 0,
+    yoyo: true
+  });
 
   // All of the interaction
   game.tiles.getChildren().forEach(tile => {
@@ -123,7 +134,10 @@ function create() {
           }, 50);
           break;
         case "cannon":
-          game.cannonballs.create(frog.x, frog.y, "cannonball").setScale(8).setGravityY(-1500).setVelocityX(500);
+          frog.anims.play("shootCannonball", true);
+          setTimeout(function () {
+            game.cannonballs.create(frog.x, frog.y, "cannonball").setScale(8).setGravityY(-1500).setVelocityX(500);
+          }, 200);
           break;
       }
     });
