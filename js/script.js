@@ -5,7 +5,7 @@ let game = {
   TILESIZE: 64,
   topMargin: 170,
   robot: {
-    speed: 0.2,
+    speed: 0.6,
     health: 2
   },
   currencies: {
@@ -159,7 +159,7 @@ function create() {
         case "cannon":
           frog.anims.play("shootCannonball", true);
           setTimeout(function () {
-            game.cannonballs.create(frog.x, frog.y, "cannonball").setScale(8).setGravityY(-1500).setVelocityX(500);
+            game.cannonballs.create(frog.x, frog.y, "cannonball").setScale(8).setGravityY(-1500).setVelocityX(300);
           }, 200);
           break;
       }
@@ -169,7 +169,7 @@ function create() {
     let row = Math.floor(Math.random() * game.height);
     let robot = game.robots.create(game.width * game.TILESIZE, (game.TILESIZE / 2 + game.TILESIZE * row) + game.topMargin, "basicRobot0").setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0).setImmovable();
     robot.health = game.robot.health;
-  }, Math.random() * (10000 - 100) + 100);
+  }, Math.random() * (3000 - 1000) + 1000);
 }
 function update() {
   game.robots.getChildren().forEach(robot => {
