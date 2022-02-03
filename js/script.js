@@ -24,7 +24,7 @@ function preload() {
   this.load.image("basicRobot1", "assets/basicRobot1.png");
   this.load.image("cannonFrog0", "assets/cannonFrog0.png");
   this.load.image("cannonFrog1", "assets/cannonFrog1.png");
-  this.load.image("cannonBall", "assets/cannonBall.png");
+  this.load.image("cannonball", "assets/cannonball.png");
 }
 function create() {
   // Create tiles
@@ -43,11 +43,10 @@ function create() {
     }
   }
 
-  // Create robots
-  game.robots = this.physics.add.group();
-
-  // Create group of frogs
+  // Create groups
   game.frogs = this.physics.add.group();
+  game.robots = this.physics.add.group();
+  game.cannonballs = this.physics.add.group();
 
   // Animation
   this.anims.create({
@@ -112,14 +111,19 @@ function create() {
       tile.frog = hasFrog;
     });
     game.frogs.getChildren().forEach(frog => {
-      if (frog.type === "basic") {
-        frog.anims.play("jump", true);
-        setTimeout(function () {
-          frog.x += game.tiles.getChildren()[0].width * 8;
-        }, 50);
+      switch (frog.type) {
+        case "basic":
+          frog.anims.play("jump", true);
+          setTimeout(function () {
+            frog.x += game.tiles.getChildren()[0].width * 8;
+          }, 50);
+          break;
+        case "cannon":
+          game.cannonballs.create(frog.x, frog.y, "cannonball").setScale(8).setGravityY(-1500).setVelocityX(500);
+          break;
       }
     });
-  }, 1000);
+  }, 1500);
   setInterval(function () {
     row = Math.floor(Math.random() * game.height);
     game.robots.create(game.width * game.TILESIZE, game.TILESIZE / 2 + game.TILESIZE * row, "basicRobot0").setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0);
