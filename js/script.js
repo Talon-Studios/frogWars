@@ -99,6 +99,10 @@ function create() {
       robot.destroy();
     }
   });
+  this.physics.add.collider(game.cannonballs, game.robots, (cannonball, robot) => {
+    cannonball.destroy();
+    robot.destroy();
+  });
 
   setInterval(function () {
     game.tiles.getChildren().forEach(tile => {
@@ -127,7 +131,7 @@ function create() {
   setInterval(function () {
     row = Math.floor(Math.random() * game.height);
     game.robots.create(game.width * game.TILESIZE, game.TILESIZE / 2 + game.TILESIZE * row, "basicRobot0").setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0);
-  }, Math.random() * (15000 - 500) + 500);
+  }, 100);
 }
 function update() {
   game.robots.getChildren().forEach(robot => {
