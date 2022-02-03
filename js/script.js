@@ -5,7 +5,8 @@ let game = {
   TILESIZE: 64,
   topMargin: 170,
   robot: {
-    speed: 0.2
+    speed: 0.2,
+    health: 2
   },
   currencies: {
     flies: 0,
@@ -98,9 +99,9 @@ function create() {
     tile.on("pointerdown", (pointer) => {
       if (!tile.frog) {
         if (pointer.rightButtonDown()) {
-          var type = "cannon";
-        } else {
           var type = "basic";
+        } else {
+          var type = "cannon";
         }
         let frog = game.frogs.create(tile.x, tile.y, `${type}Frog0`).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0);
         frog.type = type;
@@ -113,12 +114,28 @@ function create() {
   this.physics.add.overlap(game.frogs, game.robots, (frog, robot) => {
     if (frog.type === "basic") {
       frog.destroy();
-      robot.destroy();
+      let lastFrame = robot.texture.key;
+      robot.setTexture("hurtRobot");
+      setTimeout(function () {
+        robot.setTexture(lastFrame);
+      }, 500);
+      robot.health--;
+      if (robot.health <= 0) {
+        robot.destroy();
+      }
     }
   });
   this.physics.add.collider(game.cannonballs, game.robots, (cannonball, robot) => {
     cannonball.destroy();
-    robot.destroy();
+    let lastFrame = robot.texture.key;
+    robot.setTexture("hurtRobot");
+    setTimeout(function () {
+      robot.setTexture(lastFrame);
+    }, 500);
+    robot.health--;
+    if (robot.health <= 0) {
+      robot.destroy();
+    }
   });
 
   setInterval(function () {
@@ -150,8 +167,9 @@ function create() {
   }, 1500);
   setInterval(function () {
     let row = Math.floor(Math.random() * game.height);
-    game.robots.create(game.width * game.TILESIZE, (game.TILESIZE / 2 + game.TILESIZE * row) + game.topMargin, "basicRobot0").setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0);
-  }, Math.random() * (10000 - 500) + 500);
+    let robot = game.robots.create(game.width * game.TILESIZE, (game.TILESIZE / 2 + game.TILESIZE * row) + game.topMargin, "basicRobot0").setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0).setImmovable();
+    robot.health = game.robot.health;
+  }, Math.random() * (10000 - 100) + 100);
 }
 function update() {
   game.robots.getChildren().forEach(robot => {
