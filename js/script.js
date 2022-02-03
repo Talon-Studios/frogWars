@@ -84,7 +84,9 @@ function create() {
     });
     tile.on("pointerdown", () => {
       if (!tile.frog) {
-        let frog = game.frogs.create(tile.x, tile.y, "basicFrog0").setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0);
+        let type = "cannon";
+        let frog = game.frogs.create(tile.x, tile.y, `${type}Frog0`).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0);
+        frog.type = type;
         tile.frog = frog;
       }
     });
@@ -92,8 +94,10 @@ function create() {
 
   // Colliders
   this.physics.add.overlap(game.frogs, game.robots, (frog, robot) => {
-    frog.destroy();
-    robot.destroy();
+    if (frog.type === "basic") {
+      frog.destroy();
+      robot.destroy();
+    }
   });
 
   setInterval(function () {
@@ -107,10 +111,12 @@ function create() {
       tile.frog = hasFrog;
     });
     game.frogs.getChildren().forEach(frog => {
-      frog.anims.play("jump", true);
-      setTimeout(function () {
-        frog.x += game.tiles.getChildren()[0].width * 8;
-      }, 50);
+      if (frog.type === "basic") {
+        frog.anims.play("jump", true);
+        setTimeout(function () {
+          frog.x += game.tiles.getChildren()[0].width * 8;
+        }, 50);
+      }
     });
   }, 1000);
   setInterval(function () {
