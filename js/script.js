@@ -1,8 +1,9 @@
 // Frog Wars
 let game = {
   width: 17,
-  height: 9,
+  height: 7,
   TILESIZE: 64,
+  topMargin: 170,
   robot: {
     speed: 0.2
   },
@@ -31,7 +32,7 @@ function create() {
   game.tiles = this.physics.add.staticGroup();
   let count = 0;
   for (var x = game.TILESIZE / 2; x < game.width * game.TILESIZE; x += game.TILESIZE) {
-    for (var y = game.TILESIZE / 2; y < game.height * game.TILESIZE; y += game.TILESIZE) {
+    for (var y = (game.TILESIZE / 2) + game.topMargin; y < (game.height * game.TILESIZE) + game.topMargin; y += game.TILESIZE) {
       if (count % 2 == 0) {
         let tile = game.tiles.create(x, y, "tile0").setScale(8).setInteractive();
         tile.textureKey = "tile0";
@@ -143,9 +144,9 @@ function create() {
     });
   }, 1500);
   setInterval(function () {
-    row = Math.floor(Math.random() * game.height);
-    game.robots.create(game.width * game.TILESIZE, game.TILESIZE / 2 + game.TILESIZE * row, "basicRobot0").setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0);
-  }, 100);
+    let row = Math.floor(Math.random() * game.height);
+    game.robots.create(game.width * game.TILESIZE, (game.TILESIZE / 2 + game.TILESIZE * row) + game.topMargin, "basicRobot0").setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0);
+  }, Math.random() * (10000 - 500) + 500);
 }
 function update() {
   game.robots.getChildren().forEach(robot => {
