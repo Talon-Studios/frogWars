@@ -94,9 +94,13 @@ function create() {
     tile.on("pointerout", () => {
       tile.setTexture(tile.textureKey);
     });
-    tile.on("pointerdown", () => {
+    tile.on("pointerdown", (pointer) => {
       if (!tile.frog) {
-        let type = "cannon";
+        if (pointer.rightButtonDown()) {
+          var type = "cannon";
+        } else {
+          var type = "basic";
+        }
         let frog = game.frogs.create(tile.x, tile.y, `${type}Frog0`).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0);
         frog.type = type;
         tile.frog = frog;
