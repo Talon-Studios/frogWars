@@ -6,7 +6,11 @@ let game = {
   topMargin: 167,
   robot: {
     speed: 0.6,
-    health: 2
+    health: 5
+  },
+  armoredRobot: {
+    speed: 0.6,
+    health: 10
   },
   currencies: {
     flies: 0,
@@ -69,11 +73,21 @@ function create() {
     repeat: 0
   });
   this.anims.create({
-    key: "robotWalk",
+    key: "basicRobotWalk",
     frames: [{
       key: "basicRobot0"
     }, {
       key: "basicRobot1"
+    }],
+    frameRate: 5,
+    repeat: -1
+  });
+  this.anims.create({
+    key: "armoredRobotWalk",
+    frames: [{
+      key: "armoredRobot0"
+    }, {
+      key: "armoredRobot1"
     }],
     frameRate: 5,
     repeat: -1
@@ -169,14 +183,32 @@ function create() {
   }, 1500);
   setInterval(function () {
     let row = Math.floor(Math.random() * game.height);
-    let robot = game.robots.create(game.width * game.TILESIZE, (game.TILESIZE / 2 + game.TILESIZE * row) + game.topMargin, "basicRobot0").setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0).setImmovable();
-    robot.health = game.robot.health;
+    let type = "";
+    let health;
+    let randomPercentage = Math.floor(Math.random() * 100);
+    if (randomPercentage < 50) {
+      type = "basic";
+      health = game.robot.health;
+    } else {
+      type = "armored";
+      health = game.armoredRobot.health;
+    }
+    let robot = game.robots.create(game.width * game.TILESIZE, (game.TILESIZE / 2 + game.TILESIZE * row) + game.topMargin, `${type}Robot0`).setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0).setImmovable();
+    robot.type = type;
+    robot.health = health;
   }, Math.random() * (3000 - 1000) + 1000);
 }
 function update() {
   game.robots.getChildren().forEach(robot => {
     robot.x -= game.robot.speed;
-    robot.anims.play("robotWalk", true);
+    switch (robot.type) {
+      case "basic":
+        robot.anims.play("basicRobotWalk", true);
+        break;
+      case "armored":
+        robot.anims.play("armoredRobotWalk", true);
+        break;
+    }
   });
   game.tiles.getChildren().forEach(tile => {
     let hasFrog = null;
