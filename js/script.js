@@ -28,6 +28,8 @@ function preload() {
   this.load.image("cannonFrog1", "assets/cannonFrog1.png");
   this.load.image("cannonball", "assets/cannonball.png");
   this.load.image("hurtRobot", "assets/hurtRobot.png");
+  this.load.image("armoredRobot0", "assets/armoredRobot0.png");
+  this.load.image("armoredRobot1", "assets/armoredRobot1.png");
 }
 function create() {
   // Create tiles
