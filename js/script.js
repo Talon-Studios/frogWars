@@ -31,7 +31,7 @@ function preload() {
   this.load.image("basicRobot1", "assets/basicRobot1.png");
   this.load.image("cannonFrog0", "assets/cannonFrog0.png");
   this.load.image("cannonFrog1", "assets/cannonFrog1.png");
-  this.load.image("cannonball", "assets/cannonball.png");
+  this.load.image("cannonball", "assets/cannonBall.png");
   this.load.image("hurtRobot", "assets/hurtRobot.png");
   this.load.image("armoredRobot0", "assets/armoredRobot0.png");
   this.load.image("armoredRobot1", "assets/armoredRobot1.png");
