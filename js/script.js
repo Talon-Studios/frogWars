@@ -15,7 +15,8 @@ let game = {
   currencies: {
     flies: 0,
     lilyPads: 0
-  }
+  },
+  currentSelection: "cannon"
 };
 function preload() {
   this.load.image("tile0", "assets/tile0.png");
@@ -50,6 +51,16 @@ function create() {
       }
       count++;
     }
+  }
+
+  // Create choices to put in game
+  game.choices = this.physics.add.staticGroup();
+  let frogCount = 0;
+  const frogs = ["basic", "cannon"];
+  for (var x = (game.TILESIZE / 2) + 50; x < (game.TILESIZE * 2) + 50; x += game.TILESIZE + 10) {
+    let choice = game.choices.create(x, game.TILESIZE, `${frogs[frogCount]}Frog0`).setScale(8).setInteractive();
+    choice.frogType = frogs[frogCount];
+    frogCount++;
   }
 
   // Create groups
@@ -114,15 +125,15 @@ function create() {
     });
     tile.on("pointerdown", (pointer) => {
       if (!tile.frog) {
-        if (pointer.rightButtonDown()) {
-          var type = "basic";
-        } else {
-          var type = "cannon";
-        }
-        let frog = game.frogs.create(tile.x, tile.y, `${type}Frog0`).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0);
-        frog.type = type;
+        let frog = game.frogs.create(tile.x, tile.y, `${game.currentSelection}Frog0`).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0);
+        frog.type = game.currentSelection;
         tile.frog = frog;
       }
+    });
+  });
+  game.choices.getChildren().forEach(choice => {
+    choice.on("pointerdown", () => {
+      game.currentSelection = choice.frogType;
     });
   });
 
