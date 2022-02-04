@@ -1,10 +1,12 @@
 // Frog Wars
 let game = {
   width: 17,
-  height: 9,
+  height: 7,
   TILESIZE: 64,
+  topMargin: 170,
   robot: {
-    speed: 0.2
+    speed: 0.6,
+    health: 2
   },
   currencies: {
     flies: 0,
@@ -22,13 +24,17 @@ function preload() {
   this.load.image("basicFrog3", "assets/basicFrog3.png");
   this.load.image("basicRobot0", "assets/basicRobot0.png");
   this.load.image("basicRobot1", "assets/basicRobot1.png");
+  this.load.image("cannonFrog0", "assets/cannonFrog0.png");
+  this.load.image("cannonFrog1", "assets/cannonFrog1.png");
+  this.load.image("cannonball", "assets/cannonball.png");
+  this.load.image("hurtRobot", "assets/hurtRobot.png");
 }
 function create() {
   // Create tiles
   game.tiles = this.physics.add.staticGroup();
   let count = 0;
   for (var x = game.TILESIZE / 2; x < game.width * game.TILESIZE; x += game.TILESIZE) {
-    for (var y = game.TILESIZE / 2; y < game.height * game.TILESIZE; y += game.TILESIZE) {
+    for (var y = (game.TILESIZE / 2) + game.topMargin; y < (game.height * game.TILESIZE) + game.topMargin; y += game.TILESIZE) {
       if (count % 2 == 0) {
         let tile = game.tiles.create(x, y, "tile0").setScale(8).setInteractive();
         tile.textureKey = "tile0";
@@ -40,11 +46,10 @@ function create() {
     }
   }
 
-  // Create robots
-  game.robots = this.physics.add.group();
-
-  // Create group of frogs
+  // Create groups
   game.frogs = this.physics.add.group();
+  game.robots = this.physics.add.group();
+  game.cannonballs = this.physics.add.group();
 
   // Animation
   this.anims.create({
@@ -71,6 +76,17 @@ function create() {
     frameRate: 5,
     repeat: -1
   });
+  this.anims.create({
+    key: "shootCannonball",
+    frames: [{
+      key: "cannonFrog0"
+    }, {
+      key: "cannonFrog1"
+    }],
+    frameRate: 5,
+    repeat: 0,
+    yoyo: true
+  });
 
   // All of the interaction
   game.tiles.getChildren().forEach(tile => {
@@ -80,9 +96,15 @@ function create() {
     tile.on("pointerout", () => {
       tile.setTexture(tile.textureKey);
     });
-    tile.on("pointerdown", () => {
+    tile.on("pointerdown", (pointer) => {
       if (!tile.frog) {
-        let frog = game.frogs.create(tile.x, tile.y, "basicFrog0").setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0);
+        if (pointer.rightButtonDown()) {
+          var type = "basic";
+        } else {
+          var type = "cannon";
+        }
+        let frog = game.frogs.create(tile.x, tile.y, `${type}Frog0`).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0);
+        frog.type = type;
         tile.frog = frog;
       }
     });
@@ -90,8 +112,30 @@ function create() {
 
   // Colliders
   this.physics.add.overlap(game.frogs, game.robots, (frog, robot) => {
-    frog.destroy();
-    robot.destroy();
+    if (frog.type === "basic") {
+      frog.destroy();
+      let lastFrame = robot.texture.key;
+      robot.setTexture("hurtRobot");
+      setTimeout(function () {
+        robot.setTexture(lastFrame);
+      }, 500);
+      robot.health--;
+      if (robot.health <= 0) {
+        robot.destroy();
+      }
+    }
+  });
+  this.physics.add.collider(game.cannonballs, game.robots, (cannonball, robot) => {
+    cannonball.destroy();
+    let lastFrame = robot.texture.key;
+    robot.setTexture("hurtRobot");
+    setTimeout(function () {
+      robot.setTexture(lastFrame);
+    }, 500);
+    robot.health--;
+    if (robot.health <= 0) {
+      robot.destroy();
+    }
   });
 
   setInterval(function () {
@@ -105,16 +149,27 @@ function create() {
       tile.frog = hasFrog;
     });
     game.frogs.getChildren().forEach(frog => {
-      frog.anims.play("jump", true);
-      setTimeout(function () {
-        frog.x += game.tiles.getChildren()[0].width * 8;
-      }, 50);
+      switch (frog.type) {
+        case "basic":
+          frog.anims.play("jump", true);
+          setTimeout(function () {
+            frog.x += game.tiles.getChildren()[0].width * 8;
+          }, 50);
+          break;
+        case "cannon":
+          frog.anims.play("shootCannonball", true);
+          setTimeout(function () {
+            game.cannonballs.create(frog.x, frog.y, "cannonball").setScale(8).setGravityY(-1500).setVelocityX(300);
+          }, 200);
+          break;
+      }
     });
-  }, 1000);
+  }, 1500);
   setInterval(function () {
-    row = Math.floor(Math.random() * game.height);
-    game.robots.create(game.width * game.TILESIZE, game.TILESIZE / 2 + game.TILESIZE * row, "basicRobot0").setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0);
-  }, Math.random() * (15000 - 500) + 500);
+    let row = Math.floor(Math.random() * game.height);
+    let robot = game.robots.create(game.width * game.TILESIZE, (game.TILESIZE / 2 + game.TILESIZE * row) + game.topMargin, "basicRobot0").setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0).setImmovable();
+    robot.health = game.robot.health;
+  }, Math.random() * (3000 - 1000) + 1000);
 }
 function update() {
   game.robots.getChildren().forEach(robot => {
