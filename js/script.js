@@ -3,7 +3,7 @@ let game = {
   width: 17,
   height: 7,
   TILESIZE: 64,
-  topMargin: 170,
+  topMargin: 167,
   robot: {
     speed: 0.6,
     health: 2
