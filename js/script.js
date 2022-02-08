@@ -162,7 +162,7 @@ function create() {
       setTimeout(function () {
         robot.setTexture(lastFrame);
       }, 500);
-      robot.health--;
+      robot.health -= 5;
       if (robot.health <= 0) {
         robot.destroy();
       }
