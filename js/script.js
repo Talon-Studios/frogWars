@@ -42,7 +42,7 @@ function preload() {
   this.load.image("speedRobot0", "assets/speedRobot0.png");
   this.load.image("speedRobot1", "assets/speedRobot1.png");
   this.load.image("hurtSpeedRobot", "assets/speedRobot2.png");
-  this.load.image("launcherFrog", "assets/launcherFrog.png");
+  this.load.image("launcherFrog0", "assets/launcherFrog.png");
 }
 function create() {
   // Create tiles
