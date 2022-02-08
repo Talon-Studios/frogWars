@@ -177,7 +177,11 @@ function create() {
   this.physics.add.collider(game.cannonballs, game.robots, (cannonball, robot) => {
     cannonball.destroy();
     let lastFrame = robot.texture.key;
-    robot.setTexture("hurtRobot");
+    if (robot.type === "basic" || robot.type === "armored") {
+      robot.setTexture("hurtRobot");
+    } else if (robot.type === "speed") {
+      robot.setTexture("hurtSpeedRobot");
+    }
     setTimeout(function () {
       robot.setTexture(lastFrame);
     }, 500);
