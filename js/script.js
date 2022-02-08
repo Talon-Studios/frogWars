@@ -14,7 +14,7 @@ let game = {
   },
   speedRobot: {
     speed: 1.2,
-    health: 2
+    health: 3
   },
   currencies: {
     flies: 0,
