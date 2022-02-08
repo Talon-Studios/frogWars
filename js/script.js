@@ -217,11 +217,11 @@ function create() {
       type = "basic";
       health = game.robot.health;
       speed = game.robot.speed;
-    } else if (randomPercentage > 50 && randomPercentage > 75) {
+    } else if (randomPercentage >= 50 && randomPercentage > 75) {
       type = "armored";
       health = game.armoredRobot.health;
       speed = game.armoredRobot.speed;
-    } else if (randomPercentage > 50 && randomPercentage < 75) {
+    } else if (randomPercentage >= 50 && randomPercentage <= 75) {
       type = "speed";
       health = game.speedRobot.health;
       speed = game.speedRobot.speed;
