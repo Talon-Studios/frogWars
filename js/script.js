@@ -42,6 +42,7 @@ function preload() {
   this.load.image("speedRobot0", "assets/speedRobot0.png");
   this.load.image("speedRobot1", "assets/speedRobot1.png");
   this.load.image("hurtSpeedRobot", "assets/speedRobot2.png");
+  this.load.image("launcherFrog", "assets/launcherFrog.png");
 }
 function create() {
   // Create tiles
@@ -63,7 +64,7 @@ function create() {
   // Create choices to put in game
   game.choices = this.physics.add.staticGroup();
   let frogCount = 0;
-  const frogs = ["basic", "cannon"];
+  const frogs = ["basic", "cannon", "launcher"];
   for (var x = (game.TILESIZE / 2) + 50; x < (game.TILESIZE * 2) + 50; x += game.TILESIZE + 10) {
     let choice = game.choices.create(x, game.TILESIZE, `${frogs[frogCount]}Frog0`).setScale(8).setInteractive();
     choice.frogType = frogs[frogCount];
