@@ -65,7 +65,7 @@ function create() {
   game.choices = this.physics.add.staticGroup();
   let frogCount = 0;
   const frogs = ["basic", "cannon", "launcher"];
-  for (var x = (game.TILESIZE / 2) + 50; x < (game.TILESIZE * 2) + 50; x += game.TILESIZE + 10) {
+  for (var x = (game.TILESIZE / 2) + 50; x < (game.TILESIZE * 3) + 50; x += game.TILESIZE + 10) {
     let choice = game.choices.create(x, game.TILESIZE, `${frogs[frogCount]}Frog0`).setScale(8).setInteractive();
     choice.frogType = frogs[frogCount];
     frogCount++;
