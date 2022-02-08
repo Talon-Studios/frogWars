@@ -41,6 +41,7 @@ function preload() {
   this.load.image("armoredRobot1", "assets/armoredRobot1.png");
   this.load.image("speedRobot0", "assets/speedRobot0.png");
   this.load.image("speedRobot1", "assets/speedRobot1.png");
+  this.load.image("hurtSpeedRobot", "assets/speedRobot2.png");
 }
 function create() {
   // Create tiles
@@ -158,7 +159,11 @@ function create() {
     if (frog.type === "basic") {
       frog.destroy();
       let lastFrame = robot.texture.key;
-      robot.setTexture("hurtRobot");
+      if (robot.type === "basic" || robot.type === "armored") {
+        robot.setTexture("hurtRobot");
+      } else if (robot.type === "speed") {
+        robot.setTexture("hurtSpeedRobot");
+      }
       setTimeout(function () {
         robot.setTexture(lastFrame);
       }, 500);
