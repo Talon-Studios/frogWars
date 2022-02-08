@@ -12,6 +12,10 @@ let game = {
     speed: 0.6,
     health: 10
   },
+  speedRobot: {
+    speed: 1.2,
+    health: 2
+  },
   currencies: {
     flies: 0,
     lilyPads: 0
@@ -35,6 +39,8 @@ function preload() {
   this.load.image("hurtRobot", "assets/hurtRobot.png");
   this.load.image("armoredRobot0", "assets/armoredRobot0.png");
   this.load.image("armoredRobot1", "assets/armoredRobot1.png");
+  this.load.image("speedRobot0", "assets/speedRobot0.png");
+  this.load.image("speedRobot1", "assets/speedRobot1.png");
 }
 function create() {
   // Create tiles
@@ -99,6 +105,16 @@ function create() {
       key: "armoredRobot0"
     }, {
       key: "armoredRobot1"
+    }],
+    frameRate: 5,
+    repeat: -1
+  });
+  this.anims.create({
+    key: "speedRobotWalk",
+    frames: [{
+      key: "speedRobot0"
+    }, {
+      key: "speedRobot1"
     }],
     frameRate: 5,
     repeat: -1
@@ -200,24 +216,34 @@ function create() {
     if (randomPercentage < 50) {
       type = "basic";
       health = game.robot.health;
-    } else {
+      speed = game.robot.speed;
+    } else if (randomPercentage > 50 && randomPercentage > 75) {
       type = "armored";
       health = game.armoredRobot.health;
+      speed = game.armoredRobot.speed;
+    } else if (randomPercentage > 50 && randomPercentage < 75) {
+      type = "speed";
+      health = game.speedRobot.health;
+      speed = game.speedRobot.speed;
     }
     let robot = game.robots.create(game.width * game.TILESIZE, (game.TILESIZE / 2 + game.TILESIZE * row) + game.topMargin, `${type}Robot0`).setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0).setImmovable();
     robot.type = type;
     robot.health = health;
+    robot.speed = speed;
   }, Math.random() * (3000 - 1000) + 1000);
 }
 function update() {
   game.robots.getChildren().forEach(robot => {
-    robot.x -= game.robot.speed;
+    robot.x -= robot.speed;
     switch (robot.type) {
       case "basic":
         robot.anims.play("basicRobotWalk", true);
         break;
       case "armored":
         robot.anims.play("armoredRobotWalk", true);
+        break;
+      case "speed":
+        robot.anims.play("speedRobotWalk", true);
         break;
     }
   });
