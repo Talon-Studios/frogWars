@@ -292,7 +292,7 @@ function update() {
     }
   });
   game.projectiles.getChildren().forEach(projectile => {
-    if (projectile.x > game.width * game.TILESIZE || projectile.y > (game.height * game.TILESIZE) + game.topMargin || projectile.y < 0) {
+    if (projectile.x > game.width * game.TILESIZE || projectile.y > (game.height * game.TILESIZE) + game.topMargin || projectile.y < game.topMargin) {
       projectile.destroy();
     }
   });
