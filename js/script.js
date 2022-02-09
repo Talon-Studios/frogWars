@@ -20,7 +20,15 @@ let game = {
     flies: 0,
     lilyPads: 0
   },
-  currentSelection: "cannon"
+  currentSelection: "cannon",
+  projectileStats: {
+    "cannon": {
+      damage: 1
+    },
+    "launcher": {
+      damage: 0.5
+    }
+  }
 };
 function preload() {
   this.load.image("tile0", "assets/tile0.png");
@@ -35,7 +43,7 @@ function preload() {
   this.load.image("basicRobot1", "assets/basicRobot1.png");
   this.load.image("cannonFrog0", "assets/cannonFrog0.png");
   this.load.image("cannonFrog1", "assets/cannonFrog1.png");
-  this.load.image("cannonball", "assets/cannonBall.png");
+  this.load.image("cannonProjectile", "assets/cannonProjectile.png");
   this.load.image("hurtRobot", "assets/hurtRobot.png");
   this.load.image("armoredRobot0", "assets/armoredRobot0.png");
   this.load.image("armoredRobot1", "assets/armoredRobot1.png");
@@ -43,6 +51,7 @@ function preload() {
   this.load.image("speedRobot1", "assets/speedRobot1.png");
   this.load.image("hurtSpeedRobot", "assets/speedRobot2.png");
   this.load.image("launcherFrog0", "assets/launcherFrog.png");
+  this.load.image("launcherProjectile", "assets/launcherProjectile.png");
 }
 function create() {
   // Create tiles
@@ -74,7 +83,7 @@ function create() {
   // Create groups
   game.frogs = this.physics.add.group();
   game.robots = this.physics.add.group();
-  game.cannonballs = this.physics.add.group();
+  game.projectiles = this.physics.add.group();
 
   // Animation
   this.anims.create({
@@ -174,8 +183,8 @@ function create() {
       }
     }
   });
-  this.physics.add.collider(game.cannonballs, game.robots, (cannonball, robot) => {
-    cannonball.destroy();
+  this.physics.add.collider(game.projectiles, game.robots, (projectile, robot) => {
+    projectile.destroy();
     let lastFrame = robot.texture.key;
     if (robot.type === "basic" || robot.type === "armored") {
       robot.setTexture("hurtRobot");
@@ -185,12 +194,11 @@ function create() {
     setTimeout(function () {
       robot.setTexture(lastFrame);
     }, 500);
-    robot.health--;
+    robot.health -= game.projectileStats[projectile.type].damage;
     if (robot.health <= 0) {
       robot.destroy();
     }
   });
-
   setInterval(function () {
     game.tiles.getChildren().forEach(tile => {
       let hasFrog = null;
@@ -212,9 +220,21 @@ function create() {
         case "cannon":
           frog.anims.play("shootCannonball", true);
           setTimeout(function () {
-            game.cannonballs.create(frog.x, frog.y, "cannonball").setScale(8).setGravityY(-1500).setVelocityX(300);
+            let projectile = game.projectiles.create(frog.x, frog.y, "cannonProjectile").setScale(8).setGravityY(-1500).setVelocityX(300);
+            projectile.type = "cannon";
           }, 200);
           break;
+        case "launcher":
+          let numOfSprite = 3;
+          for (var i = 0; i < numOfSprite; i++) {
+            let projectile = game.projectiles.create(frog.x, frog.y, "launcherProjectile").setScale(8).setGravityY(-1500);
+            projectile.type = "launcher";
+            projectile.angle = i * 360 / numOfSprite;
+            projectile.setVelocityX(300 * Math.cos(projectile.rotation - 67.5));
+            projectile.setVelocityY(300 * Math.sin(projectile.rotation - 67.5));
+            projectile.setSize(2, 2);
+            projectile.setOffset(0, 0);
+          }
       }
     });
   }, 1500);
@@ -269,6 +289,11 @@ function update() {
   game.frogs.getChildren().forEach(frog => {
     if (frog.x > game.width * game.TILESIZE) {
       frog.destroy();
+    }
+  });
+  game.projectiles.getChildren().forEach(projectile => {
+    if (projectile.x > game.width * game.TILESIZE || projectile.y > (game.height * game.TILESIZE) + game.topMargin || projectile.y < 0) {
+      projectile.destroy();
     }
   });
 }
