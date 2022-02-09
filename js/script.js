@@ -52,6 +52,7 @@ function preload() {
   this.load.image("hurtSpeedRobot", "assets/speedRobot2.png");
   this.load.image("launcherFrog0", "assets/launcherFrog.png");
   this.load.image("launcherProjectile", "assets/launcherProjectile.png");
+  this.load.image("toadFrog0", "assets/toad.png");
 }
 function create() {
   // Create tiles
@@ -73,8 +74,8 @@ function create() {
   // Create choices to put in game
   game.choices = this.physics.add.staticGroup();
   let frogCount = 0;
-  const frogs = ["basic", "cannon", "launcher"];
-  for (var x = (game.TILESIZE / 2) + 50; x < (game.TILESIZE * 3) + 50; x += game.TILESIZE + 10) {
+  const frogs = ["basic", "cannon", "launcher", "toad"];
+  for (var x = (game.TILESIZE / 2) + 50; x < (game.TILESIZE * frogs.length) + 50; x += game.TILESIZE + 10) {
     let choice = game.choices.create(x, game.TILESIZE, `${frogs[frogCount]}Frog0`).setScale(8).setInteractive();
     choice.frogType = frogs[frogCount];
     frogCount++;
@@ -182,6 +183,8 @@ function create() {
         robot.destroy();
       }
     }
+    if (frog.type = "toad") {
+    }
   });
   this.physics.add.collider(game.projectiles, game.robots, (projectile, robot) => {
     projectile.destroy();
@@ -225,7 +228,7 @@ function create() {
           }, 200);
           break;
         case "launcher":
-          let numOfSprite = 3;
+          let numOfSprite = 5;
           for (var i = 0; i < numOfSprite; i++) {
             let projectile = game.projectiles.create(frog.x, frog.y, "launcherProjectile").setScale(8).setGravityY(-1500);
             projectile.type = "launcher";
