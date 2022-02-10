@@ -53,6 +53,10 @@ function preload() {
   this.load.image("launcherFrog0", "assets/launcherFrog.png");
   this.load.image("launcherProjectile", "assets/launcherProjectile.png");
   this.load.image("toadFrog0", "assets/toad.png");
+  this.load.image("explosion0", "assets/explosion0.png");
+  this.load.image("explosion1", "assets/explosion1.png");
+  this.load.image("explosion2", "assets/explosion2.png");
+  this.load.image("explosion3", "assets/explosion3.png");
 }
 function create() {
   // Create tiles
@@ -86,7 +90,7 @@ function create() {
   game.robots = this.physics.add.group();
   game.projectiles = this.physics.add.group();
 
-  // Animation
+  // ---------- Animation ----------
   this.anims.create({
     key: "jump",
     frames: [{
@@ -142,8 +146,22 @@ function create() {
     repeat: 0,
     yoyo: true
   });
+  this.anims.create({
+    key: "explode",
+    frames: [{
+      key: "explosion0"
+    }, {
+      key: "explosion1"
+    }, {
+      key: "explosion2"
+    }, {
+      key: "explosion3"
+    }],
+    frameRate: 10,
+    repeat: 0
+  });
 
-  // All of the interaction
+  // ---------- Interaction ----------
   game.tiles.getChildren().forEach(tile => {
     tile.on("pointerover", () => {
       tile.setTexture(tile.textureKey + "select");
@@ -165,12 +183,12 @@ function create() {
     });
   });
 
-  // Colliders
+  // ---------- Colliders ----------
   this.physics.add.overlap(game.frogs, game.robots, (frog, robot) => {
     if (frog.type === "basic") {
       frog.destroy();
       let lastFrame = robot.texture.key;
-      if (robot.type === "basic" || robot.type === "armored") {
+      if (robot.type === "basic" || robot.type === "armored" && !robot.dead) {
         robot.setTexture("hurtRobot");
       } else if (robot.type === "speed") {
         robot.setTexture("hurtSpeedRobot");
@@ -180,7 +198,11 @@ function create() {
       }, 500);
       robot.health -= 5;
       if (robot.health <= 0) {
-        robot.destroy();
+        robot.dead = true;
+        robot.anims.play("explode", true);
+        setTimeout(function () {
+          robot.destroy();
+        }, 300);
       }
     }
     if (frog.type = "toad") {
@@ -189,7 +211,7 @@ function create() {
   this.physics.add.collider(game.projectiles, game.robots, (projectile, robot) => {
     projectile.destroy();
     let lastFrame = robot.texture.key;
-    if (robot.type === "basic" || robot.type === "armored") {
+    if (robot.type === "basic" || robot.type === "armored" && !robot.dead) {
       robot.setTexture("hurtRobot");
     } else if (robot.type === "speed") {
       robot.setTexture("hurtSpeedRobot");
@@ -199,9 +221,15 @@ function create() {
     }, 500);
     robot.health -= game.projectileStats[projectile.type].damage;
     if (robot.health <= 0) {
-      robot.destroy();
+      robot.dead = true;
+      robot.anims.play("explode", true);
+      setTimeout(function () {
+        robot.destroy();
+      }, 300);
     }
   });
+
+  // ---------- Intervals ----------
   setInterval(function () {
     game.tiles.getChildren().forEach(tile => {
       let hasFrog = null;
@@ -263,21 +291,24 @@ function create() {
     robot.type = type;
     robot.health = health;
     robot.speed = speed;
+    robot.dead = false;
   }, Math.random() * (3000 - 1000) + 1000);
 }
 function update() {
   game.robots.getChildren().forEach(robot => {
-    robot.x -= robot.speed;
-    switch (robot.type) {
-      case "basic":
-        robot.anims.play("basicRobotWalk", true);
-        break;
-      case "armored":
-        robot.anims.play("armoredRobotWalk", true);
-        break;
-      case "speed":
-        robot.anims.play("speedRobotWalk", true);
-        break;
+    if (!robot.dead) {
+      robot.x -= robot.speed;
+      switch (robot.type) {
+        case "basic":
+          robot.anims.play("basicRobotWalk", true);
+          break;
+        case "armored":
+          robot.anims.play("armoredRobotWalk", true);
+          break;
+        case "speed":
+          robot.anims.play("speedRobotWalk", true);
+          break;
+      }
     }
   });
   game.tiles.getChildren().forEach(tile => {
