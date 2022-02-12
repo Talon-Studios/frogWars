@@ -16,6 +16,10 @@ let game = {
     speed: 1.2,
     health: 3
   },
+  cannonRobot: {
+    speed: 0.3,
+    health: 5
+  },
   currencies: {
     flies: 0,
     lilyPads: 0
@@ -31,28 +35,35 @@ let game = {
   }
 };
 function preload() {
-  this.load.image("tile0", "assets/tile0.png");
-  this.load.image("tile1", "assets/tile1.png");
-  this.load.image("tile0select", "assets/tile0select.png");
-  this.load.image("tile1select", "assets/tile1select.png");
+  // ---------- Frogs ----------
   this.load.image("basicFrog0", "assets/basicFrog0.png");
   this.load.image("basicFrog1", "assets/basicFrog1.png");
   this.load.image("basicFrog2", "assets/basicFrog2.png");
   this.load.image("basicFrog3", "assets/basicFrog3.png");
-  this.load.image("basicRobot0", "assets/basicRobot0.png");
-  this.load.image("basicRobot1", "assets/basicRobot1.png");
   this.load.image("cannonFrog0", "assets/cannonFrog0.png");
   this.load.image("cannonFrog1", "assets/cannonFrog1.png");
   this.load.image("cannonProjectile", "assets/cannonProjectile.png");
+  this.load.image("launcherFrog0", "assets/launcherFrog.png");
+  this.load.image("launcherProjectile", "assets/launcherProjectile.png");
+  this.load.image("toadFrog0", "assets/toad.png");
+
+  // ---------- Robots ----------
+  this.load.image("basicRobot0", "assets/basicRobot0.png");
+  this.load.image("basicRobot1", "assets/basicRobot1.png");
   this.load.image("hurtRobot", "assets/hurtRobot.png");
   this.load.image("armoredRobot0", "assets/armoredRobot0.png");
   this.load.image("armoredRobot1", "assets/armoredRobot1.png");
   this.load.image("speedRobot0", "assets/speedRobot0.png");
   this.load.image("speedRobot1", "assets/speedRobot1.png");
   this.load.image("hurtSpeedRobot", "assets/speedRobot2.png");
-  this.load.image("launcherFrog0", "assets/launcherFrog.png");
-  this.load.image("launcherProjectile", "assets/launcherProjectile.png");
-  this.load.image("toadFrog0", "assets/toad.png");
+  this.load.image("cannonRobot0", "assets/cannonRobot0.png");
+  this.load.image("cannonRobot1", "assets/cannonRobot1.png");
+
+  // ---------- Other ----------
+  this.load.image("tile0", "assets/tile0.png");
+  this.load.image("tile1", "assets/tile1.png");
+  this.load.image("tile0select", "assets/tile0select.png");
+  this.load.image("tile1select", "assets/tile1select.png");
   this.load.image("explosion0", "assets/explosion0.png");
   this.load.image("explosion1", "assets/explosion1.png");
   this.load.image("explosion2", "assets/explosion2.png");
@@ -89,6 +100,7 @@ function create() {
   game.frogs = this.physics.add.group();
   game.robots = this.physics.add.group();
   game.projectiles = this.physics.add.group();
+  game.cannonRobotProjectiles = this.physics.add.group();
 
   // ---------- Animation ----------
   this.anims.create({
@@ -113,7 +125,7 @@ function create() {
       key: "basicRobot1"
     }],
     frameRate: 5,
-    repeat: -1
+    repeat: 1
   });
   this.anims.create({
     key: "armoredRobotWalk",
@@ -123,7 +135,7 @@ function create() {
       key: "armoredRobot1"
     }],
     frameRate: 5,
-    repeat: -1
+    repeat: 1
   });
   this.anims.create({
     key: "speedRobotWalk",
@@ -133,7 +145,7 @@ function create() {
       key: "speedRobot1"
     }],
     frameRate: 5,
-    repeat: -1
+    repeat: 1
   });
   this.anims.create({
     key: "shootCannonball",
@@ -159,6 +171,16 @@ function create() {
     }],
     frameRate: 10,
     repeat: 0
+  });
+  this.anims.create({
+    key: "cannonRobotWalk",
+    frames: [{
+      key: "cannonRobot0"
+    }, {
+      key: "cannonRobot1"
+    }],
+    frameRate: 5,
+    repeat: 1
   });
 
   // ---------- Interaction ----------
@@ -278,14 +300,18 @@ function create() {
       type = "basic";
       health = game.robot.health;
       speed = game.robot.speed;
-    } else if (randomPercentage >= 50 && randomPercentage > 75) {
+    } else if (randomPercentage >= 50 && randomPercentage < 75) {
       type = "armored";
       health = game.armoredRobot.health;
       speed = game.armoredRobot.speed;
-    } else if (randomPercentage >= 50 && randomPercentage <= 75) {
+    } else if (randomPercentage >= 75 && randomPercentage < 63) {
       type = "speed";
       health = game.speedRobot.health;
       speed = game.speedRobot.speed;
+    } else if (randomPercentage >= 63) {
+      type = "cannon";
+      health = game.cannonRobot.health;
+      speed = game.cannonRobot.speed;
     }
     let robot = game.robots.create(game.width * game.TILESIZE, (game.TILESIZE / 2 + game.TILESIZE * row) + game.topMargin, `${type}Robot0`).setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0).setImmovable();
     robot.type = type;
@@ -293,6 +319,15 @@ function create() {
     robot.speed = speed;
     robot.dead = false;
   }, Math.random() * (3000 - 1000) + 1000);
+  setInterval(function () {
+    game.robots.getChildren().forEach(robot => {
+      if (robot.type === "cannon") {
+        let projectile = game.cannonRobotProjectiles.create(robot.x - 40, robot.y + 20, "cannonProjectile").setScale(8).setGravityY(-1500).setVelocityX(-300);
+        projectile.setSize(2, 2);
+        projectile.setOffset(6, 2);
+      }
+    });
+  }, 1500);
 }
 function update() {
   game.robots.getChildren().forEach(robot => {
