@@ -210,10 +210,12 @@ function create() {
     if (frog.type === "basic") {
       frog.destroy();
       let lastFrame = robot.texture.key;
-      if (robot.type === "basic" || robot.type === "armored" && !robot.dead) {
-        robot.setTexture("hurtRobot");
-      } else if (robot.type === "speed") {
-        robot.setTexture("hurtSpeedRobot");
+      if (!robot.dead) {
+        if (robot.type === "basic" || robot.type === "armored" && !robot.dead) {
+          robot.setTexture("hurtRobot");
+        } else if (robot.type === "speed") {
+          robot.setTexture("hurtSpeedRobot");
+        }
       }
       setTimeout(function () {
         robot.setTexture(lastFrame);
@@ -233,10 +235,12 @@ function create() {
   this.physics.add.collider(game.projectiles, game.robots, (projectile, robot) => {
     projectile.destroy();
     let lastFrame = robot.texture.key;
-    if (robot.type === "basic" || robot.type === "armored" && !robot.dead) {
-      robot.setTexture("hurtRobot");
-    } else if (robot.type === "speed") {
-      robot.setTexture("hurtSpeedRobot");
+    if (!robot.dead) {
+      if (robot.type === "basic" || robot.type === "armored" && !robot.dead) {
+        robot.setTexture("hurtRobot");
+      } else if (robot.type === "speed") {
+        robot.setTexture("hurtSpeedRobot");
+      }
     }
     setTimeout(function () {
       robot.setTexture(lastFrame);
