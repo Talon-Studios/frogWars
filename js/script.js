@@ -13,7 +13,7 @@ let game = {
     health: 10
   },
   speedRobot: {
-    speed: 1.2,
+    speed: 1.8,
     health: 3
   },
   cannonRobot: {
