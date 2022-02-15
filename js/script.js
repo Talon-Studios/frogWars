@@ -308,11 +308,11 @@ function create() {
       type = "armored";
       health = game.armoredRobot.health;
       speed = game.armoredRobot.speed;
-    } else if (randomPercentage >= 75 && randomPercentage < 63) {
+    } else if (randomPercentage >= 75 && randomPercentage < 87.5) {
       type = "speed";
       health = game.speedRobot.health;
       speed = game.speedRobot.speed;
-    } else if (randomPercentage >= 63) {
+    } else if (randomPercentage >= 87.5) {
       type = "cannon";
       health = game.cannonRobot.health;
       speed = game.cannonRobot.speed;
