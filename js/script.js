@@ -70,6 +70,7 @@ function preload() {
   this.load.image("explosion3", "assets/explosion3.png");
 }
 function create() {
+  game.engine = new Engine(this);
   // Create tiles
   game.tiles = this.physics.add.staticGroup();
   let count = 0;
@@ -103,20 +104,7 @@ function create() {
   game.cannonRobotProjectiles = this.physics.add.group();
 
   // ---------- Animation ----------
-  this.anims.create({
-    key: "jump",
-    frames: [{
-      key: "basicFrog0"
-    }, {
-      key: "basicFrog1"
-    }, {
-      key: "basicFrog2"
-    }, {
-      key: "basicFrog0"
-    }],
-    frameRate: 10,
-    repeat: 0
-  });
+  game.engine.addAnimation("jump", 10, false, false, "basicFrog0", "basicFrog1", "basicFrog2", "basicFrog0");
   this.anims.create({
     key: "basicRobotWalk",
     frames: [{
