@@ -166,7 +166,7 @@ class Game extends Phaser.Scene {
           }, 300);
         }
       }
-    }
+    });
     this.physics.add.collider(game.projectiles, game.robots, (projectile, robot) => {
       projectile.destroy();
       let lastFrame = robot.texture.key;
