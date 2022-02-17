@@ -18,10 +18,6 @@ const config = {
       // debug: true
     }
   },
-  scene: {
-    preload,
-    create,
-    update
-  }
+  scene: [Game]
 };
 const phaserGame = new Phaser.Game(config);

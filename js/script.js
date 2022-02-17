@@ -34,113 +34,140 @@ let game = {
     }
   }
 };
-function preload() {
-  // ---------- Frogs ----------
-  this.load.image("basicFrog0", "assets/basicFrog0.png");
-  this.load.image("basicFrog1", "assets/basicFrog1.png");
-  this.load.image("basicFrog2", "assets/basicFrog2.png");
-  this.load.image("basicFrog3", "assets/basicFrog3.png");
-  this.load.image("cannonFrog0", "assets/cannonFrog0.png");
-  this.load.image("cannonFrog1", "assets/cannonFrog1.png");
-  this.load.image("cannonProjectile", "assets/cannonProjectile.png");
-  this.load.image("launcherFrog0", "assets/launcherFrog.png");
-  this.load.image("launcherProjectile", "assets/launcherProjectile.png");
-  this.load.image("toadFrog0", "assets/toad.png");
+class Game extends Phaser.Scene {
+  constructor() {
+    super("Game");
+  }
+  preload() {
+    // ---------- Frogs ----------
+    this.load.image("basicFrog0", "assets/basicFrog0.png");
+    this.load.image("basicFrog1", "assets/basicFrog1.png");
+    this.load.image("basicFrog2", "assets/basicFrog2.png");
+    this.load.image("basicFrog3", "assets/basicFrog3.png");
+    this.load.image("cannonFrog0", "assets/cannonFrog0.png");
+    this.load.image("cannonFrog1", "assets/cannonFrog1.png");
+    this.load.image("cannonProjectile", "assets/cannonProjectile.png");
+    this.load.image("launcherFrog0", "assets/launcherFrog.png");
+    this.load.image("launcherProjectile", "assets/launcherProjectile.png");
+    this.load.image("toadFrog0", "assets/toad.png");
 
-  // ---------- Robots ----------
-  this.load.image("basicRobot0", "assets/basicRobot0.png");
-  this.load.image("basicRobot1", "assets/basicRobot1.png");
-  this.load.image("hurtRobot", "assets/hurtRobot.png");
-  this.load.image("armoredRobot0", "assets/armoredRobot0.png");
-  this.load.image("armoredRobot1", "assets/armoredRobot1.png");
-  this.load.image("speedRobot0", "assets/speedRobot0.png");
-  this.load.image("speedRobot1", "assets/speedRobot1.png");
-  this.load.image("hurtSpeedRobot", "assets/speedRobot2.png");
-  this.load.image("cannonRobot0", "assets/cannonRobot0.png");
-  this.load.image("cannonRobot1", "assets/cannonRobot1.png");
+    // ---------- Robots ----------
+    this.load.image("basicRobot0", "assets/basicRobot0.png");
+    this.load.image("basicRobot1", "assets/basicRobot1.png");
+    this.load.image("hurtRobot", "assets/hurtRobot.png");
+    this.load.image("armoredRobot0", "assets/armoredRobot0.png");
+    this.load.image("armoredRobot1", "assets/armoredRobot1.png");
+    this.load.image("speedRobot0", "assets/speedRobot0.png");
+    this.load.image("speedRobot1", "assets/speedRobot1.png");
+    this.load.image("hurtSpeedRobot", "assets/speedRobot2.png");
+    this.load.image("cannonRobot0", "assets/cannonRobot0.png");
+    this.load.image("cannonRobot1", "assets/cannonRobot1.png");
 
-  // ---------- Other ----------
-  this.load.image("tile0", "assets/tile0.png");
-  this.load.image("tile1", "assets/tile1.png");
-  this.load.image("tile0select", "assets/tile0select.png");
-  this.load.image("tile1select", "assets/tile1select.png");
-  this.load.image("explosion0", "assets/explosion0.png");
-  this.load.image("explosion1", "assets/explosion1.png");
-  this.load.image("explosion2", "assets/explosion2.png");
-  this.load.image("explosion3", "assets/explosion3.png");
-}
-function create() {
-  game.engine = new Engine(this);
-  // Create tiles
-  game.tiles = this.physics.add.staticGroup();
-  let count = 0;
-  for (var x = game.TILESIZE / 2; x < game.width * game.TILESIZE; x += game.TILESIZE) {
-    for (var y = (game.TILESIZE / 2) + game.topMargin; y < (game.height * game.TILESIZE) + game.topMargin; y += game.TILESIZE) {
-      if (count % 2 == 0) {
-        let tile = game.tiles.create(x, y, "tile0").setScale(8).setInteractive();
-        tile.textureKey = "tile0";
-      } else {
-        let tile = game.tiles.create(x, y, "tile1").setScale(8).setInteractive();
-        tile.textureKey = "tile1";
+    // ---------- Other ----------
+    this.load.image("tile0", "assets/tile0.png");
+    this.load.image("tile1", "assets/tile1.png");
+    this.load.image("tile0select", "assets/tile0select.png");
+    this.load.image("tile1select", "assets/tile1select.png");
+    this.load.image("explosion0", "assets/explosion0.png");
+    this.load.image("explosion1", "assets/explosion1.png");
+    this.load.image("explosion2", "assets/explosion2.png");
+    this.load.image("explosion3", "assets/explosion3.png");
+  }
+  create() {
+    game.engine = new Engine(this);
+    // Create tiles
+    game.tiles = this.physics.add.staticGroup();
+    let count = 0;
+    for (var x = game.TILESIZE / 2; x < game.width * game.TILESIZE; x += game.TILESIZE) {
+      for (var y = (game.TILESIZE / 2) + game.topMargin; y < (game.height * game.TILESIZE) + game.topMargin; y += game.TILESIZE) {
+        if (count % 2 == 0) {
+          let tile = game.tiles.create(x, y, "tile0").setScale(8).setInteractive();
+          tile.textureKey = "tile0";
+        } else {
+          let tile = game.tiles.create(x, y, "tile1").setScale(8).setInteractive();
+          tile.textureKey = "tile1";
+        }
+        count++;
       }
-      count++;
     }
-  }
 
-  // Create choices to put in game
-  game.choices = this.physics.add.staticGroup();
-  let frogCount = 0;
-  const frogs = ["basic", "cannon", "launcher", "toad"];
-  for (var x = (game.TILESIZE / 2) + 50; x < (game.TILESIZE * frogs.length) + 50; x += game.TILESIZE + 10) {
-    let choice = game.choices.create(x, game.TILESIZE, `${frogs[frogCount]}Frog0`).setScale(8).setInteractive();
-    choice.frogType = frogs[frogCount];
-    frogCount++;
-  }
+    // Create choices to put in game
+    game.choices = this.physics.add.staticGroup();
+    let frogCount = 0;
+    const frogs = ["basic", "cannon", "launcher", "toad"];
+    for (var x = (game.TILESIZE / 2) + 50; x < (game.TILESIZE * frogs.length) + 50; x += game.TILESIZE + 10) {
+      let choice = game.choices.create(x, game.TILESIZE, `${frogs[frogCount]}Frog0`).setScale(8).setInteractive();
+      choice.frogType = frogs[frogCount];
+      frogCount++;
+    }
 
-  // Create groups
-  game.frogs = this.physics.add.group();
-  game.robots = this.physics.add.group();
-  game.projectiles = this.physics.add.group();
-  game.cannonRobotProjectiles = this.physics.add.group();
+    // Create groups
+    game.frogs = this.physics.add.group();
+    game.robots = this.physics.add.group();
+    game.projectiles = this.physics.add.group();
+    game.cannonRobotProjectiles = this.physics.add.group();
 
-  // ---------- Animation ----------
-  // Walking
-  game.engine.addAnimation("basicRobotWalk", 5, false, false, "basicRobot0", "basicRobot1");
-  game.engine.addAnimation("armoredRobotWalk", 5, false, false, "armoredRobot0", "armoredRobot1");
-  game.engine.addAnimation("speedRobotWalk", 5, false, false, "speedRobot0", "speedRobot1");
-  game.engine.addAnimation("cannonRobotWalk", 5, false, false, "cannonRobot0", "cannonRobot1");
+    // ---------- Animation ----------
+    // Walking
+    game.engine.addAnimation("basicRobotWalk", 5, false, false, "basicRobot0", "basicRobot1");
+    game.engine.addAnimation("armoredRobotWalk", 5, false, false, "armoredRobot0", "armoredRobot1");
+    game.engine.addAnimation("speedRobotWalk", 5, false, false, "speedRobot0", "speedRobot1");
+    game.engine.addAnimation("cannonRobotWalk", 5, false, false, "cannonRobot0", "cannonRobot1");
 
-  // Other
-  game.engine.addAnimation("jump", 10, false, false, "basicFrog0", "basicFrog1", "basicFrog2", "basicFrog0");
-  game.engine.addAnimation("shootCannonball", 5, false, true, "cannonFrog0", "cannonFrog1");
-  game.engine.addAnimation("explode", 10, false, false, "explosion0", "explosion1", "explosion2", "explosion3");
+    // Other
+    game.engine.addAnimation("jump", 10, false, false, "basicFrog0", "basicFrog1", "basicFrog2", "basicFrog0");
+    game.engine.addAnimation("shootCannonball", 5, false, true, "cannonFrog0", "cannonFrog1");
+    game.engine.addAnimation("explode", 10, false, false, "explosion0", "explosion1", "explosion2", "explosion3");
 
-  // ---------- Interaction ----------
-  game.tiles.getChildren().forEach(tile => {
-    tile.on("pointerover", () => {
-      tile.setTexture(tile.textureKey + "select");
+    // ---------- Interaction ----------
+    game.tiles.getChildren().forEach(tile => {
+      tile.on("pointerover", () => {
+        tile.setTexture(tile.textureKey + "select");
+      });
+      tile.on("pointerout", () => {
+        tile.setTexture(tile.textureKey);
+      });
+      tile.on("pointerdown", (pointer) => {
+        if (!tile.frog) {
+          let frog = game.frogs.create(tile.x, tile.y, `${game.currentSelection}Frog0`).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0);
+          frog.type = game.currentSelection;
+          tile.frog = frog;
+        }
+      });
     });
-    tile.on("pointerout", () => {
-      tile.setTexture(tile.textureKey);
+    game.choices.getChildren().forEach(choice => {
+      choice.on("pointerdown", () => {
+        game.currentSelection = choice.frogType;
+      });
     });
-    tile.on("pointerdown", (pointer) => {
-      if (!tile.frog) {
-        let frog = game.frogs.create(tile.x, tile.y, `${game.currentSelection}Frog0`).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0);
-        frog.type = game.currentSelection;
-        tile.frog = frog;
+
+    // ---------- Colliders ----------
+    this.physics.add.overlap(game.frogs, game.robots, (frog, robot) => {
+      if (frog.type === "basic") {
+        frog.destroy();
+        let lastFrame = robot.texture.key;
+        if (!robot.dead) {
+          if (robot.type === "basic" || robot.type === "armored" && !robot.dead) {
+            robot.setTexture("hurtRobot");
+          } else if (robot.type === "speed") {
+            robot.setTexture("hurtSpeedRobot");
+          }
+        }
+        setTimeout(function () {
+          robot.setTexture(lastFrame);
+        }, 500);
+        robot.health -= 5;
+        if (robot.health <= 0) {
+          robot.dead = true;
+          robot.anims.play("explode", true);
+          setTimeout(function () {
+            robot.destroy();
+          }, 300);
+        }
       }
     });
-  });
-  game.choices.getChildren().forEach(choice => {
-    choice.on("pointerdown", () => {
-      game.currentSelection = choice.frogType;
-    });
-  });
-
-  // ---------- Colliders ----------
-  this.physics.add.overlap(game.frogs, game.robots, (frog, robot) => {
-    if (frog.type === "basic") {
-      frog.destroy();
+    this.physics.add.collider(game.projectiles, game.robots, (projectile, robot) => {
+      projectile.destroy();
       let lastFrame = robot.texture.key;
       if (!robot.dead) {
         if (robot.type === "basic" || robot.type === "armored" && !robot.dead) {
@@ -152,7 +179,7 @@ function create() {
       setTimeout(function () {
         robot.setTexture(lastFrame);
       }, 500);
-      robot.health -= 5;
+      robot.health -= game.projectileStats[projectile.type].damage;
       if (robot.health <= 0) {
         robot.dead = true;
         robot.anims.play("explode", true);
@@ -160,35 +187,113 @@ function create() {
           robot.destroy();
         }, 300);
       }
-    }
-    if (frog.type = "toad") {
-    }
-  });
-  this.physics.add.collider(game.projectiles, game.robots, (projectile, robot) => {
-    projectile.destroy();
-    let lastFrame = robot.texture.key;
-    if (!robot.dead) {
-      if (robot.type === "basic" || robot.type === "armored" && !robot.dead) {
-        robot.setTexture("hurtRobot");
-      } else if (robot.type === "speed") {
-        robot.setTexture("hurtSpeedRobot");
-      }
-    }
-    setTimeout(function () {
-      robot.setTexture(lastFrame);
-    }, 500);
-    robot.health -= game.projectileStats[projectile.type].damage;
-    if (robot.health <= 0) {
-      robot.dead = true;
-      robot.anims.play("explode", true);
-      setTimeout(function () {
-        robot.destroy();
-      }, 300);
-    }
-  });
+    });
 
-  // ---------- Intervals ----------
-  setInterval(function () {
+    // ---------- Intervals ----------
+    setInterval(function () {
+      game.tiles.getChildren().forEach(tile => {
+        let hasFrog = null;
+        game.frogs.getChildren().forEach(frog => {
+          if (frog.x == tile.x && frog.y == tile.y) {
+            hasFrog = frog;
+          }
+        });
+        tile.frog = hasFrog;
+      });
+      game.frogs.getChildren().forEach(frog => {
+        switch (frog.type) {
+          case "basic":
+            frog.anims.play("jump", true);
+            setTimeout(function () {
+              frog.x += game.tiles.getChildren()[0].width * 8;
+            }, 50);
+            break;
+          case "cannon":
+            frog.anims.play("shootCannonball", true);
+            setTimeout(function () {
+              let projectile = game.projectiles.create(frog.x, frog.y, "cannonProjectile").setScale(8).setGravityY(-1500).setVelocityX(300);
+              projectile.type = "cannon";
+            }, 200);
+            break;
+          case "launcher":
+            let numOfSprite = 5;
+            for (var i = 0; i < numOfSprite; i++) {
+              let projectile = game.projectiles.create(frog.x, frog.y, "launcherProjectile").setScale(8).setGravityY(-1500);
+              projectile.type = "launcher";
+              projectile.angle = i * 360 / numOfSprite;
+              projectile.setVelocityX(300 * Math.cos(projectile.rotation - 67.5));
+              projectile.setVelocityY(300 * Math.sin(projectile.rotation - 67.5));
+              projectile.setSize(2, 2);
+              projectile.setOffset(0, 0);
+            }
+        }
+      });
+    }, 1500);
+    setInterval(function () {
+      let row = Math.floor(Math.random() * game.height);
+      let type = "";
+      let health;
+      let speed;
+      let randomPercentage = Math.floor(Math.random() * 100);
+      if (randomPercentage < 50) {
+        type = "basic";
+        health = game.robot.health;
+        speed = game.robot.speed;
+      } else if (randomPercentage >= 50 && randomPercentage < 75) {
+        type = "armored";
+        health = game.armoredRobot.health;
+        speed = game.armoredRobot.speed;
+      } else if (randomPercentage >= 75 && randomPercentage < 87.5) {
+        type = "speed";
+        health = game.speedRobot.health;
+        speed = game.speedRobot.speed;
+      } else if (randomPercentage >= 87.5) {
+        type = "cannon";
+        health = game.cannonRobot.health;
+        speed = game.cannonRobot.speed;
+      }
+      let robot = game.robots.create(game.width * game.TILESIZE, (game.TILESIZE / 2 + game.TILESIZE * row) + game.topMargin, `${type}Robot0`).setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0).setImmovable();
+      robot.type = type;
+      robot.health = health;
+      robot.speed = speed;
+      robot.dead = false;
+    }, Math.random() * (3000 - 1000) + 1000);
+    setInterval(function () {
+      game.robots.getChildren().forEach(robot => {
+        if (robot.type === "cannon") {
+          let projectile = game.cannonRobotProjectiles.create(robot.x - 40, robot.y + 20, "cannonProjectile").setScale(8).setGravityY(-1500).setVelocityX(-300);
+          projectile.setSize(2, 2);
+          projectile.setOffset(6, 2);
+        }
+      });
+    }, 1500);
+
+    // ---------- Pause game ----------
+    let phaser = this;
+    window.onblur = function() {
+      phaser.scene.pause();
+    }
+    window.onfocus = function() {
+      phaser.scene.resume();
+    }
+  }
+  update() {
+    game.robots.getChildren().forEach(robot => {
+      if (!robot.dead) {
+        robot.x -= robot.speed;
+        switch (robot.type) {
+          case "basic":
+            robot.anims.play("basicRobotWalk", true);
+            break;
+          case "armored":
+            robot.anims.play("armoredRobotWalk", true);
+            break;
+          case "speed":
+            robot.anims.play("speedRobotWalk", true);
+            break;
+        }
+      }
+    });
     game.tiles.getChildren().forEach(tile => {
       let hasFrog = null;
       game.frogs.getChildren().forEach(frog => {
@@ -199,106 +304,14 @@ function create() {
       tile.frog = hasFrog;
     });
     game.frogs.getChildren().forEach(frog => {
-      switch (frog.type) {
-        case "basic":
-          frog.anims.play("jump", true);
-          setTimeout(function () {
-            frog.x += game.tiles.getChildren()[0].width * 8;
-          }, 50);
-          break;
-        case "cannon":
-          frog.anims.play("shootCannonball", true);
-          setTimeout(function () {
-            let projectile = game.projectiles.create(frog.x, frog.y, "cannonProjectile").setScale(8).setGravityY(-1500).setVelocityX(300);
-            projectile.type = "cannon";
-          }, 200);
-          break;
-        case "launcher":
-          let numOfSprite = 5;
-          for (var i = 0; i < numOfSprite; i++) {
-            let projectile = game.projectiles.create(frog.x, frog.y, "launcherProjectile").setScale(8).setGravityY(-1500);
-            projectile.type = "launcher";
-            projectile.angle = i * 360 / numOfSprite;
-            projectile.setVelocityX(300 * Math.cos(projectile.rotation - 67.5));
-            projectile.setVelocityY(300 * Math.sin(projectile.rotation - 67.5));
-            projectile.setSize(2, 2);
-            projectile.setOffset(0, 0);
-          }
+      if (frog.x > game.width * game.TILESIZE) {
+        frog.destroy();
       }
     });
-  }, 1500);
-  setInterval(function () {
-    let row = Math.floor(Math.random() * game.height);
-    let type = "";
-    let health;
-    let randomPercentage = Math.floor(Math.random() * 100);
-    if (randomPercentage < 50) {
-      type = "basic";
-      health = game.robot.health;
-      speed = game.robot.speed;
-    } else if (randomPercentage >= 50 && randomPercentage < 75) {
-      type = "armored";
-      health = game.armoredRobot.health;
-      speed = game.armoredRobot.speed;
-    } else if (randomPercentage >= 75 && randomPercentage < 87.5) {
-      type = "speed";
-      health = game.speedRobot.health;
-      speed = game.speedRobot.speed;
-    } else if (randomPercentage >= 87.5) {
-      type = "cannon";
-      health = game.cannonRobot.health;
-      speed = game.cannonRobot.speed;
-    }
-    let robot = game.robots.create(game.width * game.TILESIZE, (game.TILESIZE / 2 + game.TILESIZE * row) + game.topMargin, `${type}Robot0`).setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0).setImmovable();
-    robot.type = type;
-    robot.health = health;
-    robot.speed = speed;
-    robot.dead = false;
-  }, Math.random() * (3000 - 1000) + 1000);
-  setInterval(function () {
-    game.robots.getChildren().forEach(robot => {
-      if (robot.type === "cannon") {
-        let projectile = game.cannonRobotProjectiles.create(robot.x - 40, robot.y + 20, "cannonProjectile").setScale(8).setGravityY(-1500).setVelocityX(-300);
-        projectile.setSize(2, 2);
-        projectile.setOffset(6, 2);
+    game.projectiles.getChildren().forEach(projectile => {
+      if (projectile.x > game.width * game.TILESIZE || projectile.y > (game.height * game.TILESIZE) + game.topMargin || projectile.y < game.topMargin) {
+        projectile.destroy();
       }
     });
-  }, 1500);
-}
-function update() {
-  game.robots.getChildren().forEach(robot => {
-    if (!robot.dead) {
-      robot.x -= robot.speed;
-      switch (robot.type) {
-        case "basic":
-          robot.anims.play("basicRobotWalk", true);
-          break;
-        case "armored":
-          robot.anims.play("armoredRobotWalk", true);
-          break;
-        case "speed":
-          robot.anims.play("speedRobotWalk", true);
-          break;
-      }
-    }
-  });
-  game.tiles.getChildren().forEach(tile => {
-    let hasFrog = null;
-    game.frogs.getChildren().forEach(frog => {
-      if (frog.x == tile.x && frog.y == tile.y) {
-        hasFrog = frog;
-      }
-    });
-    tile.frog = hasFrog;
-  });
-  game.frogs.getChildren().forEach(frog => {
-    if (frog.x > game.width * game.TILESIZE) {
-      frog.destroy();
-    }
-  });
-  game.projectiles.getChildren().forEach(projectile => {
-    if (projectile.x > game.width * game.TILESIZE || projectile.y > (game.height * game.TILESIZE) + game.topMargin || projectile.y < game.topMargin) {
-      projectile.destroy();
-    }
-  });
+  }
 }
