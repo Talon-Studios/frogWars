@@ -1,4 +1,4 @@
-![Screenshot](assets/screenshot.png)
+![Screenshot](screenshot.png)
 
 :frog: Frog Wars, Yes, frogs.
 
