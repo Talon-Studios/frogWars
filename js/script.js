@@ -104,72 +104,16 @@ function create() {
   game.cannonRobotProjectiles = this.physics.add.group();
 
   // ---------- Animation ----------
+  // Walking
+  game.engine.addAnimation("basicRobotWalk", 5, false, false, "basicRobot0", "basicRobot1");
+  game.engine.addAnimation("armoredRobotWalk", 5, false, false, "armoredRobot0", "armoredRobot1");
+  game.engine.addAnimation("speedRobotWalk", 5, false, false, "speedRobot0", "speedRobot1");
+  game.engine.addAnimation("cannonRobotWalk", 5, false, false, "cannonRobot0", "cannonRobot1");
+
+  // Other
   game.engine.addAnimation("jump", 10, false, false, "basicFrog0", "basicFrog1", "basicFrog2", "basicFrog0");
-  this.anims.create({
-    key: "basicRobotWalk",
-    frames: [{
-      key: "basicRobot0"
-    }, {
-      key: "basicRobot1"
-    }],
-    frameRate: 5,
-    repeat: 1
-  });
-  this.anims.create({
-    key: "armoredRobotWalk",
-    frames: [{
-      key: "armoredRobot0"
-    }, {
-      key: "armoredRobot1"
-    }],
-    frameRate: 5,
-    repeat: 1
-  });
-  this.anims.create({
-    key: "speedRobotWalk",
-    frames: [{
-      key: "speedRobot0"
-    }, {
-      key: "speedRobot1"
-    }],
-    frameRate: 5,
-    repeat: 1
-  });
-  this.anims.create({
-    key: "shootCannonball",
-    frames: [{
-      key: "cannonFrog0"
-    }, {
-      key: "cannonFrog1"
-    }],
-    frameRate: 5,
-    repeat: 0,
-    yoyo: true
-  });
-  this.anims.create({
-    key: "explode",
-    frames: [{
-      key: "explosion0"
-    }, {
-      key: "explosion1"
-    }, {
-      key: "explosion2"
-    }, {
-      key: "explosion3"
-    }],
-    frameRate: 10,
-    repeat: 0
-  });
-  this.anims.create({
-    key: "cannonRobotWalk",
-    frames: [{
-      key: "cannonRobot0"
-    }, {
-      key: "cannonRobot1"
-    }],
-    frameRate: 5,
-    repeat: 1
-  });
+  game.engine.addAnimation("shootCannonball", 5, false, true, "cannonFrog0", "cannonFrog1");
+  game.engine.addAnimation("explode", 10, false, false, "explosion0", "explosion1", "explosion2", "explosion3");
 
   // ---------- Interaction ----------
   game.tiles.getChildren().forEach(tile => {
