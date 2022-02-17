@@ -193,91 +193,110 @@ class Game extends Phaser.Scene {
     });
 
     // ---------- Intervals ----------
-    setInterval(function () {
-      game.tiles.getChildren().forEach(tile => {
-        let hasFrog = null;
+    game.frogActionInterval = this.time.addEvent({
+      delay: 1500,
+      callback: () => {
+        game.tiles.getChildren().forEach(tile => {
+          let hasFrog = null;
+          game.frogs.getChildren().forEach(frog => {
+            if (frog.x == tile.x && frog.y == tile.y) {
+              hasFrog = frog;
+            }
+          });
+          tile.frog = hasFrog;
+        });
         game.frogs.getChildren().forEach(frog => {
-          if (frog.x == tile.x && frog.y == tile.y) {
-            hasFrog = frog;
+          switch (frog.type) {
+            case "basic":
+              frog.anims.play("jump", true);
+              setTimeout(function () {
+                frog.x += game.tiles.getChildren()[0].width * 8;
+              }, 50);
+              break;
+            case "cannon":
+              frog.anims.play("shootCannonball", true);
+              setTimeout(function () {
+                let projectile = game.projectiles.create(frog.x, frog.y, "cannonProjectile").setScale(8).setGravityY(-1500).setVelocityX(300);
+                projectile.type = "cannon";
+              }, 200);
+              break;
+            case "launcher":
+              let numOfSprite = 5;
+              for (var i = 0; i < numOfSprite; i++) {
+                let projectile = game.projectiles.create(frog.x, frog.y, "launcherProjectile").setScale(8).setGravityY(-1500);
+                projectile.type = "launcher";
+                projectile.angle = i * 360 / numOfSprite;
+                projectile.setVelocityX(300 * Math.cos(projectile.rotation - 67.5));
+                projectile.setVelocityY(300 * Math.sin(projectile.rotation - 67.5));
+                projectile.setSize(2, 2);
+                projectile.setOffset(0, 0);
+              }
           }
         });
-        tile.frog = hasFrog;
-      });
-      game.frogs.getChildren().forEach(frog => {
-        switch (frog.type) {
-          case "basic":
-            frog.anims.play("jump", true);
-            setTimeout(function () {
-              frog.x += game.tiles.getChildren()[0].width * 8;
-            }, 50);
-            break;
-          case "cannon":
-            frog.anims.play("shootCannonball", true);
-            setTimeout(function () {
-              let projectile = game.projectiles.create(frog.x, frog.y, "cannonProjectile").setScale(8).setGravityY(-1500).setVelocityX(300);
-              projectile.type = "cannon";
-            }, 200);
-            break;
-          case "launcher":
-            let numOfSprite = 5;
-            for (var i = 0; i < numOfSprite; i++) {
-              let projectile = game.projectiles.create(frog.x, frog.y, "launcherProjectile").setScale(8).setGravityY(-1500);
-              projectile.type = "launcher";
-              projectile.angle = i * 360 / numOfSprite;
-              projectile.setVelocityX(300 * Math.cos(projectile.rotation - 67.5));
-              projectile.setVelocityY(300 * Math.sin(projectile.rotation - 67.5));
-              projectile.setSize(2, 2);
-              projectile.setOffset(0, 0);
-            }
+      },
+      callbackScope: this,
+      repeat: -1
+    });
+    game.robotSpawnInterval = this.time.addEvent({
+      delay: Math.random() * (3000 - 1000) + 1000,
+      callback: () => {
+        let row = Math.floor(Math.random() * game.height);
+        let type = "";
+        let health;
+        let speed;
+        let randomPercentage = Math.floor(Math.random() * 100);
+        if (randomPercentage < 50) {
+          type = "basic";
+          health = game.robot.health;
+          speed = game.robot.speed;
+        } else if (randomPercentage >= 50 && randomPercentage < 75) {
+          type = "armored";
+          health = game.armoredRobot.health;
+          speed = game.armoredRobot.speed;
+        } else if (randomPercentage >= 75 && randomPercentage < 87.5) {
+          type = "speed";
+          health = game.speedRobot.health;
+          speed = game.speedRobot.speed;
+        } else if (randomPercentage >= 87.5) {
+          type = "cannon";
+          health = game.cannonRobot.health;
+          speed = game.cannonRobot.speed;
         }
-      });
-    }, 1500);
-    setInterval(function () {
-      let row = Math.floor(Math.random() * game.height);
-      let type = "";
-      let health;
-      let speed;
-      let randomPercentage = Math.floor(Math.random() * 100);
-      if (randomPercentage < 50) {
-        type = "basic";
-        health = game.robot.health;
-        speed = game.robot.speed;
-      } else if (randomPercentage >= 50 && randomPercentage < 75) {
-        type = "armored";
-        health = game.armoredRobot.health;
-        speed = game.armoredRobot.speed;
-      } else if (randomPercentage >= 75 && randomPercentage < 87.5) {
-        type = "speed";
-        health = game.speedRobot.health;
-        speed = game.speedRobot.speed;
-      } else if (randomPercentage >= 87.5) {
-        type = "cannon";
-        health = game.cannonRobot.health;
-        speed = game.cannonRobot.speed;
-      }
-      let robot = game.robots.create(game.width * game.TILESIZE, (game.TILESIZE / 2 + game.TILESIZE * row) + game.topMargin, `${type}Robot0`).setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0).setImmovable();
-      robot.type = type;
-      robot.health = health;
-      robot.speed = speed;
-      robot.dead = false;
-    }, Math.random() * (3000 - 1000) + 1000);
-    setInterval(function () {
-      game.robots.getChildren().forEach(robot => {
-        if (robot.type === "cannon") {
-          let projectile = game.cannonRobotProjectiles.create(robot.x - 40, robot.y + 20, "cannonProjectile").setScale(8).setGravityY(-1500).setVelocityX(-300);
-          projectile.setSize(2, 2);
-          projectile.setOffset(6, 2);
-        }
-      });
-    }, 1500);
+        let robot = game.robots.create(game.width * game.TILESIZE, (game.TILESIZE / 2 + game.TILESIZE * row) + game.topMargin, `${type}Robot0`).setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0).setImmovable();
+        robot.type = type;
+        robot.health = health;
+        robot.speed = speed;
+        robot.dead = false;
+      },
+      callbackScope: this,
+      repeat: -1
+    });
+    game.projectileInterval = this.time.addEvent({
+      delay: 1500,
+      callback: () => {
+        game.robots.getChildren().forEach(robot => {
+          if (robot.type === "cannon") {
+            let projectile = game.cannonRobotProjectiles.create(robot.x - 40, robot.y + 20, "cannonProjectile").setScale(8).setGravityY(-1500).setVelocityX(-300);
+            projectile.setSize(2, 2);
+            projectile.setOffset(6, 2);
+          }
+        });
+      },
+      callbackScope: this,
+      repeat: -1
+    });
 
     // ---------- Pause game ----------
     let phaser = this;
     window.onblur = function() {
-      phaser.scene.pause();
+      clearInterval(game.frogActionInterval);
+      clearInterval(game.robotSpawnInterval);
+      clearInterval(game.projectileInterval);
     }
     window.onfocus = function() {
-      phaser.scene.resume();
+      game.frogActionInterval
+      game.robotSpawnInterval
+      game.projectileInterval
     }
   }
   update() {
