@@ -62,6 +62,7 @@ class Game extends Phaser.Scene {
     this.load.image("hurtSpeedRobot", "assets/speedRobot2.png");
     this.load.image("cannonRobot0", "assets/cannonRobot0.png");
     this.load.image("cannonRobot1", "assets/cannonRobot1.png");
+    this.load.image("hurtCannonRobot", "assets/hurtCannonRobot.png");
 
     // ---------- Other ----------
     this.load.image("tile0", "assets/tile0.png");
@@ -170,10 +171,12 @@ class Game extends Phaser.Scene {
       projectile.destroy();
       let lastFrame = robot.texture.key;
       if (!robot.dead) {
-        if (robot.type === "basic" || robot.type === "armored" && !robot.dead) {
+        if (robot.type === "basic" || robot.type === "armored") {
           robot.setTexture("hurtRobot");
         } else if (robot.type === "speed") {
           robot.setTexture("hurtSpeedRobot");
+        } else if (robot.type === "cannon") {
+          robot.setTexture("hurtCannonRobot");
         }
       }
       setTimeout(function () {
@@ -290,6 +293,9 @@ class Game extends Phaser.Scene {
             break;
           case "speed":
             robot.anims.play("speedRobotWalk", true);
+            break;
+          case "cannon":
+            robot.anims.play("cannonRobotWalk", true);
             break;
         }
       }
