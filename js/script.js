@@ -143,7 +143,7 @@ class Game extends Phaser.Scene {
     });
 
     // ---------- Colliders ----------
-    this.physics.add.overlap(game.frogs, game.robots, (frog, robot) => {
+    this.physics.add.collider(game.frogs, game.robots, (frog, robot) => {
       if (frog.type === "basic") {
         frog.destroy();
         let lastFrame = robot.texture.key;
