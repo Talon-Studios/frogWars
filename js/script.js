@@ -285,19 +285,6 @@ class Game extends Phaser.Scene {
       callbackScope: this,
       repeat: -1
     });
-
-    // ---------- Pause game ----------
-    let phaser = this;
-    window.onblur = function() {
-      clearInterval(game.frogActionInterval);
-      clearInterval(game.robotSpawnInterval);
-      clearInterval(game.projectileInterval);
-    }
-    window.onfocus = function() {
-      game.frogActionInterval
-      game.robotSpawnInterval
-      game.projectileInterval
-    }
   }
   update() {
     game.robots.getChildren().forEach(robot => {
