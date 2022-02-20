@@ -133,15 +133,18 @@ class Game extends Phaser.Scene {
       });
       tile.on("pointerdown", (pointer) => {
         if (!tile.frog) {
-          switch (game.currentSelection) {
-            case "bird0":
-              let bird = game.removalBirds.create(0, tile.y - game.TILESIZE, "bird1").setScale(8).setGravityY(-config.physics.arcade.gravity.y).setVelocityX(500);
-              bird.flipX = true;
-              break;
-            default:
-              let frog = game.frogs.create(tile.x, tile.y, game.currentSelection).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
-              frog.type = game.currentSelection;
-              tile.frog = frog;
+          if (!(game.currentSelection === "bird0")) {
+            let frog = game.frogs.create(tile.x, tile.y, game.currentSelection).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
+            frog.type = game.currentSelection;
+            tile.frog = frog;
+            frog.isDead = false;
+          }
+        } else {
+          if (game.currentSelection === "bird0" && !tile.frog.isDead) {
+            let bird = game.removalBirds.create(0, tile.y - game.TILESIZE + (game.TILESIZE / 8), "bird1").setScale(8).setGravityY(-config.physics.arcade.gravity.y).setVelocityX(500);
+            bird.flipX = true;
+            tile.frog.isDead = true;
+            tile.frog.enableBody = true;
           }
         }
       });
@@ -199,6 +202,12 @@ class Game extends Phaser.Scene {
         setTimeout(function () {
           robot.destroy();
         }, 300);
+      }
+    });
+    this.physics.add.overlap(game.frogs, game.removalBirds, (frog, bird) => {
+      if (frog.isDead) {
+        bird.destroy();
+        frog.setVelocityX(500);
       }
     });
 
