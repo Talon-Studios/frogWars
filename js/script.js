@@ -144,7 +144,6 @@ class Game extends Phaser.Scene {
             let bird = game.removalBirds.create(0, tile.y - game.TILESIZE + (game.TILESIZE / 8), "bird1").setScale(8).setGravityY(-config.physics.arcade.gravity.y).setVelocityX(500);
             bird.flipX = true;
             tile.frog.isDead = true;
-            tile.frog.enableBody = true;
           }
         }
       });
@@ -206,7 +205,7 @@ class Game extends Phaser.Scene {
     });
     this.physics.add.overlap(game.frogs, game.removalBirds, (frog, bird) => {
       if (frog.isDead) {
-        bird.destroy();
+        bird.setVelocityX(500);
         frog.setVelocityX(500);
       }
     });
