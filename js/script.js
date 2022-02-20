@@ -73,6 +73,8 @@ class Game extends Phaser.Scene {
     this.load.image("explosion1", "assets/explosion1.png");
     this.load.image("explosion2", "assets/explosion2.png");
     this.load.image("explosion3", "assets/explosion3.png");
+    this.load.image("bird0", "assets/bird0.png");
+    this.load.image("bird1", "assets/bird1.png");
   }
   create() {
     game.engine = new Engine(this);
