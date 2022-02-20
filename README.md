@@ -2,7 +2,7 @@
 
 :frog: Frog Wars, Yes, frogs.
 
-**Live Demo:** [thcheetah777.github.io/luckyalien/](https://thcheetah777.github.io/frogWars/)
+**Live Demo:** [thcheetah777.github.io/frogWars/](https://thcheetah777.github.io/frogWars/)
 
 ## Description
 
