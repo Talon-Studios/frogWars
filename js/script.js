@@ -258,11 +258,11 @@ class Game extends Phaser.Scene {
     this.time.addEvent({
       delay: Math.random() * (3000 - 1000) + 1000,
       callback: () => {
-        let row = Math.floor(Math.random() * game.height);
+        let row = Math.random() * game.height;
         let type = "";
         let health;
         let speed;
-        let randomPercentage = Math.floor(Math.random() * 100);
+        let randomPercentage = Math.random() * 100;
         if (randomPercentage < 50) {
           type = "basic";
           health = game.robot.health;
