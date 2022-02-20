@@ -47,9 +47,9 @@ class Game extends Phaser.Scene {
     this.load.image("cannonFrog0", "assets/cannonFrog0.png");
     this.load.image("cannonFrog1", "assets/cannonFrog1.png");
     this.load.image("cannonProjectile", "assets/cannonProjectile.png");
-    this.load.image("launcherFrog0", "assets/launcherFrog.png");
+    this.load.image("launcherFrog", "assets/launcherFrog.png");
     this.load.image("launcherProjectile", "assets/launcherProjectile.png");
-    this.load.image("toadFrog0", "assets/toad.png");
+    this.load.image("toad", "assets/toad.png");
 
     // ---------- Robots ----------
     this.load.image("basicRobot0", "assets/basicRobot0.png");
@@ -80,28 +80,28 @@ class Game extends Phaser.Scene {
     game.engine = new Engine(this);
     // Create tiles
     game.tiles = this.physics.add.staticGroup();
-    let count = 0;
+    let tileCount = 0;
     for (var x = game.TILESIZE / 2; x < game.width * game.TILESIZE; x += game.TILESIZE) {
       for (var y = (game.TILESIZE / 2) + game.topMargin; y < (game.height * game.TILESIZE) + game.topMargin; y += game.TILESIZE) {
-        if (count % 2 == 0) {
+        if (tileCount % 2 == 0) {
           let tile = game.tiles.create(x, y, "tile0").setScale(8).setInteractive();
           tile.textureKey = "tile0";
         } else {
           let tile = game.tiles.create(x, y, "tile1").setScale(8).setInteractive();
           tile.textureKey = "tile1";
         }
-        count++;
+        tileCount++;
       }
     }
 
     // Create choices to put in game
     game.choices = this.physics.add.staticGroup();
-    let frogCount = 0;
-    const frogs = ["basic", "cannon", "launcher", "toad"];
-    for (var x = (game.TILESIZE / 2) + 50; x < (game.TILESIZE * frogs.length) + 50; x += game.TILESIZE + 10) {
-      let choice = game.choices.create(x, game.TILESIZE, `${frogs[frogCount]}Frog0`).setScale(8).setInteractive();
-      choice.frogType = frogs[frogCount];
-      frogCount++;
+    let choiceCount = 0;
+    const choices = ["basicFrog0", "cannonFrog0", "launcherFrog", "toad", "bird0"];
+    for (var x = (game.TILESIZE / 2) + 50; x < (game.TILESIZE * (choices.length + 1)) + 50; x += game.TILESIZE + 10) {
+      let choice = game.choices.create(x, game.TILESIZE, choices[choiceCount]).setScale(8).setInteractive();
+      choice.frogType = choices[choiceCount];
+      choiceCount++;
     }
 
     // Create groups
@@ -109,6 +109,7 @@ class Game extends Phaser.Scene {
     game.robots = this.physics.add.group();
     game.projectiles = this.physics.add.group();
     game.cannonRobotProjectiles = this.physics.add.group();
+    game.removalBirds = this.physics.add.group();
 
     // ---------- Animation ----------
     // Walking
@@ -132,7 +133,7 @@ class Game extends Phaser.Scene {
       });
       tile.on("pointerdown", (pointer) => {
         if (!tile.frog) {
-          let frog = game.frogs.create(tile.x, tile.y, `${game.currentSelection}Frog0`).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
+          let frog = game.frogs.create(tile.x, tile.y, game.currentSelection).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
           frog.type = game.currentSelection;
           tile.frog = frog;
         }
