@@ -130,7 +130,7 @@ class Game extends Phaser.Scene {
       });
       tile.on("pointerdown", (pointer) => {
         if (!tile.frog) {
-          let frog = game.frogs.create(tile.x, tile.y, `${game.currentSelection}Frog0`).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0);
+          let frog = game.frogs.create(tile.x, tile.y, `${game.currentSelection}Frog0`).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
           frog.type = game.currentSelection;
           tile.frog = frog;
         }
@@ -193,7 +193,7 @@ class Game extends Phaser.Scene {
     });
 
     // ---------- Intervals ----------
-    game.frogActionInterval = this.time.addEvent({
+    this.time.addEvent({
       delay: 1500,
       callback: () => {
         game.tiles.getChildren().forEach(tile => {
@@ -237,7 +237,7 @@ class Game extends Phaser.Scene {
       callbackScope: this,
       repeat: -1
     });
-    game.robotSpawnInterval = this.time.addEvent({
+    this.time.addEvent({
       delay: Math.random() * (3000 - 1000) + 1000,
       callback: () => {
         let row = Math.floor(Math.random() * game.height);
@@ -262,7 +262,7 @@ class Game extends Phaser.Scene {
           health = game.cannonRobot.health;
           speed = game.cannonRobot.speed;
         }
-        let robot = game.robots.create(game.width * game.TILESIZE, (game.TILESIZE / 2 + game.TILESIZE * row) + game.topMargin, `${type}Robot0`).setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0).setImmovable();
+        let robot = game.robots.create(game.width * game.TILESIZE, (game.TILESIZE / 2 + game.TILESIZE * row) + game.topMargin, `${type}Robot0`).setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0);
         robot.type = type;
         robot.health = health;
         robot.speed = speed;
@@ -271,7 +271,7 @@ class Game extends Phaser.Scene {
       callbackScope: this,
       repeat: -1
     });
-    game.projectileInterval = this.time.addEvent({
+    this.time.addEvent({
       delay: 1500,
       callback: () => {
         game.robots.getChildren().forEach(robot => {
@@ -289,7 +289,7 @@ class Game extends Phaser.Scene {
   update() {
     game.robots.getChildren().forEach(robot => {
       if (!robot.dead) {
-        robot.x -= robot.speed;
+        robot.setVelocityX(-robot.speed * 45);
         switch (robot.type) {
           case "basic":
             robot.anims.play("basicRobotWalk", true);
