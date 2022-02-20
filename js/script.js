@@ -133,9 +133,16 @@ class Game extends Phaser.Scene {
       });
       tile.on("pointerdown", (pointer) => {
         if (!tile.frog) {
-          let frog = game.frogs.create(tile.x, tile.y, game.currentSelection).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
-          frog.type = game.currentSelection;
-          tile.frog = frog;
+          switch (game.currentSelection) {
+            case "bird0":
+              let bird = game.removalBirds.create(0, tile.y - game.TILESIZE, "bird1").setScale(8).setGravityY(-config.physics.arcade.gravity.y).setVelocityX(500);
+              bird.flipX = true;
+              break;
+            default:
+              let frog = game.frogs.create(tile.x, tile.y, game.currentSelection).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
+              frog.type = game.currentSelection;
+              tile.frog = frog;
+          }
         }
       });
     });
@@ -147,7 +154,7 @@ class Game extends Phaser.Scene {
 
     // ---------- Colliders ----------
     this.physics.add.collider(game.frogs, game.robots, (frog, robot) => {
-      if (frog.type === "basic") {
+      if (frog.type === "basicFrog0") {
         frog.destroy();
         let lastFrame = robot.texture.key;
         if (!robot.dead) {
@@ -210,20 +217,20 @@ class Game extends Phaser.Scene {
         });
         game.frogs.getChildren().forEach(frog => {
           switch (frog.type) {
-            case "basic":
+            case "basicFrog0":
               frog.anims.play("jump", true);
               setTimeout(function () {
                 frog.x += game.tiles.getChildren()[0].width * 8;
               }, 50);
               break;
-            case "cannon":
+            case "cannonFrog0":
               frog.anims.play("shootCannonball", true);
               setTimeout(function () {
                 let projectile = game.projectiles.create(frog.x, frog.y, "cannonProjectile").setScale(8).setGravityY(-1500).setVelocityX(300);
                 projectile.type = "cannon";
               }, 200);
               break;
-            case "launcher":
+            case "launcherFrog":
               let numOfSprite = 5;
               for (var i = 0; i < numOfSprite; i++) {
                 let projectile = game.projectiles.create(frog.x, frog.y, "launcherProjectile").setScale(8).setGravityY(-1500);
