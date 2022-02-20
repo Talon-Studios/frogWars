@@ -133,7 +133,7 @@ class Game extends Phaser.Scene {
       });
       tile.on("pointerdown", (pointer) => {
         if (!tile.frog) {
-          if (!(game.currentSelection === "bird0")) {
+          if (game.currentSelection !== "bird0") {
             let frog = game.frogs.create(tile.x, tile.y, game.currentSelection).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
             frog.type = game.currentSelection;
             tile.frog = frog;
