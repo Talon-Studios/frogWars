@@ -167,7 +167,7 @@ class Game extends Phaser.Scene {
         }
       }
     });
-    this.physics.add.collider(game.projectiles, game.robots, (projectile, robot) => {
+    this.physics.add.overlap(game.projectiles, game.robots, (projectile, robot) => {
       projectile.destroy();
       let lastFrame = robot.texture.key;
       if (!robot.dead) {
