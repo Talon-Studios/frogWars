@@ -52,7 +52,7 @@ None yet. :disappointed:
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/thcheetah777/frogWars/blob/master/LICENSE.md) file for full details
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/thcheetah777/frogWars/blob/master/LICENSE) file for full details
 
 ## Acknowledgments
 
