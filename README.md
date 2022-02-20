@@ -1,6 +1,7 @@
 ![Screenshot](screenshot.png)
 
-:frog: Frog Wars, Yes, frogs.
+:frog: Frog Wars, Yes, frogs.\
+[![DeepScan grade](https://deepscan.io/api/teams/14666/projects/20253/branches/547887/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=14666&pid=20253&bid=547887)
 
 **Live Demo:** [thcheetah777.github.io/frogWars/](https://thcheetah777.github.io/frogWars/)
 
@@ -8,7 +9,7 @@
 
 #### **The only hope for the Earth is frogs. Yes, frogs.**
 
-In the future, machines have gotten sentient life and are succeeding in taking over the world but the frog ancients were fighting back and with the last of their energy, they joined together and built a pond that would save the world. 
+In the future, machines have gotten sentient life and are succeeding in taking over the world but the frog ancients were fighting back and with the last of their energy, they joined together and built a pond that would save the world.
 
 ## Getting Started
 
