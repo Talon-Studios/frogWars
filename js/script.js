@@ -194,7 +194,7 @@ class Game extends Phaser.Scene {
 
     // ---------- Intervals ----------
     this.time.addEvent({
-      delay: 1500,
+      delay: 500,
       callback: () => {
         game.tiles.getChildren().forEach(tile => {
           let hasFrog = null;
@@ -221,7 +221,7 @@ class Game extends Phaser.Scene {
               }, 200);
               break;
             case "launcher":
-              let numOfSprite = 200;
+              let numOfSprite = 100;
               for (var i = 0; i < numOfSprite; i++) {
                 let projectile = game.projectiles.create(frog.x, frog.y, "launcherProjectile").setScale(8).setGravityY(-1500);
                 projectile.type = "launcher";
