@@ -221,7 +221,7 @@ class Game extends Phaser.Scene {
               }, 200);
               break;
             case "launcher":
-              let numOfSprite = 5;
+              let numOfSprite = 200;
               for (var i = 0; i < numOfSprite; i++) {
                 let projectile = game.projectiles.create(frog.x, frog.y, "launcherProjectile").setScale(8).setGravityY(-1500);
                 projectile.type = "launcher";
