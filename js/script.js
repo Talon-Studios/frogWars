@@ -1,7 +1,7 @@
 // Frog Wars
 /*^*^*^*^*^*^*^*
 script.js
-The main script for Frog Wars
+The main script for Frog Wars.
 *^*^*^*^*^*^*^*/
 
 let game = {

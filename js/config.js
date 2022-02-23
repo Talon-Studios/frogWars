@@ -1,3 +1,9 @@
+// Frog Wars
+/*^*^*^*^*^*^*^*
+config.js
+The configuration for the Phaser 3 framework.
+*^*^*^*^*^*^*^*/
+
 const config = {
   type: Phaser.AUTO,
   scale: {
