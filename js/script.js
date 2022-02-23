@@ -1,4 +1,9 @@
 // Frog Wars
+/*^*^*^*^*^*^*^*
+script.js
+The main script for Frog Wars
+*^*^*^*^*^*^*^*/
+
 let game = {
   width: 17,
   height: 7,
