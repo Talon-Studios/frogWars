@@ -9,6 +9,7 @@ let game = {
   height: 7,
   TILESIZE: 64,
   topMargin: 167,
+  sfx: {},
   robot: {
     speed: 0.6,
     health: 5
@@ -86,6 +87,11 @@ class Game extends Phaser.Scene {
   }
   create() {
     game.engine = new Engine(this);
+
+    // Add sounds
+    game.sfx.music1 = this.sound.add("music1-10").setLoop(true);
+    game.sfx.music1.play();
+
     // Create tiles
     game.tiles = this.physics.add.staticGroup();
     let count = 0;
