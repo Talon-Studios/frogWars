@@ -9,6 +9,7 @@ let game = {
   height: 7,
   TILESIZE: 64,
   topMargin: 167,
+  sfx: {},
   robot: {
     speed: 0.6,
     health: 5
@@ -44,6 +45,7 @@ class Game extends Phaser.Scene {
     super("Game");
   }
   preload() {
+    // ********** Images **********
     // ---------- Frogs ----------
     this.load.image("basicFrog0", "assets/basicFrog0.png");
     this.load.image("basicFrog1", "assets/basicFrog1.png");
@@ -78,9 +80,18 @@ class Game extends Phaser.Scene {
     this.load.image("explosion1", "assets/explosion1.png");
     this.load.image("explosion2", "assets/explosion2.png");
     this.load.image("explosion3", "assets/explosion3.png");
+
+    // ********** Sounds **********
+    // ---------- Music ----------
+    this.load.audio("music1-10", "assets/music1-10.mp3");
   }
   create() {
     game.engine = new Engine(this);
+
+    // Add sounds
+    game.sfx.music1 = this.sound.add("music1-10").setLoop(true);
+    game.sfx.music1.play();
+
     // Create tiles
     game.tiles = this.physics.add.staticGroup();
     let count = 0;
