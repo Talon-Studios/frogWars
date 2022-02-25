@@ -157,7 +157,7 @@ class Game extends Phaser.Scene {
         setTimeout(function () {
           robot.setTexture(lastFrame);
         }, 500);
-        robot.health -= 5;
+        robot.health -= Infinity;
         if (robot.health <= 0) {
           robot.dead = true;
           robot.anims.play("explode", true);
@@ -238,7 +238,7 @@ class Game extends Phaser.Scene {
       repeat: -1
     });
     this.time.addEvent({
-      delay: Math.random() * (1000 - 500) + 500,
+      delay: Math.random() * (500 - 100) + 100,
       callback: () => {
         let row = Math.floor(Math.random() * game.height);
         let type = "";
