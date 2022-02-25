@@ -194,7 +194,7 @@ class Game extends Phaser.Scene {
 
     // ---------- Intervals ----------
     this.time.addEvent({
-      delay: 100,
+      delay: 50,
       callback: () => {
         game.tiles.getChildren().forEach(tile => {
           let hasFrog = null;
@@ -238,7 +238,7 @@ class Game extends Phaser.Scene {
       repeat: -1
     });
     this.time.addEvent({
-      delay: Math.random() * (3000 - 1000) + 1000,
+      delay: Math.random() * (1000 - 500) + 500,
       callback: () => {
         let row = Math.floor(Math.random() * game.height);
         let type = "";
