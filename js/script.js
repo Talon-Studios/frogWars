@@ -10,21 +10,23 @@ let game = {
   TILESIZE: 64,
   topMargin: 167,
   sfx: {},
-  robot: {
-    speed: 0.6,
-    health: 5
-  },
-  armoredRobot: {
-    speed: 0.6,
-    health: 10
-  },
-  speedRobot: {
-    speed: 1.8,
-    health: 3
-  },
-  cannonRobot: {
-    speed: 0.3,
-    health: 5
+  robots: {
+    normalRobot: {
+      speed: 0.6,
+      health: 5
+    },
+    armoredRobot: {
+      speed: 0.6,
+      health: 10
+    },
+    speedRobot: {
+      speed: 1.8,
+      health: 3
+    },
+    cannonRobot: {
+      speed: 0.3,
+      health: 5
+    }
   },
   currencies: {
     flies: 0,
@@ -263,20 +265,20 @@ class Game extends Phaser.Scene {
         let randomPercentage = Math.random() * 100;
         if (randomPercentage < 50) {
           type = "basic";
-          health = game.robot.health;
-          speed = game.robot.speed;
+          health = game.robots.normalRobot.health;
+          speed = game.robots.normalRobot.speed;
         } else if (randomPercentage >= 50 && randomPercentage < 75) {
           type = "armored";
-          health = game.armoredRobot.health;
-          speed = game.armoredRobot.speed;
+          health = game.robots.armoredRobot.health;
+          speed = game.robots.armoredRobot.speed;
         } else if (randomPercentage >= 75 && randomPercentage < 87.5) {
           type = "speed";
-          health = game.speedRobot.health;
-          speed = game.speedRobot.speed;
+          health = game.robots.speedRobot.health;
+          speed = game.robots.speedRobot.speed;
         } else if (randomPercentage >= 87.5) {
           type = "cannon";
-          health = game.cannonRobot.health;
-          speed = game.cannonRobot.speed;
+          health = game.robots.cannonRobot.health;
+          speed = game.robots.cannonRobot.speed;
         }
         let robot = game.robots.create(game.width * game.TILESIZE, (game.TILESIZE / 2 + game.TILESIZE * row) + game.topMargin, `${type}Robot0`).setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0);
         robot.type = type;
