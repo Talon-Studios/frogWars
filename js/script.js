@@ -321,8 +321,8 @@ class Game extends Phaser.Scene {
       delay: 50,
       callback: () => {
         let row = Math.floor(Math.random() * game.height);
-        let frog = game.frogs.create(tile.x, (game.TILESIZE / 2 + game.TILESIZE * row) + game.topMargin, `basicFrog0`).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
-        frog.type = game.currentSelection;
+        let frog = game.frogs.create(0, (game.TILESIZE / 2 + game.TILESIZE * row) + game.topMargin, `basicFrog0`).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
+        frog.type = "basic";
       },
       callbackScope: this,
       repeat: -1
