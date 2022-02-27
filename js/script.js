@@ -84,6 +84,12 @@ class Game extends Phaser.Scene {
     // ********** Sounds **********
     // ---------- Music ----------
     this.load.audio("music1-10", "assets/music1-10.mp3");
+
+    // ---------- SFX ----------
+    this.load.audio("cannonFrogShoot", "assets/cannonFrogShoot.wav");
+    this.load.audio("launcherFrogShoot", "assets/launcherFrogShoot.wav");
+    this.load.audio("robotDie", "assets/robotDie.wav");
+    this.load.audio("robotHit", "assets/robotHit.wav");
   }
   create() {
     game.engine = new Engine(this);
