@@ -124,8 +124,8 @@ class Game extends Phaser.Scene {
     // Create choices to put in game
     game.choices = this.physics.add.staticGroup();
     let frogCount = 0;
-    const frogs = ["basic", "cannon", "launcher", "toad"];
-    for (var x = (game.TILESIZE / 2) + 50; x < (game.TILESIZE * frogs.length) + 50; x += game.TILESIZE + 10) {
+    const frogs = ["cannon", "basic", "launcher", "toad", "water"];
+    for (var x = (game.TILESIZE / 2) + 50; x < (game.TILESIZE * (frogs.length + 1)) + 50; x += game.TILESIZE + 10) {
       let choice = game.choices.create(x, game.TILESIZE, `${frogs[frogCount]}Frog0`).setScale(8).setInteractive();
       choice.frogType = frogs[frogCount];
       frogCount++;
