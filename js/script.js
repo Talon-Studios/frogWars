@@ -84,11 +84,21 @@ class Game extends Phaser.Scene {
     // ********** Sounds **********
     // ---------- Music ----------
     this.load.audio("music1-10", "assets/music1-10.mp3");
+
+    // ---------- SFX ----------
+    this.load.audio("cannonFrogShoot", "assets/cannonFrogShoot.wav");
+    this.load.audio("launcherFrogShoot", "assets/launcherFrogShoot.wav");
+    this.load.audio("robotDie", "assets/robotDie.wav");
+    this.load.audio("robotHit", "assets/robotHit.wav");
   }
   create() {
     game.engine = new Engine(this);
 
     // Add sounds
+    game.sfx.cannonFrogShoot = this.sound.add("cannonFrogShoot");
+    game.sfx.launcherFrogShoot = this.sound.add("launcherFrogShoot");
+    game.sfx.robotDie = this.sound.add("robotDie");
+    game.sfx.robotHit = this.sound.add("robotHit");
     game.sfx.music1 = this.sound.add("music1-10").setLoop(true);
     game.sfx.music1.play();
 
@@ -173,8 +183,10 @@ class Game extends Phaser.Scene {
         setTimeout(function () {
           robot.setTexture(lastFrame);
         }, 500);
+        game.sfx.robotHit.play();
         robot.health -= 5;
         if (robot.health <= 0) {
+          game.sfx.robotDie.play();
           robot.dead = true;
           robot.anims.play("explode", true);
           setTimeout(function () {
@@ -198,8 +210,10 @@ class Game extends Phaser.Scene {
       setTimeout(function () {
         robot.setTexture(lastFrame);
       }, 500);
+      game.sfx.robotHit.play();
       robot.health -= game.projectileStats[projectile.type].damage;
       if (robot.health <= 0) {
+        game.sfx.robotDie.play();
         robot.dead = true;
         robot.anims.play("explode", true);
         setTimeout(function () {
@@ -230,6 +244,7 @@ class Game extends Phaser.Scene {
               }, 50);
               break;
             case "cannon":
+              // game.sfx.cannonFrogShoot.play();
               frog.anims.play("shootCannonball", true);
               setTimeout(function () {
                 let projectile = game.projectiles.create(frog.x, frog.y, "cannonProjectile").setScale(8).setGravityY(-1500).setVelocityX(300);
@@ -237,6 +252,7 @@ class Game extends Phaser.Scene {
               }, 200);
               break;
             case "launcher":
+              game.sfx.launcherFrogShoot.play();
               let numOfSprite = 5;
               for (var i = 0; i < numOfSprite; i++) {
                 let projectile = game.projectiles.create(frog.x, frog.y, "launcherProjectile").setScale(8).setGravityY(-1500);
