@@ -1,9 +1,15 @@
 // Frog Wars
+/*^*^*^*^*^*^*^*
+script.js
+The main script for Frog Wars.
+*^*^*^*^*^*^*^*/
+
 let game = {
   width: 17,
   height: 7,
   TILESIZE: 64,
   topMargin: 167,
+  sfx: {},
   robot: {
     speed: 0.6,
     health: 5
@@ -39,6 +45,7 @@ class Game extends Phaser.Scene {
     super("Game");
   }
   preload() {
+    // ********** Images **********
     // ---------- Frogs ----------
     this.load.image("basicFrog0", "assets/basicFrog0.png");
     this.load.image("basicFrog1", "assets/basicFrog1.png");
@@ -73,9 +80,28 @@ class Game extends Phaser.Scene {
     this.load.image("explosion1", "assets/explosion1.png");
     this.load.image("explosion2", "assets/explosion2.png");
     this.load.image("explosion3", "assets/explosion3.png");
+
+    // ********** Sounds **********
+    // ---------- Music ----------
+    this.load.audio("music1-10", "assets/music1-10.mp3");
+
+    // ---------- SFX ----------
+    this.load.audio("cannonFrogShoot", "assets/cannonFrogShoot.wav");
+    this.load.audio("launcherFrogShoot", "assets/launcherFrogShoot.wav");
+    this.load.audio("robotDie", "assets/robotDie.wav");
+    this.load.audio("robotHit", "assets/robotHit.wav");
   }
   create() {
     game.engine = new Engine(this);
+
+    // Add sounds
+    game.sfx.cannonFrogShoot = this.sound.add("cannonFrogShoot");
+    game.sfx.launcherFrogShoot = this.sound.add("launcherFrogShoot");
+    game.sfx.robotDie = this.sound.add("robotDie");
+    game.sfx.robotHit = this.sound.add("robotHit");
+    game.sfx.music1 = this.sound.add("music1-10").setLoop(true);
+    game.sfx.music1.play();
+
     // Create tiles
     game.tiles = this.physics.add.staticGroup();
     let count = 0;
@@ -157,8 +183,10 @@ class Game extends Phaser.Scene {
         setTimeout(function () {
           robot.setTexture(lastFrame);
         }, 500);
+        game.sfx.robotHit.play();
         robot.health -= Infinity;
         if (robot.health <= 0) {
+          game.sfx.robotDie.play();
           robot.dead = true;
           robot.anims.play("explode", true);
           setTimeout(function () {
@@ -182,8 +210,10 @@ class Game extends Phaser.Scene {
       setTimeout(function () {
         robot.setTexture(lastFrame);
       }, 500);
+      game.sfx.robotHit.play();
       robot.health -= game.projectileStats[projectile.type].damage;
       if (robot.health <= 0) {
+        game.sfx.robotDie.play();
         robot.dead = true;
         robot.anims.play("explode", true);
         setTimeout(function () {
@@ -214,6 +244,7 @@ class Game extends Phaser.Scene {
               }, 50);
               break;
             case "cannon":
+              // game.sfx.cannonFrogShoot.play();
               frog.anims.play("shootCannonball", true);
               setTimeout(function () {
                 let projectile = game.projectiles.create(frog.x, frog.y, "cannonProjectile").setScale(8).setGravityY(-1500).setVelocityX(300);
@@ -221,6 +252,7 @@ class Game extends Phaser.Scene {
               }, 200);
               break;
             case "launcher":
+              game.sfx.launcherFrogShoot.play();
               let numOfSprite = 20;
               for (var i = 0; i < numOfSprite; i++) {
                 let projectile = game.projectiles.create(frog.x, frog.y, "launcherProjectile").setScale(8).setGravityY(-1500);
