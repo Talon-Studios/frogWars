@@ -57,6 +57,9 @@ class Game extends Phaser.Scene {
     this.load.image("launcherFrog0", "assets/launcherFrog.png");
     this.load.image("launcherProjectile", "assets/launcherProjectile.png");
     this.load.image("toadFrog0", "assets/toad.png");
+    this.load.image("waterFrog0", "assets/waterFrog0.png");
+    this.load.image("waterFrog1", "assets/waterFrog1.png");
+    this.load.image("water", "assets/water.png");
 
     // ---------- Robots ----------
     this.load.image("basicRobot0", "assets/basicRobot0.png");
