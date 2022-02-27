@@ -1,6 +1,7 @@
 ![Screenshot](screenshot.png)
 
-:frog: Frog Wars, Yes, frogs.\
+:frog: Frog Wars, Yes, frogs.
+
 [![DeepScan grade](https://deepscan.io/api/teams/14666/projects/20253/branches/547887/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=14666&pid=20253&bid=547887)
 
 **Live Demo:** [thcheetah777.github.io/frogWars/](https://thcheetah777.github.io/frogWars/)
@@ -31,17 +32,11 @@ cd frogWars
 
 ### Running the game
 
-You need to set up the server via Python. (If you don't have Python, download it [here](https://www.python.org/)) Do this by entering
+You need to set up the server via Node. (If you don't have Node, download it [here](https://nodejs.org/en/) Do this by running
 ```
-python -m http.server
+npm install
+npm start
 ```
-or
-```
-python3 -m http.server
-```
-or
-```python -m SimpleHTTPServer``` and ```python3 -m SimpleHTTPSServer``` on Linux machines
-After you activate the server, got to [localhost:8000](http://localhost:8000/) to play the game
 
 ## Contribution
 
@@ -59,5 +54,5 @@ This project is licensed under the MIT License - see the [LICENSE](https://githu
 
 * Inspiration: [Plants vs Zombies](https://en.wikipedia.org/wiki/Plants_vs._Zombies)
 * Music: [Video Game Music (Kirby)](https://downloads.khinsider.com/game-soundtracks/album/kirby-the-very-best-of-kirby)
-* Graphics: [My team on Pixilart.com](https://pixilart.com)
-* Level Design: Me and my team
+* Graphics: [My artists on Pixilart.com](https://pixilart.com)
+* Level Design: My writer
