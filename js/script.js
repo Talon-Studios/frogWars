@@ -235,8 +235,9 @@ class Game extends Phaser.Scene {
     });
     this.physics.add.overlap(game.frogs, game.removalBirds, (frog, bird) => {
       if (frog.isDead) {
-        bird.setVelocityX(500);
-        frog.setVelocityX(500);
+        bird.setVelocityY(-500);
+        bird.setVelocityX(0);
+        frog.setVelocityY(-500);
       }
     });
 
