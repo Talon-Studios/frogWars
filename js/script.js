@@ -37,6 +37,9 @@ let game = {
     },
     "launcher": {
       damage: 0.5
+    },
+    "water": {
+      damage: 0.5
     }
   }
 };
@@ -148,6 +151,7 @@ class Game extends Phaser.Scene {
     game.engine.addAnimation("jump", 10, false, false, "basicFrog0", "basicFrog1", "basicFrog2", "basicFrog0");
     game.engine.addAnimation("shootCannonball", 5, false, true, "cannonFrog0", "cannonFrog1");
     game.engine.addAnimation("explode", 10, false, false, "explosion0", "explosion1", "explosion2", "explosion3");
+    game.engine.addAnimation("shootWater", 5, false, true, "waterFrog0", "waterFrog1");
 
     // ---------- Interaction ----------
     game.tiles.getChildren().forEach(tile => {
@@ -215,6 +219,9 @@ class Game extends Phaser.Scene {
       }, 500);
       game.sfx.robotHit.play();
       robot.health -= game.projectileStats[projectile.type].damage;
+      if (projectile.type === "water" && robot.speed > 0.3) {
+        robot.speed -= 0.05;
+      }
       if (robot.health <= 0) {
         game.sfx.robotDie.play();
         robot.dead = true;
@@ -247,7 +254,6 @@ class Game extends Phaser.Scene {
               }, 50);
               break;
             case "cannon":
-              // game.sfx.cannonFrogShoot.play();
               frog.anims.play("shootCannonball", true);
               setTimeout(function () {
                 let projectile = game.projectiles.create(frog.x, frog.y, "cannonProjectile").setScale(8).setGravityY(-1500).setVelocityX(300);
@@ -266,6 +272,14 @@ class Game extends Phaser.Scene {
                 projectile.setSize(2, 2);
                 projectile.setOffset(0, 0);
               }
+              break;
+            case "water":
+              frog.anims.play("shootWater", true);
+              setTimeout(function () {
+                let projectile = game.projectiles.create(frog.x + 58, frog.y + 48, "water").setScale(8).setGravityY(-1500).setVelocityX(300).setSize(1, 1).setOffset(0, 0);
+                projectile.type = "water";
+              }, 100);
+              break;
           }
         });
       },
