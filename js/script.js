@@ -128,7 +128,7 @@ class Game extends Phaser.Scene {
     game.sfx.robotDie = this.sound.add("robotDie");
     game.sfx.robotHit = this.sound.add("robotHit");
     game.sfx.music1 = this.sound.add("music1-10").setLoop(true);
-    game.sfx.music1.play({volume: 1.4});
+    game.sfx.music1.play({volume: 2});
 
     // Create tiles
     game.tiles = this.physics.add.staticGroup();
