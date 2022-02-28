@@ -253,6 +253,9 @@ class Game extends Phaser.Scene {
         }, 300);
       }
     });
+    this.physics.add.overlap(game.cannonRobotProjectiles, game.frogs, (projectile, frog) => {
+      projectile.destroy();
+    });
 
     // ---------- Intervals ----------
     this.time.addEvent({
