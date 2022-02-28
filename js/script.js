@@ -61,7 +61,7 @@ let game = {
       damage: 0.5
     },
     "water": {
-      damage: 0.5
+      damage: 1
     }
   }
 };
