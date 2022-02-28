@@ -10,6 +10,28 @@ let game = {
   TILESIZE: 64,
   topMargin: 167,
   sfx: {},
+  frogTypes: {
+    "cannon": {
+      path: "cannonFrog0",
+      name: "cannon"
+    },
+    "basic": {
+      path: "basicFrog0",
+      name: "basic"
+    },
+    "launcher": {
+      path: "launcherFrog",
+      name: "launcher"
+    },
+    "toad": {
+      path: "toad",
+      name: "toad"
+    },
+    "water": {
+      path: "waterFrog0",
+      name: "water"
+    }
+  },
   robot: {
     speed: 0.6,
     health: 5
@@ -57,9 +79,9 @@ class Game extends Phaser.Scene {
     this.load.image("cannonFrog0", "assets/cannonFrog0.png");
     this.load.image("cannonFrog1", "assets/cannonFrog1.png");
     this.load.image("cannonProjectile", "assets/cannonProjectile.png");
-    this.load.image("launcherFrog0", "assets/launcherFrog.png");
+    this.load.image("launcherFrog", "assets/launcherFrog.png");
     this.load.image("launcherProjectile", "assets/launcherProjectile.png");
-    this.load.image("toadFrog0", "assets/toad.png");
+    this.load.image("toad", "assets/toad.png");
     this.load.image("waterFrog0", "assets/waterFrog0.png");
     this.load.image("waterFrog1", "assets/waterFrog1.png");
     this.load.image("water", "assets/water.png");
@@ -128,9 +150,9 @@ class Game extends Phaser.Scene {
     game.choices = this.physics.add.staticGroup();
     let frogCount = 0;
     const frogs = ["cannon", "basic", "launcher", "toad", "water"];
-    for (var x = (game.TILESIZE / 2) + 50; x < (game.TILESIZE * (frogs.length + 1)) + 50; x += game.TILESIZE + 10) {
-      let choice = game.choices.create(x, game.TILESIZE, `${frogs[frogCount]}Frog0`).setScale(8).setInteractive();
-      choice.frogType = frogs[frogCount];
+    for (var x = (game.TILESIZE / 2) + 50; x < (game.TILESIZE * (Object.keys(game.frogTypes).length + 1)) + 50; x += game.TILESIZE + 10) {
+      let choice = game.choices.create(x, game.TILESIZE, game.frogTypes[Object.keys(game.frogTypes)[frogCount]].path).setScale(8).setInteractive();
+      choice.frogType = game.frogTypes[Object.keys(game.frogTypes)[frogCount]].name;
       frogCount++;
     }
 
@@ -163,7 +185,7 @@ class Game extends Phaser.Scene {
       });
       tile.on("pointerdown", (pointer) => {
         if (!tile.frog) {
-          let frog = game.frogs.create(tile.x, tile.y, `${game.currentSelection}Frog0`).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
+          let frog = game.frogs.create(tile.x, tile.y, game.frogTypes[game.currentSelection].path).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
           frog.type = game.currentSelection;
           tile.frog = frog;
         }
