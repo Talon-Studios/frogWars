@@ -215,6 +215,7 @@ class Game extends Phaser.Scene {
         game.sfx.robotHit.play();
         robot.health -= 5;
         if (robot.health <= 0) {
+          robot.body.enable = false;
           game.sfx.robotDie.play();
           robot.dead = true;
           robot.anims.play("explode", true);
@@ -245,6 +246,7 @@ class Game extends Phaser.Scene {
         robot.speed -= 0.05;
       }
       if (robot.health <= 0) {
+        robot.body.enable = false;
         game.sfx.robotDie.play();
         robot.dead = true;
         robot.anims.play("explode", true);
