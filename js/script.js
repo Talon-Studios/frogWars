@@ -192,9 +192,12 @@ class Game extends Phaser.Scene {
       });
       tile.on("pointerdown", (pointer) => {
         if (!tile.frog) {
-          let frog = game.frogs.create(tile.x, tile.y, game.frogTypes[game.currentSelection].path).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
-          frog.type = game.currentSelection;
-          tile.frog = frog;
+          if (game.currentSelection !== "bird") {
+            let frog = game.frogs.create(tile.x, tile.y, game.frogTypes[game.currentSelection].path).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
+            frog.type = game.currentSelection;
+            frog.isDead = false;
+            tile.frog = frog;
+          }
         } else {
           if (game.currentSelection === "bird" && !tile.frog.isDead) {
             let bird = game.removalBirds.create(0, tile.y - game.TILESIZE + (game.TILESIZE / 8), "bird1").setScale(8).setGravityY(-config.physics.arcade.gravity.y).setVelocityX(500).setSize(3, 8).setOffset(0, 0);
