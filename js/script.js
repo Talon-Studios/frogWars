@@ -88,6 +88,7 @@ class Game extends Phaser.Scene {
     this.load.image("toad", "assets/toad.png");
     this.load.image("waterFrog0", "assets/waterFrog0.png");
     this.load.image("waterFrog1", "assets/waterFrog1.png");
+    this.load.image("water", "assets/water.png");
 
     // ---------- Robots ----------
     this.load.image("basicRobot0", "assets/basicRobot0.png");
@@ -194,14 +195,8 @@ class Game extends Phaser.Scene {
           let frog = game.frogs.create(tile.x, tile.y, game.frogTypes[game.currentSelection].path).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
           frog.type = game.currentSelection;
           tile.frog = frog;
-          if (game.currentSelection !== "bird0") {
-            let frog = game.frogs.create(tile.x, tile.y, game.currentSelection).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
-            frog.type = game.currentSelection;
-            tile.frog = frog;
-            frog.isDead = false;
-          }
         } else {
-          if (game.currentSelection === "bird0" && !tile.frog.isDead) {
+          if (game.currentSelection === "bird" && !tile.frog.isDead) {
             let bird = game.removalBirds.create(0, tile.y - game.TILESIZE + (game.TILESIZE / 8), "bird1").setScale(8).setGravityY(-config.physics.arcade.gravity.y).setVelocityX(500).setSize(3, 8).setOffset(0, 0);
             bird.flipX = true;
             tile.frog.isDead = true;
