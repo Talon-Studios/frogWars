@@ -30,6 +30,10 @@ let game = {
     "water": {
       path: "waterFrog0",
       name: "water"
+    },
+    "bird": {
+      path: "bird0",
+      name: "bird"
     }
   },
   robot: {
@@ -82,6 +86,8 @@ class Game extends Phaser.Scene {
     this.load.image("launcherFrog", "assets/launcherFrog.png");
     this.load.image("launcherProjectile", "assets/launcherProjectile.png");
     this.load.image("toad", "assets/toad.png");
+    this.load.image("waterFrog0", "assets/waterFrog0.png");
+    this.load.image("waterFrog1", "assets/waterFrog1.png");
 
     // ---------- Robots ----------
     this.load.image("basicRobot0", "assets/basicRobot0.png");
@@ -148,7 +154,7 @@ class Game extends Phaser.Scene {
     // Create choices to put in game
     game.choices = this.physics.add.staticGroup();
     let frogCount = 0;
-    const frogs = ["cannon", "basic", "launcher", "toad", "water"];
+    const frogs = ["cannon", "basic", "launcher", "toad", "water", "bird"];
     for (var x = (game.TILESIZE / 2) + 50; x < (game.TILESIZE * (Object.keys(game.frogTypes).length + 1)) + 50; x += game.TILESIZE + 10) {
       let choice = game.choices.create(x, game.TILESIZE, game.frogTypes[Object.keys(game.frogTypes)[frogCount]].path).setScale(8).setInteractive();
       choice.frogType = game.frogTypes[Object.keys(game.frogTypes)[frogCount]].name;
