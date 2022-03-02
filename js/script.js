@@ -4,6 +4,7 @@ script.js
 The main script for Frog Wars.
 *^*^*^*^*^*^*^*/
 
+// ********** Game Scene **********
 let game = {
   width: 17,
   height: 7,
@@ -401,5 +402,50 @@ class Game extends Phaser.Scene {
         projectile.destroy();
       }
     });
+  }
+}
+
+// ********** Start Scene **********
+class Start extends Phaser.Scene {
+  constructor() {
+    super("Start");
+  }
+  preload() {
+    // ---------- Assets ----------
+    this.load.image("picker", "assets/picker.png");
+    this.load.image("title", "assets/title.png");
+    this.load.image("start", "assets/start.png");
+  }
+  create() {
+    this.engine = new Engine(this);
+
+    // Set background color
+    this.cameras.main.backgroundColor = Phaser.Display.Color.HexStringToColor("#ffffff");
+
+    // Add title
+    this.add.image((this.engine.gameWidth / 2) + 32, 125, "title").setScale(8);
+
+    // Picker group
+    this.pickerGroup = this.physics.add.staticGroup();
+
+    // Add start option
+    let phaser = this;
+    this.startButton = this.add.image((this.engine.gameWidth / 2) + 16, 400, "start").setScale(8).setInteractive();
+    this.startButton.on("pointerup", () => {
+      phaser.scene.stop();
+      phaser.scene.start("Game");
+    });
+    this.startButton.on("pointerover", () => {
+      this.pickerGroup.create(this.startButton.x - 160, this.startButton.y - 8, "picker").setScale(8);
+      this.pickerGroup.create(this.startButton.x + 100, this.startButton.y - 8, "picker").setScale(8).flipX = true;
+    });
+    this.startButton.on("pointerout", () => {
+      this.pickerGroup.getChildren().forEach(picker => {
+        picker.visible = false;
+      });
+    });
+  }
+  update() {
+
   }
 }
