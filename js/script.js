@@ -416,8 +416,13 @@ class Start extends Phaser.Scene {
     this.load.image("title", "assets/title.png");
   }
   create() {
+    this.engine = new Engine(this);
+
     // Set background color
     this.cameras.main.backgroundColor = Phaser.Display.Color.HexStringToColor("#ffffff");
+
+    // Add title
+    this.add.image((this.engine.gameWidth / 2) + 32, 125, "title").setScale(8);
   }
   update() {
 
