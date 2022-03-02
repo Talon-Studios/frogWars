@@ -414,6 +414,7 @@ class Start extends Phaser.Scene {
     // ---------- Assets ----------
     this.load.image("picker", "assets/picker.png");
     this.load.image("title", "assets/title.png");
+    this.load.image("start", "assets/start.png");
   }
   create() {
     this.engine = new Engine(this);
@@ -423,6 +424,14 @@ class Start extends Phaser.Scene {
 
     // Add title
     this.add.image((this.engine.gameWidth / 2) + 32, 125, "title").setScale(8);
+
+    // Add start option
+    let phaser = this;
+    this.startButton = this.add.image((this.engine.gameWidth / 2) + 16, 400, "start").setScale(8).setInteractive();
+    this.startButton.on("pointerup", () => {
+      phaser.scene.stop();
+      phaser.scene.start("Game");
+    });
   }
   update() {
 
