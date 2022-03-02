@@ -416,7 +416,8 @@ class Start extends Phaser.Scene {
     this.load.image("title", "assets/title.png");
   }
   create() {
-
+    // Set background color
+    this.cameras.main.backgroundColor = Phaser.Display.Color.HexStringToColor("#ffffff");
   }
   update() {
 
