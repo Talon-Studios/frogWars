@@ -425,12 +425,24 @@ class Start extends Phaser.Scene {
     // Add title
     this.add.image((this.engine.gameWidth / 2) + 32, 125, "title").setScale(8);
 
+    // Picker group
+    this.pickerGroup = this.physics.add.staticGroup();
+
     // Add start option
     let phaser = this;
     this.startButton = this.add.image((this.engine.gameWidth / 2) + 16, 400, "start").setScale(8).setInteractive();
     this.startButton.on("pointerup", () => {
       phaser.scene.stop();
       phaser.scene.start("Game");
+    });
+    this.startButton.on("pointerover", () => {
+      this.pickerGroup.create(this.startButton.x - 160, this.startButton.y - 8, "picker").setScale(8);
+      this.pickerGroup.create(this.startButton.x + 100, this.startButton.y - 8, "picker").setScale(8).flipX = true;
+    });
+    this.startButton.on("pointerout", () => {
+      this.pickerGroup.getChildren().forEach(picker => {
+        picker.visible = false;
+      });
     });
   }
   update() {
