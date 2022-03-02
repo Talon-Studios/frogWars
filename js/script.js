@@ -4,6 +4,7 @@ script.js
 The main script for Frog Wars.
 *^*^*^*^*^*^*^*/
 
+// ********** Game Scene **********
 let game = {
   width: 17,
   height: 7,
@@ -401,5 +402,23 @@ class Game extends Phaser.Scene {
         projectile.destroy();
       }
     });
+  }
+}
+
+// ********** Start Scene **********
+class Start extends Phaser.Scene {
+  constructor() {
+    super("Start");
+  }
+  preload() {
+    // ---------- Assets ----------
+    this.load.image("picker", "assets/picker.png");
+    this.load.image("title", "assets/title.png");
+  }
+  create() {
+
+  }
+  update() {
+
   }
 }
