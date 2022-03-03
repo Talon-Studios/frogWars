@@ -33,7 +33,7 @@ let game = {
       name: "water"
     }
   },
-  robots: {
+  robotTypes: {
     normalRobot: {
       speed: 0.6,
       health: 5
@@ -320,26 +320,26 @@ class Game extends Phaser.Scene {
       delay: this.engine.randomBetween(1000, 3000),
       callback: () => {
         let row = Math.floor(Math.random() * game.height);
-        let type = "";
+        let randomPercentage = Math.random() * 100;
+        let type;
         let health;
         let speed;
-        let randomPercentage = Math.random() * 100;
         if (randomPercentage < 50) {
           type = "basic";
-          health = game.robots.normalRobot.health;
-          speed = game.robots.normalRobot.speed;
+          health = game.robotTypes.normalRobot.health;
+          speed = game.robotTypes.normalRobot.speed;
         } else if (randomPercentage >= 50 && randomPercentage < 75) {
           type = "armored";
-          health = game.robots.armoredRobot.health;
-          speed = game.robots.armoredRobot.speed;
+          health = game.robotTypes.armoredRobot.health;
+          speed = game.robotTypes.armoredRobot.speed;
         } else if (randomPercentage >= 75 && randomPercentage < 87.5) {
           type = "speed";
-          health = game.robots.speedRobot.health;
-          speed = game.robots.speedRobot.speed;
+          health = game.robotTypes.speedRobot.health;
+          speed = game.robotTypes.speedRobot.speed;
         } else if (randomPercentage >= 87.5) {
           type = "cannon";
-          health = game.robots.cannonRobot.health;
-          speed = game.robots.cannonRobot.speed;
+          health = game.robotTypes.cannonRobot.health;
+          speed = game.robotTypes.cannonRobot.speed;
         }
         let robot = game.robots.create(game.width * game.TILESIZE, (game.TILESIZE / 2 + game.TILESIZE * row) + game.topMargin, `${type}Robot0`).setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0);
         robot.type = type;
