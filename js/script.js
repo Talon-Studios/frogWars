@@ -121,6 +121,7 @@ class Game extends Phaser.Scene {
     this.load.audio("launcherFrogShoot", "assets/launcherFrogShoot.wav");
     this.load.audio("robotDie", "assets/robotDie.wav");
     this.load.audio("robotHit", "assets/robotHit.wav");
+    this.load.audio("basicFrogJump", "assets/basicFrogJump.wav");
   }
   create() {
     this.engine = new Engine(this);
@@ -130,6 +131,7 @@ class Game extends Phaser.Scene {
     game.sfx.launcherFrogShoot = this.sound.add("launcherFrogShoot");
     game.sfx.robotDie = this.sound.add("robotDie");
     game.sfx.robotHit = this.sound.add("robotHit");
+    game.sfx.basicFrogJump = this.sound.add("basicFrogJump");
     game.sfx.music1 = this.sound.add("music1-10").setLoop(true);
     game.sfx.music1.play({volume: 2});
 
@@ -278,6 +280,7 @@ class Game extends Phaser.Scene {
         game.frogs.getChildren().forEach(frog => {
           switch (frog.type) {
             case "basic":
+              game.sfx.basicFrogJump.play();
               frog.anims.play("jump", true);
               setTimeout(function () {
                 frog.x += game.tiles.getChildren()[0].width * 8;
@@ -417,9 +420,13 @@ class Start extends Phaser.Scene {
     this.load.image("picker", "assets/picker.png");
     this.load.image("title", "assets/title.png");
     this.load.image("start", "assets/start.png");
+    this.load.audio("optionSelect", "assets/optionSelect.wav");
   }
   create() {
     this.engine = new Engine(this);
+    
+    // Add sounds
+    game.sfx.optionSelect = this.sound.add("optionSelect");
 
     // Set background color
     this.engine.setBackgroundColor(this, "#ffffff");
@@ -434,6 +441,7 @@ class Start extends Phaser.Scene {
     let phaser = this;
     this.startButton = this.add.image(this.engine.gameWidthCenter + 16, 400, "start").setScale(8).setInteractive();
     this.startButton.on("pointerup", () => {
+      game.sfx.optionSelect.play();
       phaser.scene.stop();
       phaser.scene.start("Game");
     });
