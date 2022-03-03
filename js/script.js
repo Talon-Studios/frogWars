@@ -4,12 +4,35 @@ script.js
 The main script for Frog Wars.
 *^*^*^*^*^*^*^*/
 
+// ********** Game Scene **********
 let game = {
   width: 17,
   height: 7,
   TILESIZE: 64,
   topMargin: 167,
   sfx: {},
+  frogTypes: {
+    "cannon": {
+      path: "cannonFrog0",
+      name: "cannon"
+    },
+    "basic": {
+      path: "basicFrog0",
+      name: "basic"
+    },
+    "launcher": {
+      path: "launcherFrog",
+      name: "launcher"
+    },
+    "toad": {
+      path: "toad",
+      name: "toad"
+    },
+    "water": {
+      path: "waterFrog0",
+      name: "water"
+    }
+  },
   robots: {
     normalRobot: {
       speed: 0.6,
@@ -39,6 +62,9 @@ let game = {
     },
     "launcher": {
       damage: 0.5
+    },
+    "water": {
+      damage: 1
     }
   }
 };
@@ -56,9 +82,12 @@ class Game extends Phaser.Scene {
     this.load.image("cannonFrog0", "assets/cannonFrog0.png");
     this.load.image("cannonFrog1", "assets/cannonFrog1.png");
     this.load.image("cannonProjectile", "assets/cannonProjectile.png");
-    this.load.image("launcherFrog0", "assets/launcherFrog.png");
+    this.load.image("launcherFrog", "assets/launcherFrog.png");
     this.load.image("launcherProjectile", "assets/launcherProjectile.png");
-    this.load.image("toadFrog0", "assets/toad.png");
+    this.load.image("toad", "assets/toad.png");
+    this.load.image("waterFrog0", "assets/waterFrog0.png");
+    this.load.image("waterFrog1", "assets/waterFrog1.png");
+    this.load.image("water", "assets/water.png");
 
     // ---------- Robots ----------
     this.load.image("basicRobot0", "assets/basicRobot0.png");
@@ -86,13 +115,23 @@ class Game extends Phaser.Scene {
     // ********** Sounds **********
     // ---------- Music ----------
     this.load.audio("music1-10", "assets/music1-10.mp3");
+
+    // ---------- SFX ----------
+    this.load.audio("cannonFrogShoot", "assets/cannonFrogShoot.wav");
+    this.load.audio("launcherFrogShoot", "assets/launcherFrogShoot.wav");
+    this.load.audio("robotDie", "assets/robotDie.wav");
+    this.load.audio("robotHit", "assets/robotHit.wav");
   }
   create() {
-    game.engine = new Engine(this);
+    this.engine = new Engine(this);
 
     // Add sounds
+    game.sfx.cannonFrogShoot = this.sound.add("cannonFrogShoot");
+    game.sfx.launcherFrogShoot = this.sound.add("launcherFrogShoot");
+    game.sfx.robotDie = this.sound.add("robotDie");
+    game.sfx.robotHit = this.sound.add("robotHit");
     game.sfx.music1 = this.sound.add("music1-10").setLoop(true);
-    game.sfx.music1.play();
+    game.sfx.music1.play({volume: 2});
 
     // Create tiles
     game.tiles = this.physics.add.staticGroup();
@@ -113,10 +152,10 @@ class Game extends Phaser.Scene {
     // Create choices to put in game
     game.choices = this.physics.add.staticGroup();
     let frogCount = 0;
-    const frogs = ["basic", "cannon", "launcher", "toad"];
-    for (var x = (game.TILESIZE / 2) + 50; x < (game.TILESIZE * frogs.length) + 50; x += game.TILESIZE + 10) {
-      let choice = game.choices.create(x, game.TILESIZE, `${frogs[frogCount]}Frog0`).setScale(8).setInteractive();
-      choice.frogType = frogs[frogCount];
+    const frogs = ["cannon", "basic", "launcher", "toad", "water"];
+    for (var x = (game.TILESIZE / 2) + 50; x < (game.TILESIZE * (Object.keys(game.frogTypes).length + 1)) + 50; x += game.TILESIZE + 10) {
+      let choice = game.choices.create(x, game.TILESIZE, game.frogTypes[Object.keys(game.frogTypes)[frogCount]].path).setScale(8).setInteractive();
+      choice.frogType = game.frogTypes[Object.keys(game.frogTypes)[frogCount]].name;
       frogCount++;
     }
 
@@ -128,15 +167,16 @@ class Game extends Phaser.Scene {
 
     // ---------- Animation ----------
     // Walking
-    game.engine.addAnimation("basicRobotWalk", 5, false, false, "basicRobot0", "basicRobot1");
-    game.engine.addAnimation("armoredRobotWalk", 5, false, false, "armoredRobot0", "armoredRobot1");
-    game.engine.addAnimation("speedRobotWalk", 5, false, false, "speedRobot0", "speedRobot1");
-    game.engine.addAnimation("cannonRobotWalk", 5, false, false, "cannonRobot0", "cannonRobot1");
+    this.engine.addAnimation("basicRobotWalk", 5, false, false, "basicRobot0", "basicRobot1");
+    this.engine.addAnimation("armoredRobotWalk", 5, false, false, "armoredRobot0", "armoredRobot1");
+    this.engine.addAnimation("speedRobotWalk", 5, false, false, "speedRobot0", "speedRobot1");
+    this.engine.addAnimation("cannonRobotWalk", 5, false, false, "cannonRobot0", "cannonRobot1");
 
     // Other
-    game.engine.addAnimation("jump", 10, false, false, "basicFrog0", "basicFrog1", "basicFrog2", "basicFrog0");
-    game.engine.addAnimation("shootCannonball", 5, false, true, "cannonFrog0", "cannonFrog1");
-    game.engine.addAnimation("explode", 10, false, false, "explosion0", "explosion1", "explosion2", "explosion3");
+    this.engine.addAnimation("jump", 10, false, false, "basicFrog0", "basicFrog1", "basicFrog2", "basicFrog0");
+    this.engine.addAnimation("shootCannonball", 5, false, true, "cannonFrog0", "cannonFrog1");
+    this.engine.addAnimation("explode", 10, false, false, "explosion0", "explosion1", "explosion2", "explosion3");
+    this.engine.addAnimation("shootWater", 5, false, true, "waterFrog0", "waterFrog1");
 
     // ---------- Interaction ----------
     game.tiles.getChildren().forEach(tile => {
@@ -148,7 +188,7 @@ class Game extends Phaser.Scene {
       });
       tile.on("pointerdown", (pointer) => {
         if (!tile.frog) {
-          let frog = game.frogs.create(tile.x, tile.y, `${game.currentSelection}Frog0`).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
+          let frog = game.frogs.create(tile.x, tile.y, game.frogTypes[game.currentSelection].path).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
           frog.type = game.currentSelection;
           tile.frog = frog;
         }
@@ -175,8 +215,11 @@ class Game extends Phaser.Scene {
         setTimeout(function () {
           robot.setTexture(lastFrame);
         }, 500);
+        game.sfx.robotHit.play();
         robot.health -= 5;
         if (robot.health <= 0) {
+          robot.body.enable = false;
+          game.sfx.robotDie.play();
           robot.dead = true;
           robot.anims.play("explode", true);
           setTimeout(function () {
@@ -200,14 +243,23 @@ class Game extends Phaser.Scene {
       setTimeout(function () {
         robot.setTexture(lastFrame);
       }, 500);
+      game.sfx.robotHit.play();
       robot.health -= game.projectileStats[projectile.type].damage;
+      if (projectile.type === "water" && robot.speed > 0.3) {
+        robot.speed -= 0.05;
+      }
       if (robot.health <= 0) {
+        robot.body.enable = false;
+        game.sfx.robotDie.play();
         robot.dead = true;
         robot.anims.play("explode", true);
         setTimeout(function () {
           robot.destroy();
         }, 300);
       }
+    });
+    this.physics.add.overlap(game.cannonRobotProjectiles, game.frogs, (projectile, frog) => {
+      projectile.destroy();
     });
 
     // ---------- Intervals ----------
@@ -239,6 +291,7 @@ class Game extends Phaser.Scene {
               }, 200);
               break;
             case "launcher":
+              game.sfx.launcherFrogShoot.play();
               let numOfSprite = 5;
               for (var i = 0; i < numOfSprite; i++) {
                 let projectile = game.projectiles.create(frog.x, frog.y, "launcherProjectile").setScale(8).setGravityY(-1500);
@@ -249,6 +302,14 @@ class Game extends Phaser.Scene {
                 projectile.setSize(2, 2);
                 projectile.setOffset(0, 0);
               }
+              break;
+            case "water":
+              frog.anims.play("shootWater", true);
+              setTimeout(function () {
+                let projectile = game.projectiles.create(frog.x + 58, frog.y + 48, "water").setScale(8).setGravityY(-1500).setVelocityX(300).setSize(1, 1).setOffset(0, 0);
+                projectile.type = "water";
+              }, 100);
+              break;
           }
         });
       },
@@ -256,7 +317,7 @@ class Game extends Phaser.Scene {
       repeat: -1
     });
     this.time.addEvent({
-      delay: Math.random() * (3000 - 1000) + 1000,
+      delay: this.engine.randomBetween(1000, 3000),
       callback: () => {
         let row = Math.floor(Math.random() * game.height);
         let type = "";
@@ -343,5 +404,50 @@ class Game extends Phaser.Scene {
         projectile.destroy();
       }
     });
+  }
+}
+
+// ********** Start Scene **********
+class Start extends Phaser.Scene {
+  constructor() {
+    super("Start");
+  }
+  preload() {
+    // ---------- Assets ----------
+    this.load.image("picker", "assets/picker.png");
+    this.load.image("title", "assets/title.png");
+    this.load.image("start", "assets/start.png");
+  }
+  create() {
+    this.engine = new Engine(this);
+
+    // Set background color
+    this.engine.setBackgroundColor(this, "#ffffff");
+
+    // Add title
+    this.add.image(this.engine.gameWidthCenter + 32, 125, "title").setScale(8);
+
+    // Picker group
+    this.pickerGroup = this.physics.add.staticGroup();
+
+    // Add start option
+    let phaser = this;
+    this.startButton = this.add.image(this.engine.gameWidthCenter + 16, 400, "start").setScale(8).setInteractive();
+    this.startButton.on("pointerup", () => {
+      phaser.scene.stop();
+      phaser.scene.start("Game");
+    });
+    this.startButton.on("pointerover", () => {
+      this.pickerGroup.create(this.startButton.x - 160, this.startButton.y - 8, "picker").setScale(8);
+      this.pickerGroup.create(this.startButton.x + 100, this.startButton.y - 8, "picker").setScale(8).flipX = true;
+    });
+    this.startButton.on("pointerout", () => {
+      this.pickerGroup.getChildren().forEach(picker => {
+        picker.visible = false;
+      });
+    });
+  }
+  update() {
+
   }
 }
