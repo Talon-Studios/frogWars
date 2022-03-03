@@ -133,7 +133,7 @@ class Game extends Phaser.Scene {
     game.sfx.robotHit = this.sound.add("robotHit");
     game.sfx.basicFrogJump = this.sound.add("basicFrogJump");
     game.sfx.music1 = this.sound.add("music1-10").setLoop(true);
-    game.sfx.music1.play({volume: 2});
+    game.sfx.music1.play({ volume: 2 });
 
     // Create tiles
     game.tiles = this.physics.add.staticGroup();
@@ -214,7 +214,7 @@ class Game extends Phaser.Scene {
             robot.setTexture("hurtSpeedRobot");
           }
         }
-        setTimeout(function () {
+        setTimeout(function() {
           robot.setTexture(lastFrame);
         }, 500);
         game.sfx.robotHit.play();
@@ -224,7 +224,7 @@ class Game extends Phaser.Scene {
           game.sfx.robotDie.play();
           robot.dead = true;
           robot.anims.play("explode", true);
-          setTimeout(function () {
+          setTimeout(function() {
             robot.destroy();
           }, 300);
         }
@@ -242,7 +242,7 @@ class Game extends Phaser.Scene {
           robot.setTexture("hurtCannonRobot");
         }
       }
-      setTimeout(function () {
+      setTimeout(function() {
         robot.setTexture(lastFrame);
       }, 500);
       game.sfx.robotHit.play();
@@ -255,7 +255,7 @@ class Game extends Phaser.Scene {
         game.sfx.robotDie.play();
         robot.dead = true;
         robot.anims.play("explode", true);
-        setTimeout(function () {
+        setTimeout(function() {
           robot.destroy();
         }, 300);
       }
@@ -282,13 +282,13 @@ class Game extends Phaser.Scene {
             case "basic":
               game.sfx.basicFrogJump.play();
               frog.anims.play("jump", true);
-              setTimeout(function () {
+              setTimeout(function() {
                 frog.x += game.tiles.getChildren()[0].width * 8;
               }, 50);
               break;
             case "cannon":
               frog.anims.play("shootCannonball", true);
-              setTimeout(function () {
+              setTimeout(function() {
                 let projectile = game.projectiles.create(frog.x, frog.y, "cannonProjectile").setScale(8).setGravityY(-1500).setVelocityX(300);
                 projectile.type = "cannon";
               }, 200);
@@ -308,7 +308,7 @@ class Game extends Phaser.Scene {
               break;
             case "water":
               frog.anims.play("shootWater", true);
-              setTimeout(function () {
+              setTimeout(function() {
                 let projectile = game.projectiles.create(frog.x + 58, frog.y + 48, "water").setScale(8).setGravityY(-1500).setVelocityX(300).setSize(1, 1).setOffset(0, 0);
                 projectile.type = "water";
               }, 100);
@@ -425,11 +425,11 @@ class Start extends Phaser.Scene {
   }
   create() {
     this.engine = new Engine(this);
-    
+
     // Add sounds
-    game.sfx.optionSelect = this.sound.add("optionSelect");
-    game.sfx.introMusic = this.sound.add("introMusic").setLoop(true);
-    game.sfx.introMusic.play({volume: 2});
+    this.sfx.optionSelect = this.sound.add("optionSelect");
+    this.sfx.introMusic = this.sound.add("introMusic").setLoop(true);
+    this.sfx.introMusic.play({ volume: 2 });
 
     // Set background color
     this.engine.setBackgroundColor(this, "#ffffff");
@@ -444,16 +444,16 @@ class Start extends Phaser.Scene {
     let phaser = this;
     this.startButton = this.add.image(this.engine.gameWidthCenter + 16, 400, "start").setScale(8).setInteractive();
     this.startButton.on("pointerup", () => {
-      game.sfx.optionSelect.play();
+      phaser.sfx.optionSelect.play();
       phaser.scene.stop();
       phaser.scene.start("Game");
     });
     this.startButton.on("pointerover", () => {
-      this.pickerGroup.create(this.startButton.x - 160, this.startButton.y - 8, "picker").setScale(8);
-      this.pickerGroup.create(this.startButton.x + 100, this.startButton.y - 8, "picker").setScale(8).flipX = true;
+      phaser.pickerGroup.create(phaser.startButton.x - 160, phaser.startButton.y - 8, "picker").setScale(8);
+      phaser.pickerGroup.create(phaser.startButton.x + 100, phaser.startButton.y - 8, "picker").setScale(8).flipX = true;
     });
     this.startButton.on("pointerout", () => {
-      this.pickerGroup.getChildren().forEach(picker => {
+      phaser.pickerGroup.getChildren().forEach(picker => {
         picker.visible = false;
       });
     });
