@@ -33,21 +33,23 @@ let game = {
       name: "water"
     }
   },
-  robot: {
-    speed: 0.6,
-    health: 5
-  },
-  armoredRobot: {
-    speed: 0.6,
-    health: 10
-  },
-  speedRobot: {
-    speed: 1.8,
-    health: 3
-  },
-  cannonRobot: {
-    speed: 0.3,
-    health: 5
+  robotTypes: {
+    normalRobot: {
+      speed: 0.6,
+      health: 5
+    },
+    armoredRobot: {
+      speed: 0.6,
+      health: 10
+    },
+    speedRobot: {
+      speed: 1.8,
+      health: 3
+    },
+    cannonRobot: {
+      speed: 0.3,
+      health: 5
+    }
   },
   currencies: {
     flies: 0,
@@ -318,26 +320,26 @@ class Game extends Phaser.Scene {
       delay: this.engine.randomBetween(1000, 3000),
       callback: () => {
         let row = Math.floor(Math.random() * game.height);
-        let type = "";
+        let randomPercentage = Math.random() * 100;
+        let type;
         let health;
         let speed;
-        let randomPercentage = Math.random() * 100;
         if (randomPercentage < 50) {
           type = "basic";
-          health = game.robot.health;
-          speed = game.robot.speed;
+          health = game.robotTypes.normalRobot.health;
+          speed = game.robotTypes.normalRobot.speed;
         } else if (randomPercentage >= 50 && randomPercentage < 75) {
           type = "armored";
-          health = game.armoredRobot.health;
-          speed = game.armoredRobot.speed;
+          health = game.robotTypes.armoredRobot.health;
+          speed = game.robotTypes.armoredRobot.speed;
         } else if (randomPercentage >= 75 && randomPercentage < 87.5) {
           type = "speed";
-          health = game.speedRobot.health;
-          speed = game.speedRobot.speed;
+          health = game.robotTypes.speedRobot.health;
+          speed = game.robotTypes.speedRobot.speed;
         } else if (randomPercentage >= 87.5) {
           type = "cannon";
-          health = game.cannonRobot.health;
-          speed = game.cannonRobot.speed;
+          health = game.robotTypes.cannonRobot.health;
+          speed = game.robotTypes.cannonRobot.speed;
         }
         let robot = game.robots.create(game.width * game.TILESIZE, (game.TILESIZE / 2 + game.TILESIZE * row) + game.topMargin, `${type}Robot0`).setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0);
         robot.type = type;
