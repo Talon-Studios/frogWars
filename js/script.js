@@ -315,7 +315,7 @@ class Game extends Phaser.Scene {
       repeat: -1
     });
     this.time.addEvent({
-      delay: Math.random() * (3000 - 1000) + 1000,
+      delay: this.engine.randomBetween(1000, 3000),
       callback: () => {
         let row = Math.floor(Math.random() * game.height);
         let type = "";
@@ -423,7 +423,7 @@ class Start extends Phaser.Scene {
     this.engine.setBackgroundColor(this, "#ffffff");
 
     // Add title
-    this.add.image((this.engine.gameWidth / 2) + 32, 125, "title").setScale(8);
+    this.add.image(this.engine.gameWidthCenter + 32, 125, "title").setScale(8);
 
     // Picker group
     this.pickerGroup = this.physics.add.staticGroup();
