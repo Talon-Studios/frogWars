@@ -121,7 +121,7 @@ class Game extends Phaser.Scene {
     this.load.audio("robotHit", "assets/robotHit.wav");
   }
   create() {
-    game.engine = new Engine(this);
+    this.engine = new Engine(this);
 
     // Add sounds
     game.sfx.cannonFrogShoot = this.sound.add("cannonFrogShoot");
@@ -165,16 +165,16 @@ class Game extends Phaser.Scene {
 
     // ---------- Animation ----------
     // Walking
-    game.engine.addAnimation("basicRobotWalk", 5, false, false, "basicRobot0", "basicRobot1");
-    game.engine.addAnimation("armoredRobotWalk", 5, false, false, "armoredRobot0", "armoredRobot1");
-    game.engine.addAnimation("speedRobotWalk", 5, false, false, "speedRobot0", "speedRobot1");
-    game.engine.addAnimation("cannonRobotWalk", 5, false, false, "cannonRobot0", "cannonRobot1");
+    this.engine.addAnimation("basicRobotWalk", 5, false, false, "basicRobot0", "basicRobot1");
+    this.engine.addAnimation("armoredRobotWalk", 5, false, false, "armoredRobot0", "armoredRobot1");
+    this.engine.addAnimation("speedRobotWalk", 5, false, false, "speedRobot0", "speedRobot1");
+    this.engine.addAnimation("cannonRobotWalk", 5, false, false, "cannonRobot0", "cannonRobot1");
 
     // Other
-    game.engine.addAnimation("jump", 10, false, false, "basicFrog0", "basicFrog1", "basicFrog2", "basicFrog0");
-    game.engine.addAnimation("shootCannonball", 5, false, true, "cannonFrog0", "cannonFrog1");
-    game.engine.addAnimation("explode", 10, false, false, "explosion0", "explosion1", "explosion2", "explosion3");
-    game.engine.addAnimation("shootWater", 5, false, true, "waterFrog0", "waterFrog1");
+    this.engine.addAnimation("jump", 10, false, false, "basicFrog0", "basicFrog1", "basicFrog2", "basicFrog0");
+    this.engine.addAnimation("shootCannonball", 5, false, true, "cannonFrog0", "cannonFrog1");
+    this.engine.addAnimation("explode", 10, false, false, "explosion0", "explosion1", "explosion2", "explosion3");
+    this.engine.addAnimation("shootWater", 5, false, true, "waterFrog0", "waterFrog1");
 
     // ---------- Interaction ----------
     game.tiles.getChildren().forEach(tile => {
@@ -420,7 +420,7 @@ class Start extends Phaser.Scene {
     this.engine = new Engine(this);
 
     // Set background color
-    this.cameras.main.backgroundColor = Phaser.Display.Color.HexStringToColor("#ffffff");
+    this.engine.setBackgroundColor(this, "#ffffff");
 
     // Add title
     this.add.image((this.engine.gameWidth / 2) + 32, 125, "title").setScale(8);
@@ -430,7 +430,7 @@ class Start extends Phaser.Scene {
 
     // Add start option
     let phaser = this;
-    this.startButton = this.add.image((this.engine.gameWidth / 2) + 16, 400, "start").setScale(8).setInteractive();
+    this.startButton = this.add.image(this.engine.gameWidthCenter + 16, 400, "start").setScale(8).setInteractive();
     this.startButton.on("pointerup", () => {
       phaser.scene.stop();
       phaser.scene.start("Game");
