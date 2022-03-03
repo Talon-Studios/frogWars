@@ -421,12 +421,15 @@ class Start extends Phaser.Scene {
     this.load.image("title", "assets/title.png");
     this.load.image("start", "assets/start.png");
     this.load.audio("optionSelect", "assets/optionSelect.wav");
+    this.load.audio("introMusic", "assets/introMusic.wav");
   }
   create() {
     this.engine = new Engine(this);
     
     // Add sounds
     game.sfx.optionSelect = this.sound.add("optionSelect");
+    game.sfx.introMusic = this.sound.add("introMusic").setLoop(true);
+    game.sfx.introMusic.play({volume: 2});
 
     // Set background color
     this.engine.setBackgroundColor(this, "#ffffff");
