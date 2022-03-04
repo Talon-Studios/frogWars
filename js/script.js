@@ -414,6 +414,7 @@ class Game extends Phaser.Scene {
 class Start extends Phaser.Scene {
   constructor() {
     super("Start");
+    this.sfx = {};
   }
   preload() {
     // ---------- Assets ----------
@@ -421,7 +422,7 @@ class Start extends Phaser.Scene {
     this.load.image("title", "assets/title.png");
     this.load.image("start", "assets/start.png");
     this.load.audio("optionSelect", "assets/optionSelect.wav");
-    this.load.audio("introMusic", "assets/introMusic.wav");
+    this.load.audio("introMusic", "assets/introMusic.mp3");
   }
   create() {
     this.engine = new Engine(this);
