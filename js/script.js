@@ -446,6 +446,7 @@ class Start extends Phaser.Scene {
     this.startButton = this.add.image(this.engine.gameWidthCenter + 16, 400, "start").setScale(8).setInteractive();
     this.startButton.on("pointerup", () => {
       phaser.sfx.optionSelect.play();
+      phaser.sfx.introMusic.stop();
       phaser.scene.stop();
       phaser.scene.start("Game");
     });
