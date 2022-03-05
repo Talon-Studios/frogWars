@@ -31,6 +31,10 @@ let game = {
     "water": {
       path: "waterFrog0",
       name: "water"
+    },
+    "bird": {
+      path: "bird0",
+      name: "bird"
     }
   },
   robotTypes: {
@@ -111,6 +115,8 @@ class Game extends Phaser.Scene {
     this.load.image("explosion1", "assets/explosion1.png");
     this.load.image("explosion2", "assets/explosion2.png");
     this.load.image("explosion3", "assets/explosion3.png");
+    this.load.image("bird0", "assets/bird0.png");
+    this.load.image("bird1", "assets/bird1.png");
 
     // ********** Sounds **********
     // ---------- Music ----------
@@ -137,24 +143,24 @@ class Game extends Phaser.Scene {
 
     // Create tiles
     game.tiles = this.physics.add.staticGroup();
-    let count = 0;
+    let tileCount = 0;
     for (var x = game.TILESIZE / 2; x < game.width * game.TILESIZE; x += game.TILESIZE) {
       for (var y = (game.TILESIZE / 2) + game.topMargin; y < (game.height * game.TILESIZE) + game.topMargin; y += game.TILESIZE) {
-        if (count % 2 == 0) {
+        if (tileCount % 2 == 0) {
           let tile = game.tiles.create(x, y, "tile0").setScale(8).setInteractive();
           tile.textureKey = "tile0";
         } else {
           let tile = game.tiles.create(x, y, "tile1").setScale(8).setInteractive();
           tile.textureKey = "tile1";
         }
-        count++;
+        tileCount++;
       }
     }
 
     // Create choices to put in game
     game.choices = this.physics.add.staticGroup();
     let frogCount = 0;
-    const frogs = ["cannon", "basic", "launcher", "toad", "water"];
+    const frogs = ["cannon", "basic", "launcher", "toad", "water", "bird"];
     for (var x = (game.TILESIZE / 2) + 50; x < (game.TILESIZE * (Object.keys(game.frogTypes).length + 1)) + 50; x += game.TILESIZE + 10) {
       let choice = game.choices.create(x, game.TILESIZE, game.frogTypes[Object.keys(game.frogTypes)[frogCount]].path).setScale(8).setInteractive();
       choice.frogType = game.frogTypes[Object.keys(game.frogTypes)[frogCount]].name;
@@ -166,6 +172,7 @@ class Game extends Phaser.Scene {
     game.robots = this.physics.add.group();
     game.projectiles = this.physics.add.group();
     game.cannonRobotProjectiles = this.physics.add.group();
+    game.removalBirds = this.physics.add.group();
 
     // ---------- Animation ----------
     // Walking
@@ -190,9 +197,20 @@ class Game extends Phaser.Scene {
       });
       tile.on("pointerdown", (pointer) => {
         if (!tile.frog) {
-          let frog = game.frogs.create(tile.x, tile.y, game.frogTypes[game.currentSelection].path).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
-          frog.type = game.currentSelection;
-          tile.frog = frog;
+          if (game.currentSelection !== "bird") {
+            let frog = game.frogs.create(tile.x, tile.y, game.frogTypes[game.currentSelection].path).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
+            frog.type = game.currentSelection;
+            frog.isDead = false;
+            frog.touchedBird = false;
+            tile.frog = frog;
+          }
+        } else {
+          if (game.currentSelection === "bird" && !tile.frog.isDead) {
+            let bird = game.removalBirds.create(0, tile.y - game.TILESIZE + (game.TILESIZE / 8), "bird1").setScale(8).setGravityY(-config.physics.arcade.gravity.y).setVelocityX(500).setSize(3, 8).setOffset(0, 0);
+            bird.flipX = true;
+            bird.touchedFrog = false;
+            tile.frog.isDead = true;
+          }
         }
       });
     });
@@ -203,8 +221,8 @@ class Game extends Phaser.Scene {
     });
 
     // ---------- Colliders ----------
-    this.physics.add.collider(game.frogs, game.robots, (frog, robot) => {
-      if (frog.type === "basic") {
+    game.frogRobotCollider = this.physics.add.collider(game.frogs, game.robots, (frog, robot) => {
+      if (frog.type === "basicFrog0") {
         frog.destroy();
         let lastFrame = robot.texture.key;
         if (!robot.dead) {
@@ -258,6 +276,14 @@ class Game extends Phaser.Scene {
         setTimeout(function() {
           robot.destroy();
         }, 300);
+      }
+    });
+    this.physics.add.overlap(game.frogs, game.removalBirds, (frog, bird) => {
+      if (frog.isDead) {
+        bird.setVelocityX(0);
+        bird.touchedFrog = true;
+        frog.touchedBird = true;
+        frog.body.enable = false;
       }
     });
     this.physics.add.overlap(game.cannonRobotProjectiles, game.frogs, (projectile, frog) => {
@@ -400,6 +426,17 @@ class Game extends Phaser.Scene {
     game.frogs.getChildren().forEach(frog => {
       if (frog.x > game.width * game.TILESIZE) {
         frog.destroy();
+      }
+      if (frog.touchedBird) {
+        frog.y -= 8;
+      }
+    });
+    game.removalBirds.getChildren().forEach(bird => {
+      if (bird.x > game.width * game.TILESIZE) {
+        bird.destroy();
+      }
+      if (bird.touchedFrog) {
+        bird.y -= 8;
       }
     });
     game.projectiles.getChildren().forEach(projectile => {
