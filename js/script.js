@@ -225,6 +225,12 @@ class Game extends Phaser.Scene {
         game.currentSelection = choice.frogType;
       });
     });
+    this.input.on("pointerdown", () => {
+      game.cursor.setScale(6.5);
+    });
+    this.input.on("pointerup", () => {
+      game.cursor.setScale(8);
+    });
 
     // ---------- Colliders ----------
     game.frogRobotCollider = this.physics.add.collider(game.frogs, game.robots, (frog, robot) => {
@@ -509,6 +515,12 @@ class Start extends Phaser.Scene {
       phaser.pickerGroup.getChildren().forEach(picker => {
         picker.visible = false;
       });
+    });
+    this.input.on("pointerdown", () => {
+      game.cursor.setScale(6.5);
+    });
+    this.input.on("pointerup", () => {
+      game.cursor.setScale(8);
     });
   }
   update() {
