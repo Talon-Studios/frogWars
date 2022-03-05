@@ -142,6 +142,11 @@ class Game extends Phaser.Scene {
     game.sfx.music1 = this.sound.add("music1-10").setLoop(true);
     game.sfx.music1.play({ volume: 2 });
 
+    // Create cursor
+    this.engine.mouseInput();
+    game.cursor = this.physics.add.sprite(this.input.mousePointer.x, this.input.mousePointer.y, "cursor").setScale(8).setGravityY(-1500).setSize(2, 2).setOffset(0, 0).setOrigin(0, 0);
+    game.cursor.setDepth(1);
+
     // Create tiles
     game.tiles = this.physics.add.staticGroup();
     let tileCount = 0;
@@ -396,6 +401,8 @@ class Game extends Phaser.Scene {
     });
   }
   update() {
+    game.cursor.x = this.input.mousePointer.x;
+    game.cursor.y = this.input.mousePointer.y;
     game.robots.getChildren().forEach(robot => {
       if (!robot.dead) {
         robot.setVelocityX(-robot.speed * 45);
@@ -471,6 +478,11 @@ class Start extends Phaser.Scene {
     this.sfx.introMusic = this.sound.add("introMusic").setLoop(true);
     this.sfx.introMusic.play({ volume: 2 });
 
+    // Create cursor
+    this.engine.mouseInput();
+    game.cursor = this.physics.add.sprite(this.input.mousePointer.x, this.input.mousePointer.y, "cursor").setScale(8).setGravityY(-1500).setSize(2, 2).setOffset(0, 0).setOrigin(0, 0);
+    game.cursor.setDepth(1);
+
     // Set background color
     this.engine.setBackgroundColor(this, "#ffffff");
 
@@ -500,6 +512,7 @@ class Start extends Phaser.Scene {
     });
   }
   update() {
-
+    game.cursor.x = this.input.mousePointer.x;
+    game.cursor.y = this.input.mousePointer.y;
   }
 }
