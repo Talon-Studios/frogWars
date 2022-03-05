@@ -201,12 +201,14 @@ class Game extends Phaser.Scene {
             let frog = game.frogs.create(tile.x, tile.y, game.frogTypes[game.currentSelection].path).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
             frog.type = game.currentSelection;
             frog.isDead = false;
+            frog.touchedBird = false;
             tile.frog = frog;
           }
         } else {
           if (game.currentSelection === "bird" && !tile.frog.isDead) {
             let bird = game.removalBirds.create(0, tile.y - game.TILESIZE + (game.TILESIZE / 8), "bird1").setScale(8).setGravityY(-config.physics.arcade.gravity.y).setVelocityX(500).setSize(3, 8).setOffset(0, 0);
             bird.flipX = true;
+            bird.touchedFrog = false;
             tile.frog.isDead = true;
           }
         }
@@ -219,7 +221,7 @@ class Game extends Phaser.Scene {
     });
 
     // ---------- Colliders ----------
-    this.physics.add.collider(game.frogs, game.robots, (frog, robot) => {
+    game.frogRobotCollider = this.physics.add.collider(game.frogs, game.robots, (frog, robot) => {
       if (frog.type === "basicFrog0") {
         frog.destroy();
         let lastFrame = robot.texture.key;
@@ -278,9 +280,10 @@ class Game extends Phaser.Scene {
     });
     this.physics.add.overlap(game.frogs, game.removalBirds, (frog, bird) => {
       if (frog.isDead) {
-        bird.setVelocityY(-500);
         bird.setVelocityX(0);
-        frog.setVelocityY(-500);
+        bird.touchedFrog = true;
+        frog.touchedBird = true;
+        frog.body.enable = false;
       }
     });
     this.physics.add.overlap(game.cannonRobotProjectiles, game.frogs, (projectile, frog) => {
@@ -424,10 +427,16 @@ class Game extends Phaser.Scene {
       if (frog.x > game.width * game.TILESIZE) {
         frog.destroy();
       }
+      if (frog.touchedBird) {
+        frog.y -= 8;
+      }
     });
     game.removalBirds.getChildren().forEach(bird => {
       if (bird.x > game.width * game.TILESIZE) {
         bird.destroy();
+      }
+      if (bird.touchedFrog) {
+        bird.y -= 8;
       }
     });
     game.projectiles.getChildren().forEach(projectile => {
