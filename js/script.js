@@ -117,6 +117,7 @@ class Game extends Phaser.Scene {
     this.load.image("explosion3", "assets/explosion3.png");
     this.load.image("bird0", "assets/bird0.png");
     this.load.image("bird1", "assets/bird1.png");
+    this.load.image("cursor", "assets/cursor.png");
 
     // ********** Sounds **********
     // ---------- Music ----------
@@ -140,6 +141,11 @@ class Game extends Phaser.Scene {
     game.sfx.basicFrogJump = this.sound.add("basicFrogJump");
     game.sfx.music1 = this.sound.add("music1-10").setLoop(true);
     game.sfx.music1.play({ volume: 2 });
+
+    // Create cursor
+    this.engine.mouseInput();
+    game.cursor = this.physics.add.sprite(this.input.mousePointer.x, this.input.mousePointer.y, "cursor").setScale(8).setGravityY(-1500).setSize(2, 2).setOffset(0, 0).setOrigin(0, 0);
+    game.cursor.setDepth(1);
 
     // Create tiles
     game.tiles = this.physics.add.staticGroup();
@@ -218,6 +224,12 @@ class Game extends Phaser.Scene {
       choice.on("pointerdown", () => {
         game.currentSelection = choice.frogType;
       });
+    });
+    this.input.on("pointerdown", () => {
+      game.cursor.setScale(6.5);
+    });
+    this.input.on("pointerup", () => {
+      game.cursor.setScale(8);
     });
 
     // ---------- Colliders ----------
@@ -395,6 +407,8 @@ class Game extends Phaser.Scene {
     });
   }
   update() {
+    game.cursor.x = this.input.mousePointer.x;
+    game.cursor.y = this.input.mousePointer.y;
     game.robots.getChildren().forEach(robot => {
       if (!robot.dead) {
         robot.setVelocityX(-robot.speed * 45);
@@ -460,6 +474,7 @@ class Start extends Phaser.Scene {
     this.load.image("start", "assets/start.png");
     this.load.audio("optionSelect", "assets/optionSelect.wav");
     this.load.audio("introMusic", "assets/introMusic.mp3");
+    this.load.image("cursor", "assets/cursor.png");
   }
   create() {
     this.engine = new Engine(this);
@@ -468,6 +483,11 @@ class Start extends Phaser.Scene {
     this.sfx.optionSelect = this.sound.add("optionSelect");
     this.sfx.introMusic = this.sound.add("introMusic").setLoop(true);
     this.sfx.introMusic.play({ volume: 2 });
+
+    // Create cursor
+    this.engine.mouseInput();
+    game.cursor = this.physics.add.sprite(this.input.mousePointer.x, this.input.mousePointer.y, "cursor").setScale(8).setGravityY(-1500).setSize(2, 2).setOffset(0, 0).setOrigin(0, 0);
+    game.cursor.setDepth(1);
 
     // Set background color
     this.engine.setBackgroundColor(this, "#ffffff");
@@ -496,8 +516,15 @@ class Start extends Phaser.Scene {
         picker.visible = false;
       });
     });
+    this.input.on("pointerdown", () => {
+      game.cursor.setScale(6.5);
+    });
+    this.input.on("pointerup", () => {
+      game.cursor.setScale(8);
+    });
   }
   update() {
-
+    game.cursor.x = this.input.mousePointer.x;
+    game.cursor.y = this.input.mousePointer.y;
   }
 }
