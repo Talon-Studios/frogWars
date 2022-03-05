@@ -117,6 +117,7 @@ class Game extends Phaser.Scene {
     this.load.image("explosion3", "assets/explosion3.png");
     this.load.image("bird0", "assets/bird0.png");
     this.load.image("bird1", "assets/bird1.png");
+    this.load.image("cursor", "assets/cursor.png");
 
     // ********** Sounds **********
     // ---------- Music ----------
@@ -460,6 +461,7 @@ class Start extends Phaser.Scene {
     this.load.image("start", "assets/start.png");
     this.load.audio("optionSelect", "assets/optionSelect.wav");
     this.load.audio("introMusic", "assets/introMusic.mp3");
+    this.load.image("cursor", "assets/cursor.png");
   }
   create() {
     this.engine = new Engine(this);
