@@ -4,6 +4,7 @@ script.js
 The main script for Frog Wars.
 *^*^*^*^*^*^*^*/
 
+// ********** Game Scene **********
 let game = {
   width: 17,
   height: 7,
@@ -36,21 +37,23 @@ let game = {
       name: "bird"
     }
   },
-  robot: {
-    speed: 0.6,
-    health: 5
-  },
-  armoredRobot: {
-    speed: 0.6,
-    health: 10
-  },
-  speedRobot: {
-    speed: 1.8,
-    health: 3
-  },
-  cannonRobot: {
-    speed: 0.3,
-    health: 5
+  robotTypes: {
+    normalRobot: {
+      speed: 0.6,
+      health: 5
+    },
+    armoredRobot: {
+      speed: 0.6,
+      health: 10
+    },
+    speedRobot: {
+      speed: 1.8,
+      health: 3
+    },
+    cannonRobot: {
+      speed: 0.3,
+      health: 5
+    }
   },
   currencies: {
     flies: 0,
@@ -124,17 +127,19 @@ class Game extends Phaser.Scene {
     this.load.audio("launcherFrogShoot", "assets/launcherFrogShoot.wav");
     this.load.audio("robotDie", "assets/robotDie.wav");
     this.load.audio("robotHit", "assets/robotHit.wav");
+    this.load.audio("basicFrogJump", "assets/basicFrogJump.wav");
   }
   create() {
-    game.engine = new Engine(this);
+    this.engine = new Engine(this);
 
     // Add sounds
     game.sfx.cannonFrogShoot = this.sound.add("cannonFrogShoot");
     game.sfx.launcherFrogShoot = this.sound.add("launcherFrogShoot");
     game.sfx.robotDie = this.sound.add("robotDie");
     game.sfx.robotHit = this.sound.add("robotHit");
+    game.sfx.basicFrogJump = this.sound.add("basicFrogJump");
     game.sfx.music1 = this.sound.add("music1-10").setLoop(true);
-    game.sfx.music1.play({volume: 2});
+    game.sfx.music1.play({ volume: 2 });
 
     // Create tiles
     game.tiles = this.physics.add.staticGroup();
@@ -171,16 +176,16 @@ class Game extends Phaser.Scene {
 
     // ---------- Animation ----------
     // Walking
-    game.engine.addAnimation("basicRobotWalk", 5, false, false, "basicRobot0", "basicRobot1");
-    game.engine.addAnimation("armoredRobotWalk", 5, false, false, "armoredRobot0", "armoredRobot1");
-    game.engine.addAnimation("speedRobotWalk", 5, false, false, "speedRobot0", "speedRobot1");
-    game.engine.addAnimation("cannonRobotWalk", 5, false, false, "cannonRobot0", "cannonRobot1");
+    this.engine.addAnimation("basicRobotWalk", 5, false, false, "basicRobot0", "basicRobot1");
+    this.engine.addAnimation("armoredRobotWalk", 5, false, false, "armoredRobot0", "armoredRobot1");
+    this.engine.addAnimation("speedRobotWalk", 5, false, false, "speedRobot0", "speedRobot1");
+    this.engine.addAnimation("cannonRobotWalk", 5, false, false, "cannonRobot0", "cannonRobot1");
 
     // Other
-    game.engine.addAnimation("jump", 10, false, false, "basicFrog0", "basicFrog1", "basicFrog2", "basicFrog0");
-    game.engine.addAnimation("shootCannonball", 5, false, true, "cannonFrog0", "cannonFrog1");
-    game.engine.addAnimation("explode", 10, false, false, "explosion0", "explosion1", "explosion2", "explosion3");
-    game.engine.addAnimation("shootWater", 5, false, true, "waterFrog0", "waterFrog1");
+    this.engine.addAnimation("jump", 10, false, false, "basicFrog0", "basicFrog1", "basicFrog2", "basicFrog0");
+    this.engine.addAnimation("shootCannonball", 5, false, true, "cannonFrog0", "cannonFrog1");
+    this.engine.addAnimation("explode", 10, false, false, "explosion0", "explosion1", "explosion2", "explosion3");
+    this.engine.addAnimation("shootWater", 5, false, true, "waterFrog0", "waterFrog1");
 
     // ---------- Interaction ----------
     game.tiles.getChildren().forEach(tile => {
@@ -225,7 +230,7 @@ class Game extends Phaser.Scene {
             robot.setTexture("hurtSpeedRobot");
           }
         }
-        setTimeout(function () {
+        setTimeout(function() {
           robot.setTexture(lastFrame);
         }, 500);
         game.sfx.robotHit.play();
@@ -235,7 +240,7 @@ class Game extends Phaser.Scene {
           game.sfx.robotDie.play();
           robot.dead = true;
           robot.anims.play("explode", true);
-          setTimeout(function () {
+          setTimeout(function() {
             robot.destroy();
           }, 300);
         }
@@ -253,7 +258,7 @@ class Game extends Phaser.Scene {
           robot.setTexture("hurtCannonRobot");
         }
       }
-      setTimeout(function () {
+      setTimeout(function() {
         robot.setTexture(lastFrame);
       }, 500);
       game.sfx.robotHit.play();
@@ -266,7 +271,7 @@ class Game extends Phaser.Scene {
         game.sfx.robotDie.play();
         robot.dead = true;
         robot.anims.play("explode", true);
-        setTimeout(function () {
+        setTimeout(function() {
           robot.destroy();
         }, 300);
       }
@@ -297,15 +302,16 @@ class Game extends Phaser.Scene {
         });
         game.frogs.getChildren().forEach(frog => {
           switch (frog.type) {
-            case "basicFrog0":
+            case "basic":
+              game.sfx.basicFrogJump.play();
               frog.anims.play("jump", true);
-              setTimeout(function () {
+              setTimeout(function() {
                 frog.x += game.tiles.getChildren()[0].width * 8;
               }, 50);
               break;
             case "cannon":
               frog.anims.play("shootCannonball", true);
-              setTimeout(function () {
+              setTimeout(function() {
                 let projectile = game.projectiles.create(frog.x, frog.y, "cannonProjectile").setScale(8).setGravityY(-1500).setVelocityX(300);
                 projectile.type = "cannon";
               }, 200);
@@ -325,7 +331,7 @@ class Game extends Phaser.Scene {
               break;
             case "water":
               frog.anims.play("shootWater", true);
-              setTimeout(function () {
+              setTimeout(function() {
                 let projectile = game.projectiles.create(frog.x + 58, frog.y + 48, "water").setScale(8).setGravityY(-1500).setVelocityX(300).setSize(1, 1).setOffset(0, 0);
                 projectile.type = "water";
               }, 100);
@@ -337,29 +343,29 @@ class Game extends Phaser.Scene {
       repeat: -1
     });
     this.time.addEvent({
-      delay: Math.random() * (3000 - 1000) + 1000,
+      delay: this.engine.randomBetween(1000, 3000),
       callback: () => {
         let row = Math.floor(Math.random() * game.height);
-        let type = "";
+        let randomPercentage = Math.random() * 100;
+        let type;
         let health;
         let speed;
-        let randomPercentage = Math.random() * 100;
         if (randomPercentage < 50) {
           type = "basic";
-          health = game.robot.health;
-          speed = game.robot.speed;
+          health = game.robotTypes.normalRobot.health;
+          speed = game.robotTypes.normalRobot.speed;
         } else if (randomPercentage >= 50 && randomPercentage < 75) {
           type = "armored";
-          health = game.armoredRobot.health;
-          speed = game.armoredRobot.speed;
+          health = game.robotTypes.armoredRobot.health;
+          speed = game.robotTypes.armoredRobot.speed;
         } else if (randomPercentage >= 75 && randomPercentage < 87.5) {
           type = "speed";
-          health = game.speedRobot.health;
-          speed = game.speedRobot.speed;
+          health = game.robotTypes.speedRobot.health;
+          speed = game.robotTypes.speedRobot.speed;
         } else if (randomPercentage >= 87.5) {
           type = "cannon";
-          health = game.cannonRobot.health;
-          speed = game.cannonRobot.speed;
+          health = game.robotTypes.cannonRobot.health;
+          speed = game.robotTypes.cannonRobot.speed;
         }
         let robot = game.robots.create(game.width * game.TILESIZE, (game.TILESIZE / 2 + game.TILESIZE * row) + game.topMargin, `${type}Robot0`).setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0);
         robot.type = type;
@@ -429,5 +435,60 @@ class Game extends Phaser.Scene {
         projectile.destroy();
       }
     });
+  }
+}
+
+// ********** Start Scene **********
+class Start extends Phaser.Scene {
+  constructor() {
+    super("Start");
+    this.sfx = {};
+  }
+  preload() {
+    // ---------- Assets ----------
+    this.load.image("picker", "assets/picker.png");
+    this.load.image("title", "assets/title.png");
+    this.load.image("start", "assets/start.png");
+    this.load.audio("optionSelect", "assets/optionSelect.wav");
+    this.load.audio("introMusic", "assets/introMusic.mp3");
+  }
+  create() {
+    this.engine = new Engine(this);
+
+    // Add sounds
+    this.sfx.optionSelect = this.sound.add("optionSelect");
+    this.sfx.introMusic = this.sound.add("introMusic").setLoop(true);
+    this.sfx.introMusic.play({ volume: 2 });
+
+    // Set background color
+    this.engine.setBackgroundColor(this, "#ffffff");
+
+    // Add title
+    this.add.image(this.engine.gameWidthCenter + 32, 125, "title").setScale(8);
+
+    // Picker group
+    this.pickerGroup = this.physics.add.staticGroup();
+
+    // Add start option
+    let phaser = this;
+    this.startButton = this.add.image(this.engine.gameWidthCenter + 16, 400, "start").setScale(8).setInteractive();
+    this.startButton.on("pointerup", () => {
+      phaser.sfx.optionSelect.play();
+      phaser.sfx.introMusic.stop();
+      phaser.scene.stop();
+      phaser.scene.start("Game");
+    });
+    this.startButton.on("pointerover", () => {
+      phaser.pickerGroup.create(phaser.startButton.x - 160, phaser.startButton.y - 8, "picker").setScale(8);
+      phaser.pickerGroup.create(phaser.startButton.x + 100, phaser.startButton.y - 8, "picker").setScale(8).flipX = true;
+    });
+    this.startButton.on("pointerout", () => {
+      phaser.pickerGroup.getChildren().forEach(picker => {
+        picker.visible = false;
+      });
+    });
+  }
+  update() {
+
   }
 }
