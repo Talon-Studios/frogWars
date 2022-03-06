@@ -118,6 +118,9 @@ class Game extends Phaser.Scene {
     this.load.image("bird0", "assets/bird0.png");
     this.load.image("bird1", "assets/bird1.png");
     this.load.image("cursor", "assets/cursor.png");
+    this.load.image("optionBorder0", "assets/optionBorder0.png");
+    this.load.image("optionBorder1", "assets/optionBorder1.png");
+    this.load.image("optionBorder2", "assets/optionBorder2.png");
 
     // ********** Sounds **********
     // ---------- Music ----------
@@ -165,11 +168,20 @@ class Game extends Phaser.Scene {
 
     // Create choices to put in game
     game.choices = this.physics.add.staticGroup();
+    game.choiceBorders = this.physics.add.staticGroup();
     let frogCount = 0;
     const frogs = ["cannon", "basic", "launcher", "toad", "water", "bird"];
-    for (var x = (game.TILESIZE / 2) + 50; x < (game.TILESIZE * (Object.keys(game.frogTypes).length + 1)) + 50; x += game.TILESIZE + 10) {
-      let choice = game.choices.create(x, game.TILESIZE, game.frogTypes[Object.keys(game.frogTypes)[frogCount]].path).setScale(8).setInteractive();
-      choice.frogType = game.frogTypes[Object.keys(game.frogTypes)[frogCount]].name;
+    for (var x = 80; x < frogs.length * (game.TILESIZE + 25); x += game.TILESIZE + 25) {
+      console.log(x);
+      let border = game.choiceBorders.create(x, game.TILESIZE, "optionBorder0").setScale(8).setInteractive();
+      border.clicked = false;
+      if (frogs[frogCount] === game.currentSelection) {
+        border.clicked = true;
+        border.setTexture("optionBorder2");
+      }
+      let choice = game.choices.create(x, game.TILESIZE, game.frogTypes[frogs[frogCount]].path).setScale(8).setInteractive();
+      choice.frogType = game.frogTypes[frogs[frogCount]].name;
+      choice.border = border;
       frogCount++;
     }
 
@@ -222,7 +234,47 @@ class Game extends Phaser.Scene {
     });
     game.choices.getChildren().forEach(choice => {
       choice.on("pointerdown", () => {
-        game.currentSelection = choice.frogType;
+        if (!choice.border.clicked) {
+          game.choiceBorders.getChildren().forEach(x => {
+            x.clicked = false;
+            x.setTexture("optionBorder0");
+          });
+          game.currentSelection = choice.frogType;
+          choice.border.clicked = true;
+          choice.border.setTexture("optionBorder2");
+        }
+      });
+      choice.on("pointerover", () => {
+        if (!choice.border.clicked) {
+          choice.border.setTexture("optionBorder1");
+        }
+      });
+      choice.on("pointerout", () => {
+        if (!choice.border.clicked) {
+          choice.border.setTexture("optionBorder0");
+        }
+      });
+    });
+    game.choiceBorders.getChildren().forEach(border => {
+      border.on("pointerdown", () => {
+        if (!border.clicked) {
+          game.choiceBorders.getChildren().forEach(x => {
+            x.clicked = false;
+            x.setTexture("optionBorder0");
+          });
+          border.clicked = true;
+          border.setTexture("optionBorder2");
+        }
+      });
+      border.on("pointerover", () => {
+        if (!border.clicked) {
+          border.setTexture("optionBorder1");
+        }
+      });
+      border.on("pointerout", () => {
+        if (!border.clicked) {
+          border.setTexture("optionBorder0");
+        }
       });
     });
     this.input.on("pointerdown", () => {
