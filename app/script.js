@@ -176,6 +176,7 @@ class Game extends Phaser.Scene {
       let border = game.choiceBorders.create(x, game.TILESIZE, "optionBorder0").setScale(8).setInteractive();
       let choice = game.choices.create(x, game.TILESIZE, game.frogTypes[frogs[frogCount]].path).setScale(8).setInteractive();
       choice.frogType = game.frogTypes[frogs[frogCount]].name;
+      choice.border = border;
       frogCount++;
     }
 
@@ -229,6 +230,20 @@ class Game extends Phaser.Scene {
     game.choices.getChildren().forEach(choice => {
       choice.on("pointerdown", () => {
         game.currentSelection = choice.frogType;
+      });
+      choice.on("pointerover", () => {
+        choice.border.setTexture("optionBorder1");
+      });
+      choice.on("pointerout", () => {
+        choice.border.setTexture("optionBorder0");
+      });
+    });
+    game.choiceBorders.getChildren().forEach(border => {
+      border.on("pointerover", () => {
+        border.setTexture("optionBorder1");
+      });
+      border.on("pointerout", () => {
+        border.setTexture("optionBorder0");
       });
     });
     this.input.on("pointerdown", () => {
