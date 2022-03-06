@@ -362,7 +362,7 @@ class Game extends Phaser.Scene {
       repeat: -1
     });
     this.time.addEvent({
-      delay: 50,
+      delay: 5,
       callback: () => {
         let row = Math.floor(Math.random() * game.height);
         let frog = game.frogs.create(0, (game.TILESIZE / 2 + game.TILESIZE * row) + game.topMargin, `basicFrog0`).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
