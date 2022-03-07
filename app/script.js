@@ -286,7 +286,7 @@ class Game extends Phaser.Scene {
 
     // ---------- Colliders ----------
     game.frogRobotCollider = this.physics.add.collider(game.frogs, game.robots, (frog, robot) => {
-      if (frog.type === "basicFrog0") {
+      if (frog.type === "basic") {
         frog.destroy();
         let lastFrame = robot.texture.key;
         if (!robot.dead) {
