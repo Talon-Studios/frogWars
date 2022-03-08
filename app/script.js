@@ -615,14 +615,13 @@ class Settings extends Phaser.Scene {
     this.load.image("checkboxUnchecked", "assets/checkboxUnchecked.png");
     this.load.image("musicSetting", "assets/musicSetting.png");
     this.load.image("sfxSetting", "assets/sfxSetting.png");
+    this.load.image("backSetting", "assets/backSetting.png");
   }
   create() {
     this.engine = new Engine(this);
 
     // Add sounds
     this.sfx.optionSelect = this.sound.add("optionSelect");
-    this.sfx.introMusic = this.sound.add("introMusic").setLoop(true);
-    this.sfx.introMusic.play({ volume: 2 });
 
     // Create cursor
     this.engine.mouseInput();
@@ -633,24 +632,25 @@ class Settings extends Phaser.Scene {
     this.engine.setBackgroundColor(this, "#ffffff");
 
     // Create text
-    this.musicSetting = this.add.image(this.engine.gameWidthCenter + 42, 350, "musicSetting").setScale(8).setInteractive();
-    this.sfxSetting = this.add.image(this.engine.gameWidthCenter + 70, 450, "sfxSetting").setScale(8).setInteractive();
+    this.musicSetting = this.add.image(this.engine.gameWidthCenter + 42, 310, "musicSetting").setScale(8).setInteractive();
+    this.sfxSetting = this.add.image(this.engine.gameWidthCenter + 70, 410, "sfxSetting").setScale(8).setInteractive();
 
     // Create checkboxes
-    this.musicCheckbox = this.add.image(this.engine.gameWidthCenter - 180, 340, "checkboxUnchecked").setScale(8).setInteractive();
+    this.musicCheckbox = this.add.image(this.engine.gameWidthCenter - 180, 300, "checkboxUnchecked").setScale(8).setInteractive();
     if (game.musicEnabled) this.musicCheckbox.setTexture("checkboxChecked");
-    this.sfxCheckbox = this.add.image(this.engine.gameWidthCenter - 180, 440, "checkboxUnchecked").setScale(8).setInteractive();
+    this.sfxCheckbox = this.add.image(this.engine.gameWidthCenter - 180, 400, "checkboxUnchecked").setScale(8).setInteractive();
     if (game.sfxEnabled) this.sfxCheckbox.setTexture("checkboxChecked");
+
+    // Create backbutton
+    this.backSetting = this.add.image(this.engine.gameWidthCenter, 600, "backSetting").setScale(8).setInteractive();
 
     // Interaction
     this.musicCheckbox.on("pointerdown", () => {
       game.musicEnabled = !game.musicEnabled;
       if (game.musicEnabled) {
         this.musicCheckbox.setTexture("checkboxChecked");
-        this.sfx.introMusic.play();
       } else {
         this.musicCheckbox.setTexture("checkboxUnchecked");
-        this.sfx.introMusic.stop();
       }
     });
     this.sfxCheckbox.on("pointerdown", () => {
@@ -660,6 +660,10 @@ class Settings extends Phaser.Scene {
       } else {
         this.sfxCheckbox.setTexture("checkboxUnchecked");
       }
+    });
+    this.backSetting.on("pointerdown", () => {
+      this.scene.stop();
+      this.scene.start("Start");
     });
     this.input.on("pointerdown", () => {
       game.cursor.setScale(6.5);
