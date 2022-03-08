@@ -11,6 +11,8 @@ let game = {
   TILESIZE: 64,
   topMargin: 167,
   sfx: {},
+  musicEnabled: true,
+  sfxEnabled: true,
   frogTypes: {
     "cannon": {
       path: "cannonFrog0",
@@ -143,7 +145,7 @@ class Game extends Phaser.Scene {
     game.sfx.robotHit = this.sound.add("robotHit");
     game.sfx.basicFrogJump = this.sound.add("basicFrogJump");
     game.sfx.music1 = this.sound.add("music1-10").setLoop(true);
-    game.sfx.music1.play({ volume: 2 });
+    if (game.musicEnabled) game.sfx.music1.play({ volume: 2 });
 
     // Create cursor
     this.engine.mouseInput();
@@ -219,6 +221,7 @@ class Game extends Phaser.Scene {
             let frog = game.frogs.create(tile.x, tile.y, game.frogTypes[game.currentSelection].path).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
             frog.type = game.currentSelection;
             frog.isDead = false;
+            frog.health = 10;
             frog.touchedBird = false;
             tile.frog = frog;
           }
@@ -286,7 +289,7 @@ class Game extends Phaser.Scene {
 
     // ---------- Colliders ----------
     game.frogRobotCollider = this.physics.add.collider(game.frogs, game.robots, (frog, robot) => {
-      if (frog.type === "basic") {
+      if (frog.type === "basicFrog0") {
         frog.destroy();
         let lastFrame = robot.texture.key;
         if (!robot.dead) {
@@ -299,11 +302,11 @@ class Game extends Phaser.Scene {
         setTimeout(function() {
           robot.setTexture(lastFrame);
         }, 500);
-        game.sfx.robotHit.play();
+        if(game.sfxEnabled) game.sfx.robotHit.play();
         robot.health -= 5;
         if (robot.health <= 0) {
           robot.body.enable = false;
-          game.sfx.robotDie.play();
+          if(game.sfxEnabled) game.sfx.robotDie.play();
           robot.dead = true;
           robot.anims.play("explode", true);
           setTimeout(function() {
@@ -327,14 +330,14 @@ class Game extends Phaser.Scene {
       setTimeout(function() {
         robot.setTexture(lastFrame);
       }, 500);
-      game.sfx.robotHit.play();
+      if(game.sfxEnabled) game.sfx.robotHit.play();
       robot.health -= game.projectileStats[projectile.type].damage;
       if (projectile.type === "water" && robot.speed > 0.3) {
         robot.speed -= 0.05;
       }
       if (robot.health <= 0) {
         robot.body.enable = false;
-        game.sfx.robotDie.play();
+        if(game.sfxEnabled) game.sfx.robotDie.play();
         robot.dead = true;
         robot.anims.play("explode", true);
         setTimeout(function() {
@@ -370,7 +373,7 @@ class Game extends Phaser.Scene {
         game.frogs.getChildren().forEach(frog => {
           switch (frog.type) {
             case "basic":
-              game.sfx.basicFrogJump.play();
+              if(game.sfxEnabled) game.sfx.basicFrogJump.play();
               frog.anims.play("jump", true);
               setTimeout(function() {
                 frog.x += game.tiles.getChildren()[0].width * 8;
@@ -384,7 +387,7 @@ class Game extends Phaser.Scene {
               }, 200);
               break;
             case "launcher":
-              game.sfx.launcherFrogShoot.play();
+              if(game.sfxEnabled) game.sfx.launcherFrogShoot.play();
               let numOfSprite = 5;
               for (var i = 0; i < numOfSprite; i++) {
                 let projectile = game.projectiles.create(frog.x, frog.y, "launcherProjectile").setScale(8).setGravityY(-1500);
@@ -524,6 +527,7 @@ class Start extends Phaser.Scene {
     this.load.image("picker", "assets/picker.png");
     this.load.image("title", "assets/title.png");
     this.load.image("start", "assets/start.png");
+    this.load.image("settings", "assets/settings.png");
     this.load.audio("optionSelect", "assets/optionSelect.wav");
     this.load.audio("introMusic", "assets/introMusic.mp3");
     this.load.image("cursor", "assets/cursor.png");
@@ -534,7 +538,7 @@ class Start extends Phaser.Scene {
     // Add sounds
     this.sfx.optionSelect = this.sound.add("optionSelect");
     this.sfx.introMusic = this.sound.add("introMusic").setLoop(true);
-    this.sfx.introMusic.play({ volume: 2 });
+    if(game.musicEnabled) this.sfx.introMusic.play({ volume: 2 });
 
     // Create cursor
     this.engine.mouseInput();
@@ -552,12 +556,28 @@ class Start extends Phaser.Scene {
 
     // Add start option
     let phaser = this;
-    this.startButton = this.add.image(this.engine.gameWidthCenter + 16, 400, "start").setScale(8).setInteractive();
+    this.startButton = this.add.image(this.engine.gameWidthCenter + 16, 350, "start").setScale(8).setInteractive();
+    this.settingsButton = this.add.image(this.engine.gameWidthCenter, 450, "settings").setScale(8).setInteractive();
     this.startButton.on("pointerup", () => {
-      phaser.sfx.optionSelect.play();
-      phaser.sfx.introMusic.stop();
+      if(game.sfxEnabled) phaser.sfx.optionSelect.play();
+      if(game.musicEnabled) phaser.sfx.introMusic.stop();
       phaser.scene.stop();
       phaser.scene.start("Game");
+    });
+    this.settingsButton.on("pointerup", () => {
+      if(game.sfxEnabled) phaser.sfx.optionSelect.play();
+      if(game.musicEnabled) phaser.sfx.introMusic.stop();
+      phaser.scene.stop();
+      phaser.scene.start("Settings");
+    });
+    this.settingsButton.on("pointerover", () => {
+      phaser.pickerGroup.create(phaser.settingsButton.x - 190, phaser.settingsButton.y - 8, "picker").setScale(8);
+      phaser.pickerGroup.create(phaser.settingsButton.x + 190, phaser.settingsButton.y - 8, "picker").setScale(8).flipX = true;
+    });
+    this.settingsButton.on("pointerout", () => {
+      phaser.pickerGroup.getChildren().forEach(picker => {
+        picker.visible = false;
+      });
     });
     this.startButton.on("pointerover", () => {
       phaser.pickerGroup.create(phaser.startButton.x - 160, phaser.startButton.y - 8, "picker").setScale(8);
@@ -567,6 +587,83 @@ class Start extends Phaser.Scene {
       phaser.pickerGroup.getChildren().forEach(picker => {
         picker.visible = false;
       });
+    });
+    this.input.on("pointerdown", () => {
+      game.cursor.setScale(6.5);
+    });
+    this.input.on("pointerup", () => {
+      game.cursor.setScale(8);
+    });
+  }
+  update() {
+    game.cursor.x = this.input.mousePointer.x;
+    game.cursor.y = this.input.mousePointer.y;
+  }
+}
+
+// ********** Settings Scene **********
+class Settings extends Phaser.Scene {
+  constructor() {
+    super("Settings");
+    this.sfx = {};
+  }
+  preload() {
+    this.load.audio("optionSelect", "assets/optionSelect.wav");
+    this.load.audio("introMusic", "assets/introMusic.mp3");
+    this.load.image("cursor", "assets/cursor.png");
+    this.load.image("checkboxChecked", "assets/checkboxChecked.png");
+    this.load.image("checkboxUnchecked", "assets/checkboxUnchecked.png");
+    this.load.image("musicSetting", "assets/musicSetting.png");
+    this.load.image("sfxSetting", "assets/sfxSetting.png");
+    this.load.image("backSetting", "assets/backSetting.png");
+  }
+  create() {
+    this.engine = new Engine(this);
+
+    // Add sounds
+    this.sfx.optionSelect = this.sound.add("optionSelect");
+
+    // Create cursor
+    this.engine.mouseInput();
+    game.cursor = this.physics.add.sprite(this.input.mousePointer.x, this.input.mousePointer.y, "cursor").setScale(8).setGravityY(-1500).setSize(2, 2).setOffset(0, 0).setOrigin(0, 0);
+    game.cursor.setDepth(1);
+
+    // Set background color
+    this.engine.setBackgroundColor(this, "#ffffff");
+
+    // Create text
+    this.musicSetting = this.add.image(this.engine.gameWidthCenter + 42, 310, "musicSetting").setScale(8).setInteractive();
+    this.sfxSetting = this.add.image(this.engine.gameWidthCenter + 70, 410, "sfxSetting").setScale(8).setInteractive();
+
+    // Create checkboxes
+    this.musicCheckbox = this.add.image(this.engine.gameWidthCenter - 180, 300, "checkboxUnchecked").setScale(8).setInteractive();
+    if (game.musicEnabled) this.musicCheckbox.setTexture("checkboxChecked");
+    this.sfxCheckbox = this.add.image(this.engine.gameWidthCenter - 180, 400, "checkboxUnchecked").setScale(8).setInteractive();
+    if (game.sfxEnabled) this.sfxCheckbox.setTexture("checkboxChecked");
+
+    // Create backbutton
+    this.backSetting = this.add.image(this.engine.gameWidthCenter, 600, "backSetting").setScale(8).setInteractive();
+
+    // Interaction
+    this.musicCheckbox.on("pointerdown", () => {
+      game.musicEnabled = !game.musicEnabled;
+      if (game.musicEnabled) {
+        this.musicCheckbox.setTexture("checkboxChecked");
+      } else {
+        this.musicCheckbox.setTexture("checkboxUnchecked");
+      }
+    });
+    this.sfxCheckbox.on("pointerdown", () => {
+      game.sfxEnabled = !game.sfxEnabled;
+      if (game.sfxEnabled) {
+        this.sfxCheckbox.setTexture("checkboxChecked");
+      } else {
+        this.sfxCheckbox.setTexture("checkboxUnchecked");
+      }
+    });
+    this.backSetting.on("pointerdown", () => {
+      this.scene.stop();
+      this.scene.start("Start");
     });
     this.input.on("pointerdown", () => {
       game.cursor.setScale(6.5);
