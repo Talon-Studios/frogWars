@@ -11,6 +11,8 @@ let game = {
   TILESIZE: 64,
   topMargin: 167,
   sfx: {},
+  musicEnabled: true,
+  sfxEnabled: true,
   frogTypes: {
     "cannon": {
       path: "cannonFrog0",
@@ -143,7 +145,7 @@ class Game extends Phaser.Scene {
     game.sfx.robotHit = this.sound.add("robotHit");
     game.sfx.basicFrogJump = this.sound.add("basicFrogJump");
     game.sfx.music1 = this.sound.add("music1-10").setLoop(true);
-    game.sfx.music1.play({ volume: 2 });
+    if (game.musicEnabled) game.sfx.music1.play({ volume: 2 });
 
     // Create cursor
     this.engine.mouseInput();
@@ -300,11 +302,11 @@ class Game extends Phaser.Scene {
         setTimeout(function() {
           robot.setTexture(lastFrame);
         }, 500);
-        game.sfx.robotHit.play();
+        if(game.sfxEnabled) game.sfx.robotHit.play();
         robot.health -= 5;
         if (robot.health <= 0) {
           robot.body.enable = false;
-          game.sfx.robotDie.play();
+          if(game.sfxEnabled) game.sfx.robotDie.play();
           robot.dead = true;
           robot.anims.play("explode", true);
           setTimeout(function() {
@@ -328,14 +330,14 @@ class Game extends Phaser.Scene {
       setTimeout(function() {
         robot.setTexture(lastFrame);
       }, 500);
-      game.sfx.robotHit.play();
+      if(game.sfxEnabled) game.sfx.robotHit.play();
       robot.health -= game.projectileStats[projectile.type].damage;
       if (projectile.type === "water" && robot.speed > 0.3) {
         robot.speed -= 0.05;
       }
       if (robot.health <= 0) {
         robot.body.enable = false;
-        game.sfx.robotDie.play();
+        if(game.sfxEnabled) game.sfx.robotDie.play();
         robot.dead = true;
         robot.anims.play("explode", true);
         setTimeout(function() {
@@ -371,7 +373,7 @@ class Game extends Phaser.Scene {
         game.frogs.getChildren().forEach(frog => {
           switch (frog.type) {
             case "basic":
-              game.sfx.basicFrogJump.play();
+              if(game.sfxEnabled) game.sfx.basicFrogJump.play();
               frog.anims.play("jump", true);
               setTimeout(function() {
                 frog.x += game.tiles.getChildren()[0].width * 8;
@@ -385,7 +387,7 @@ class Game extends Phaser.Scene {
               }, 200);
               break;
             case "launcher":
-              game.sfx.launcherFrogShoot.play();
+              if(game.sfxEnabled) game.sfx.launcherFrogShoot.play();
               let numOfSprite = 5;
               for (var i = 0; i < numOfSprite; i++) {
                 let projectile = game.projectiles.create(frog.x, frog.y, "launcherProjectile").setScale(8).setGravityY(-1500);
@@ -536,7 +538,7 @@ class Start extends Phaser.Scene {
     // Add sounds
     this.sfx.optionSelect = this.sound.add("optionSelect");
     this.sfx.introMusic = this.sound.add("introMusic").setLoop(true);
-    this.sfx.introMusic.play({ volume: 2 });
+    if(game.musicEnabled) this.sfx.introMusic.play({ volume: 2 });
 
     // Create cursor
     this.engine.mouseInput();
@@ -557,14 +559,14 @@ class Start extends Phaser.Scene {
     this.startButton = this.add.image(this.engine.gameWidthCenter + 16, 350, "start").setScale(8).setInteractive();
     this.settingsButton = this.add.image(this.engine.gameWidthCenter, 450, "settings").setScale(8).setInteractive();
     this.startButton.on("pointerup", () => {
-      phaser.sfx.optionSelect.play();
-      phaser.sfx.introMusic.stop();
+      if(game.sfxEnabled) phaser.sfx.optionSelect.play();
+      if(game.musicEnabled) phaser.sfx.introMusic.stop();
       phaser.scene.stop();
       phaser.scene.start("Game");
     });
     this.settingsButton.on("pointerup", () => {
-      phaser.sfx.optionSelect.play();
-      phaser.sfx.introMusic.stop();
+      if(game.sfxEnabled) phaser.sfx.optionSelect.play();
+      if(game.musicEnabled) phaser.sfx.introMusic.stop();
       phaser.scene.stop();
       phaser.scene.start("Settings");
     });
@@ -635,10 +637,30 @@ class Settings extends Phaser.Scene {
     this.sfxSetting = this.add.image(this.engine.gameWidthCenter + 70, 450, "sfxSetting").setScale(8).setInteractive();
 
     // Create checkboxes
-    this.musicCheckbox = this.add.image(this.engine.gameWidthCenter - 180, 340, "checkboxChecked").setScale(8).setInteractive();
-    this.sfxCheckbox = this.add.image(this.engine.gameWidthCenter - 180, 440, "checkboxChecked").setScale(8).setInteractive();
+    this.musicCheckbox = this.add.image(this.engine.gameWidthCenter - 180, 340, "checkboxUnchecked").setScale(8).setInteractive();
+    if (game.musicEnabled) this.musicCheckbox.setTexture("checkboxChecked");
+    this.sfxCheckbox = this.add.image(this.engine.gameWidthCenter - 180, 440, "checkboxUnchecked").setScale(8).setInteractive();
+    if (game.sfxEnabled) this.sfxCheckbox.setTexture("checkboxChecked");
 
     // Interaction
+    this.musicCheckbox.on("pointerdown", () => {
+      game.musicEnabled = !game.musicEnabled;
+      if (game.musicEnabled) {
+        this.musicCheckbox.setTexture("checkboxChecked");
+        this.sfx.introMusic.play();
+      } else {
+        this.musicCheckbox.setTexture("checkboxUnchecked");
+        this.sfx.introMusic.stop();
+      }
+    });
+    this.sfxCheckbox.on("pointerdown", () => {
+      game.sfxEnabled = !game.sfxEnabled;
+      if (game.sfxEnabled) {
+        this.sfxCheckbox.setTexture("checkboxChecked");
+      } else {
+        this.sfxCheckbox.setTexture("checkboxUnchecked");
+      }
+    });
     this.input.on("pointerdown", () => {
       game.cursor.setScale(6.5);
     });
