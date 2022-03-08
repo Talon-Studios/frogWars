@@ -630,6 +630,14 @@ class Settings extends Phaser.Scene {
     // Set background color
     this.engine.setBackgroundColor(this, "#ffffff");
 
+    // Create text
+    this.musicSetting = this.add.image(this.engine.gameWidthCenter + 42, 350, "musicSetting").setScale(8).setInteractive();
+    this.sfxSetting = this.add.image(this.engine.gameWidthCenter + 70, 450, "sfxSetting").setScale(8).setInteractive();
+
+    // Create checkboxes
+    this.musicCheckbox = this.add.image(this.engine.gameWidthCenter - 180, 340, "checkboxChecked").setScale(8).setInteractive();
+    this.sfxCheckbox = this.add.image(this.engine.gameWidthCenter - 180, 440, "checkboxChecked").setScale(8).setInteractive();
+
     // Interaction
     this.input.on("pointerdown", () => {
       game.cursor.setScale(6.5);
