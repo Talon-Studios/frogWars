@@ -609,6 +609,10 @@ class Settings extends Phaser.Scene {
     this.load.audio("optionSelect", "assets/optionSelect.wav");
     this.load.audio("introMusic", "assets/introMusic.mp3");
     this.load.image("cursor", "assets/cursor.png");
+    this.load.image("checkboxChecked", "assets/checkboxChecked.png");
+    this.load.image("checkboxUnchecked", "assets/checkboxUnchecked.png");
+    this.load.image("musicSetting", "assets/musicSetting.png");
+    this.load.image("sfxSetting", "assets/sfxSetting.png");
   }
   create() {
     this.engine = new Engine(this);
