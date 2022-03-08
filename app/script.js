@@ -219,6 +219,7 @@ class Game extends Phaser.Scene {
             let frog = game.frogs.create(tile.x, tile.y, game.frogTypes[game.currentSelection].path).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
             frog.type = game.currentSelection;
             frog.isDead = false;
+            frog.health = 10;
             frog.touchedBird = false;
             tile.frog = frog;
           }
@@ -286,7 +287,7 @@ class Game extends Phaser.Scene {
 
     // ---------- Colliders ----------
     game.frogRobotCollider = this.physics.add.collider(game.frogs, game.robots, (frog, robot) => {
-      if (frog.type === "basic") {
+      if (frog.type === "basicFrog0") {
         frog.destroy();
         let lastFrame = robot.texture.key;
         if (!robot.dead) {
@@ -524,6 +525,7 @@ class Start extends Phaser.Scene {
     this.load.image("picker", "assets/picker.png");
     this.load.image("title", "assets/title.png");
     this.load.image("start", "assets/start.png");
+    this.load.image("settings", "assets/settings.png");
     this.load.audio("optionSelect", "assets/optionSelect.wav");
     this.load.audio("introMusic", "assets/introMusic.mp3");
     this.load.image("cursor", "assets/cursor.png");
@@ -552,12 +554,28 @@ class Start extends Phaser.Scene {
 
     // Add start option
     let phaser = this;
-    this.startButton = this.add.image(this.engine.gameWidthCenter + 16, 400, "start").setScale(8).setInteractive();
+    this.startButton = this.add.image(this.engine.gameWidthCenter + 16, 350, "start").setScale(8).setInteractive();
+    this.settingsButton = this.add.image(this.engine.gameWidthCenter, 450, "settings").setScale(8).setInteractive();
     this.startButton.on("pointerup", () => {
       phaser.sfx.optionSelect.play();
       phaser.sfx.introMusic.stop();
       phaser.scene.stop();
       phaser.scene.start("Game");
+    });
+    this.settingsButton.on("pointerup", () => {
+      phaser.sfx.optionSelect.play();
+      phaser.sfx.introMusic.stop();
+      phaser.scene.stop();
+      phaser.scene.start("Settings");
+    });
+    this.settingsButton.on("pointerover", () => {
+      phaser.pickerGroup.create(phaser.settingsButton.x - 190, phaser.settingsButton.y - 8, "picker").setScale(8);
+      phaser.pickerGroup.create(phaser.settingsButton.x + 190, phaser.settingsButton.y - 8, "picker").setScale(8).flipX = true;
+    });
+    this.settingsButton.on("pointerout", () => {
+      phaser.pickerGroup.getChildren().forEach(picker => {
+        picker.visible = false;
+      });
     });
     this.startButton.on("pointerover", () => {
       phaser.pickerGroup.create(phaser.startButton.x - 160, phaser.startButton.y - 8, "picker").setScale(8);
@@ -568,6 +586,47 @@ class Start extends Phaser.Scene {
         picker.visible = false;
       });
     });
+    this.input.on("pointerdown", () => {
+      game.cursor.setScale(6.5);
+    });
+    this.input.on("pointerup", () => {
+      game.cursor.setScale(8);
+    });
+  }
+  update() {
+    game.cursor.x = this.input.mousePointer.x;
+    game.cursor.y = this.input.mousePointer.y;
+  }
+}
+
+// ********** Settings Scene **********
+class Settings extends Phaser.Scene {
+  constructor() {
+    super("Settings");
+    this.sfx = {};
+  }
+  preload() {
+    this.load.audio("optionSelect", "assets/optionSelect.wav");
+    this.load.audio("introMusic", "assets/introMusic.mp3");
+    this.load.image("cursor", "assets/cursor.png");
+  }
+  create() {
+    this.engine = new Engine(this);
+
+    // Add sounds
+    this.sfx.optionSelect = this.sound.add("optionSelect");
+    this.sfx.introMusic = this.sound.add("introMusic").setLoop(true);
+    this.sfx.introMusic.play({ volume: 2 });
+
+    // Create cursor
+    this.engine.mouseInput();
+    game.cursor = this.physics.add.sprite(this.input.mousePointer.x, this.input.mousePointer.y, "cursor").setScale(8).setGravityY(-1500).setSize(2, 2).setOffset(0, 0).setOrigin(0, 0);
+    game.cursor.setDepth(1);
+
+    // Set background color
+    this.engine.setBackgroundColor(this, "#ffffff");
+
+    // Interaction
     this.input.on("pointerdown", () => {
       game.cursor.setScale(6.5);
     });
