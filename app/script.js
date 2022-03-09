@@ -632,17 +632,17 @@ class Settings extends Phaser.Scene {
     this.engine.setBackgroundColor(this, "#ffffff");
 
     // Create text
-    this.musicSetting = this.add.image(this.engine.gameWidthCenter + 42, 310, "musicSetting").setScale(8).setInteractive();
-    this.sfxSetting = this.add.image(this.engine.gameWidthCenter + 70, 410, "sfxSetting").setScale(8).setInteractive();
+    this.musicSetting = this.add.image(this.engine.gameWidthCenter + 42, 280, "musicSetting").setScale(8).setInteractive();
+    this.sfxSetting = this.add.image(this.engine.gameWidthCenter + 70, 380, "sfxSetting").setScale(8).setInteractive();
 
     // Create checkboxes
-    this.musicCheckbox = this.add.image(this.engine.gameWidthCenter - 180, 300, "checkboxUnchecked").setScale(8).setInteractive();
+    this.musicCheckbox = this.add.image(this.engine.gameWidthCenter - 180, 270, "checkboxUnchecked").setScale(8).setInteractive();
     if (game.musicEnabled) this.musicCheckbox.setTexture("checkboxChecked");
-    this.sfxCheckbox = this.add.image(this.engine.gameWidthCenter - 180, 400, "checkboxUnchecked").setScale(8).setInteractive();
+    this.sfxCheckbox = this.add.image(this.engine.gameWidthCenter - 180, 370, "checkboxUnchecked").setScale(8).setInteractive();
     if (game.sfxEnabled) this.sfxCheckbox.setTexture("checkboxChecked");
 
     // Create backbutton
-    this.backSetting = this.add.image(this.engine.gameWidthCenter, 600, "backSetting").setScale(8).setInteractive();
+    this.backSetting = this.add.image(this.engine.gameWidthCenter, 570, "backSetting").setScale(8).setInteractive();
 
     // Interaction
     this.musicCheckbox.on("pointerdown", () => {
