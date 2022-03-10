@@ -13,7 +13,7 @@ const config = {
   render: {
     pixelArt: true
   },
-  backgroundColor: 0x000000,
+  backgroundColor: 0x2b2b2b,
   physics: {
     default: "arcade",
     arcade: {
