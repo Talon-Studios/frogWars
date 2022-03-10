@@ -661,7 +661,7 @@ class Settings extends Phaser.Scene {
         this.sfxCheckbox.setTexture("checkboxUnchecked");
       }
     });
-    this.backSetting.on("pointerdown", () => {
+    this.backSetting.on("pointerup", () => {
       this.scene.stop();
       this.scene.start("Start");
     });
