@@ -289,61 +289,18 @@ class Game extends Phaser.Scene {
 
     // ---------- Colliders ----------
     game.frogRobotCollider = this.physics.add.collider(game.frogs, game.robots, (frog, robot) => {
-      if (frog.type === "basicFrog0") {
+      if (frog.type === "basic") {
         frog.destroy();
-        let lastFrame = robot.texture.key;
-        if (!robot.dead) {
-          if (robot.type === "basic" || robot.type === "armored" && !robot.dead) {
-            robot.setTexture("hurtRobot");
-          } else if (robot.type === "speed") {
-            robot.setTexture("hurtSpeedRobot");
-          }
-        }
-        setTimeout(function() {
-          robot.setTexture(lastFrame);
-        }, 500);
-        if(game.sfxEnabled) game.sfx.robotHit.play();
-        robot.health -= 5;
-        if (robot.health <= 0) {
-          robot.body.enable = false;
-          if(game.sfxEnabled) game.sfx.robotDie.play();
-          robot.dead = true;
-          robot.anims.play("explode", true);
-          setTimeout(function() {
-            robot.destroy();
-          }, 300);
-        }
+        killRobot(this, game, robot, 5);
       }
     });
     this.physics.add.overlap(game.projectiles, game.robots, (projectile, robot) => {
       projectile.destroy();
-      let lastFrame = robot.texture.key;
-      if (!robot.dead) {
-        if (robot.type === "basic" || robot.type === "armored") {
-          robot.setTexture("hurtRobot");
-        } else if (robot.type === "speed") {
-          robot.setTexture("hurtSpeedRobot");
-        } else if (robot.type === "cannon") {
-          robot.setTexture("hurtCannonRobot");
+      killRobot(this, game, robot, game.projectileStats[projectile.type].damage, () => {
+        if (projectile.type === "water" && robot.speed > 0.3) {
+          robot.speed -= 0.05;
         }
-      }
-      setTimeout(function() {
-        robot.setTexture(lastFrame);
-      }, 500);
-      if(game.sfxEnabled) game.sfx.robotHit.play();
-      robot.health -= game.projectileStats[projectile.type].damage;
-      if (projectile.type === "water" && robot.speed > 0.3) {
-        robot.speed -= 0.05;
-      }
-      if (robot.health <= 0) {
-        robot.body.enable = false;
-        if(game.sfxEnabled) game.sfx.robotDie.play();
-        robot.dead = true;
-        robot.anims.play("explode", true);
-        setTimeout(function() {
-          robot.destroy();
-        }, 300);
-      }
+      });
     });
     this.physics.add.overlap(game.frogs, game.removalBirds, (frog, bird) => {
       if (frog.isDead) {
