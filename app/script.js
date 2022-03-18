@@ -145,7 +145,7 @@ class Game extends Phaser.Scene {
     game.sfx.robotHit = this.sound.add("robotHit");
     game.sfx.basicFrogJump = this.sound.add("basicFrogJump");
     game.sfx.music1 = this.sound.add("music1-10").setLoop(true);
-    if (game.musicEnabled) game.sfx.music1.play({ volume: 2 });
+    if (game.musicEnabled) game.sfx.music1.play();
 
     // Create cursor
     this.engine.mouseInput();
