@@ -126,7 +126,7 @@ class Game extends Phaser.Scene {
 
     // ********** Sounds **********
     // ---------- Music ----------
-    this.load.audio("music1-10", "assets/music1-10.mp3");
+    this.load.audio("music1-10", "assets/music1-10.wav");
 
     // ---------- SFX ----------
     this.load.audio("cannonFrogShoot", "assets/cannonFrogShoot.wav");
