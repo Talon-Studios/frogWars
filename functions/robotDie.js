@@ -5,7 +5,6 @@ Kill the robot.
 *^*^*^*^*^*^*^*/
 
 function killRobot(phaser, game, robot, damage, callback = () => {}) {
-  console.log("KILL");
   let lastFrame = robot.texture.key;
   if (!robot.dead) {
     if (robot.type === "basic" || robot.type === "armored") {
@@ -19,12 +18,12 @@ function killRobot(phaser, game, robot, damage, callback = () => {}) {
   setTimeout(function() {
     robot.setTexture(lastFrame);
   }, 500);
-  if (game.sfxEnabled) game.sfx.robotHit.play();
+  playSound(game, "robotHit");
   robot.health -= damage;
   callback();
   if (robot.health <= 0) {
     robot.body.enable = false;
-    if (game.sfxEnabled) game.sfx.robotDie.play();
+    playSound(game, "robotDie");
     robot.dead = true;
     robot.anims.play("explode", true);
     setTimeout(function() {

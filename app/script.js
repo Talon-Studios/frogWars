@@ -139,12 +139,12 @@ class Game extends Phaser.Scene {
     this.engine = new Engine(this);
 
     // Add sounds
-    game.sfx.cannonFrogShoot = this.sound.add("cannonFrogShoot");
-    game.sfx.launcherFrogShoot = this.sound.add("launcherFrogShoot");
-    game.sfx.robotDie = this.sound.add("robotDie");
-    game.sfx.robotHit = this.sound.add("robotHit");
-    game.sfx.basicFrogJump = this.sound.add("basicFrogJump");
-    game.sfx.music1 = this.sound.add("music1-10").setLoop(true);
+    game.sfx["cannonFrogShoot"] = this.sound.add("cannonFrogShoot");
+    game.sfx["launcherFrogShoot"] = this.sound.add("launcherFrogShoot");
+    game.sfx["robotDie"] = this.sound.add("robotDie");
+    game.sfx["robotHit"] = this.sound.add("robotHit");
+    game.sfx["basicFrogJump"] = this.sound.add("basicFrogJump");
+    game.sfx["music1"] = this.sound.add("music1-10").setLoop(true);
     if (game.musicEnabled) game.sfx.music1.play({volume: 0.5});
 
     // Create cursor
@@ -330,7 +330,7 @@ class Game extends Phaser.Scene {
         game.frogs.getChildren().forEach(frog => {
           switch (frog.type) {
             case "basic":
-              if(game.sfxEnabled) game.sfx.basicFrogJump.play();
+              playSound(game, "basicFrogJump");
               frog.anims.play("jump", true);
               setTimeout(function() {
                 frog.x += game.tiles.getChildren()[0].width * 8;
@@ -344,7 +344,7 @@ class Game extends Phaser.Scene {
               }, 200);
               break;
             case "launcher":
-              if(game.sfxEnabled) game.sfx.launcherFrogShoot.play();
+              playSound(game, "launcherFrogShoot");
               let numOfSprite = 5;
               for (var i = 0; i < numOfSprite; i++) {
                 let projectile = game.projectiles.create(frog.x, frog.y, "launcherProjectile").setScale(8).setGravityY(-1500);
@@ -450,7 +450,7 @@ class Game extends Phaser.Scene {
       tile.frog = hasFrog;
     });
     game.frogs.getChildren().forEach(frog => {
-      if (frog.x > game.width * game.TILESIZE) {
+      if (frog.x > game.width * game.TILESIZE || frog.y < 0) {
         frog.destroy();
       }
       if (frog.touchedBird) {
@@ -493,8 +493,8 @@ class Start extends Phaser.Scene {
     this.engine = new Engine(this);
 
     // Add sounds
-    this.sfx.optionSelect = this.sound.add("optionSelect");
-    this.sfx.introMusic = this.sound.add("introMusic").setLoop(true);
+    this.sfx["optionSelect"] = this.sound.add("optionSelect");
+    this.sfx["introMusic"] = this.sound.add("introMusic").setLoop(true);
     if(game.musicEnabled) this.sfx.introMusic.play({ volume: 2 });
 
     // Create cursor
@@ -516,13 +516,13 @@ class Start extends Phaser.Scene {
     this.startButton = this.add.image(this.engine.gameWidthCenter + 16, 350, "start").setScale(8).setInteractive();
     this.settingsButton = this.add.image(this.engine.gameWidthCenter, 450, "settings").setScale(8).setInteractive();
     this.startButton.on("pointerup", () => {
-      if(game.sfxEnabled) phaser.sfx.optionSelect.play();
+      playSound(this, "optionSelect");
       if(game.musicEnabled) phaser.sfx.introMusic.stop();
       phaser.scene.stop();
       phaser.scene.start("Game");
     });
     this.settingsButton.on("pointerup", () => {
-      if(game.sfxEnabled) phaser.sfx.optionSelect.play();
+      playSound(this, "optionSelect");
       if(game.musicEnabled) phaser.sfx.introMusic.stop();
       phaser.scene.stop();
       phaser.scene.start("Settings");
