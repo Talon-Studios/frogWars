@@ -486,7 +486,7 @@ class Start extends Phaser.Scene {
     this.load.image("start", "assets/start.png");
     this.load.image("settings", "assets/settings.png");
     this.load.audio("optionSelect", "assets/optionSelect.wav");
-    this.load.audio("introMusic", "assets/introMusic.mp3");
+    this.load.audio("introMusic", "assets/introMusic.wav");
     this.load.image("cursor", "assets/cursor.png");
   }
   create() {
