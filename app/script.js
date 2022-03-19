@@ -6,7 +6,7 @@ The main script for Frog Wars.
 
 // ********** Game Scene **********
 let game = {
-  width: 17,
+  width: 20,
   height: 7,
   TILESIZE: 64,
   topMargin: 167,
