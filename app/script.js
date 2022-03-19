@@ -288,7 +288,7 @@ class Game extends Phaser.Scene {
     });
 
     // ---------- Colliders ----------
-    game.frogRobotCollider = this.physics.add.collider(game.frogs, game.robots, (frog, robot) => {
+    this.physics.add.collider(game.frogs, game.robots, (frog, robot) => {
       if (frog.type === "basic") {
         frog.destroy();
         killRobot(this, game, robot, 5);
@@ -312,6 +312,7 @@ class Game extends Phaser.Scene {
     });
     this.physics.add.overlap(game.cannonRobotProjectiles, game.frogs, (projectile, frog) => {
       projectile.destroy();
+      killFrog(this, game, frog, 1);
     });
 
     // ---------- Intervals ----------
