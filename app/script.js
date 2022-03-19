@@ -126,7 +126,7 @@ class Game extends Phaser.Scene {
 
     // ********** Sounds **********
     // ---------- Music ----------
-    this.load.audio("music1-10", "assets/music1-10.mp3");
+    this.load.audio("music1-10", "assets/music1-10.wav");
 
     // ---------- SFX ----------
     this.load.audio("cannonFrogShoot", "assets/cannonFrogShoot.wav");
@@ -145,7 +145,7 @@ class Game extends Phaser.Scene {
     game.sfx.robotHit = this.sound.add("robotHit");
     game.sfx.basicFrogJump = this.sound.add("basicFrogJump");
     game.sfx.music1 = this.sound.add("music1-10").setLoop(true);
-    if (game.musicEnabled) game.sfx.music1.play({ volume: 2 });
+    if (game.musicEnabled) game.sfx.music1.play({volume: 0.5});
 
     // Create cursor
     this.engine.mouseInput();
@@ -486,7 +486,7 @@ class Start extends Phaser.Scene {
     this.load.image("start", "assets/start.png");
     this.load.image("settings", "assets/settings.png");
     this.load.audio("optionSelect", "assets/optionSelect.wav");
-    this.load.audio("introMusic", "assets/introMusic.mp3");
+    this.load.audio("introMusic", "assets/introMusic.wav");
     this.load.image("cursor", "assets/cursor.png");
   }
   create() {
