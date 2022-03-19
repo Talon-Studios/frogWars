@@ -87,12 +87,16 @@ class Game extends Phaser.Scene {
     this.load.image("basicFrog3", "assets/basicFrog3.png");
     this.load.image("cannonFrog0", "assets/cannonFrog0.png");
     this.load.image("cannonFrog1", "assets/cannonFrog1.png");
+    this.load.image("hurtCannonFrog", "assets/hurtCannonFrog.png");
     this.load.image("cannonProjectile", "assets/cannonProjectile.png");
     this.load.image("launcherFrog", "assets/launcherFrog.png");
+    this.load.image("hurtLauncherFrog", "assets/hurtLauncherFrog.png");
     this.load.image("launcherProjectile", "assets/launcherProjectile.png");
     this.load.image("toad", "assets/toad.png");
+    this.load.image("hurtToad", "assets/hurtToad.png");
     this.load.image("waterFrog0", "assets/waterFrog0.png");
     this.load.image("waterFrog1", "assets/waterFrog1.png");
+    this.load.image("hurtWaterFrog", "assets/hurtWaterFrog.png");
     this.load.image("water", "assets/water.png");
 
     // ---------- Robots ----------
