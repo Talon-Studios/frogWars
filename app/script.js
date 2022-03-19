@@ -75,8 +75,8 @@ let game = {
   }
 };
 class Game extends Phaser.Scene {
-  constructor() {
-    super("Game");
+  constructor(sceneKey) {
+    super(sceneKey);
   }
   preload() {
     // ********** Images **********
@@ -519,7 +519,7 @@ class Start extends Phaser.Scene {
       if(game.sfxEnabled) phaser.sfx.optionSelect.play();
       if(game.musicEnabled) phaser.sfx.introMusic.stop();
       phaser.scene.stop();
-      phaser.scene.start("Game");
+      phaser.scene.start("Level_1");
     });
     this.settingsButton.on("pointerup", () => {
       if(game.sfxEnabled) phaser.sfx.optionSelect.play();
