@@ -345,20 +345,35 @@ class Game extends Phaser.Scene {
           tile.frog = hasFrog;
         });
         game.frogs.getChildren().forEach(frog => {
+          let robotOnRow = false;
           switch (frog.type) {
             case "basic":
-              playSound(game, "basicFrogJump");
-              frog.anims.play("jump", true);
-              setTimeout(function() {
-                frog.x += game.tiles.getChildren()[0].width * 8;
-              }, 50);
+              game.robots.getChildren().forEach(robot => {
+                if (robot.y === frog.y) {
+                  robotOnRow = true;
+                }
+              });
+              if (robotOnRow) {
+                playSound(game, "basicFrogJump");
+                frog.anims.play("jump", true);
+                setTimeout(function() {
+                  frog.x += game.tiles.getChildren()[0].width * 8;
+                }, 50);
+              }
               break;
             case "cannon":
-              frog.anims.play("shootCannonball", true);
-              setTimeout(function() {
-                let projectile = game.projectiles.create(frog.x, frog.y, "cannonProjectile").setScale(8).setGravityY(-1500).setVelocityX(300);
-                projectile.type = "cannon";
-              }, 200);
+              game.robots.getChildren().forEach(robot => {
+                if (robot.y === frog.y) {
+                  robotOnRow = true;
+                }
+              });
+              if (robotOnRow) {
+                frog.anims.play("shootCannonball", true);
+                setTimeout(function() {
+                  let projectile = game.projectiles.create(frog.x, frog.y, "cannonProjectile").setScale(8).setGravityY(-1500).setVelocityX(300);
+                  projectile.type = "cannon";
+                }, 200);
+              }
               break;
             case "launcher":
               playSound(game, "launcherFrogShoot");
