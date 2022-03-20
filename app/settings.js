@@ -83,3 +83,82 @@ class Settings extends Phaser.Scene {
     game.cursor.y = this.input.mousePointer.y;
   }
 }
+
+// Nothing here... hehe...
+class Settings2 extends Phaser.Scene {
+  constructor() {
+    super("Settings2");
+    this.sfx = {};
+  }
+  preload() {
+    this.load.audio("optionSelect", "assets/optionSelect.wav");
+    this.load.audio("introMusic", "assets/introMusic.mp3");
+    this.load.image("cursor", "assets/cursor.png");
+    this.load.image("checkboxChecked", "assets/checkboxChecked.png");
+    this.load.image("checkboxUnchecked", "assets/checkboxUnchecked.png");
+    this.load.image("backSetting", "assets/backSetting.png");
+    this.load.image("frogsText", "assets/frogsText.png");
+    this.load.image("funText", "assets/funText.png");
+  }
+  create() {
+    this.engine = new Engine(this);
+
+    // Add sounds
+    this.sfx.optionSelect = this.sound.add("optionSelect");
+
+    // Create cursor
+    this.engine.mouseInput();
+    game.cursor = this.physics.add.sprite(this.input.mousePointer.x, this.input.mousePointer.y, "cursor").setScale(8).setGravityY(-1500).setSize(2, 2).setOffset(0, 0).setOrigin(0, 0);
+    game.cursor.setDepth(1);
+
+    // Set background color
+    this.engine.setBackgroundColor(this, "#ffffff");
+
+    // Create options
+    this.add.image(this.engine.gameWidthCenter + 42, 200, "frogsText").setScale(8).setInteractive();
+    this.add.image(this.engine.gameWidthCenter + 30, 300, "funText").setScale(8).setInteractive();
+
+    // Create checkboxes
+    this.frogCheckbox = this.add.image(this.engine.gameWidthCenter - 180, 190, "checkboxUnchecked").setScale(8).setInteractive();
+    if (game.frogsEnabled) this.frogCheckbox.setTexture("checkboxChecked");
+    game.funCheckbox = this.add.image(this.engine.gameWidthCenter - 180, 290, "checkboxUnchecked").setScale(8).setInteractive();
+    if (game.funEnabled) game.funCheckbox.setTexture("checkboxChecked");
+    this.frogCheckbox.on("pointerdown", () => {
+      game.frogsEnabled = !game.frogsEnabled;
+      if (game.frogsEnabled) {
+        this.frogCheckbox.setTexture("checkboxChecked");
+        localStorage.setItem("frogs", true);
+      } else {
+        this.frogCheckbox.setTexture("checkboxUnchecked");
+        localStorage.setItem("frogs", false);
+      }
+    });
+    game.funCheckbox.on("pointerdown", () => {
+      game.funEnabled = !game.funEnabled;
+      if (game.funEnabled) {
+        game.funCheckbox.setTexture("checkboxChecked");
+        localStorage.setItem("fun", true);
+      } else {
+        game.funCheckbox.setTexture("checkboxUnchecked");
+        localStorage.setItem("fun", false);
+      }
+    });
+
+    // Create backbutton
+    this.backSetting = this.add.image(this.engine.gameWidthCenter, 490, "backSetting").setScale(8).setInteractive();
+    this.backSetting.on("pointerup", () => {
+      this.scene.stop();
+      this.scene.start("Start");
+    });
+    this.input.on("pointerdown", () => {
+      game.cursor.setScale(6.5);
+    });
+    this.input.on("pointerup", () => {
+      game.cursor.setScale(8);
+    });
+  }
+  update() {
+    game.cursor.x = this.input.mousePointer.x;
+    game.cursor.y = this.input.mousePointer.y;
+  }
+}

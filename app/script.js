@@ -11,8 +11,10 @@ let game = {
   TILESIZE: 64,
   topMargin: 167,
   sfx: {},
-  musicEnabled: (localStorage.getItem("musicEnabled") !== null) ? JSON.parse(localStorage.getItem("musicEnabled")): true,
-  sfxEnabled: (localStorage.getItem("sfxEnabled") !== null) ? JSON.parse(localStorage.getItem("sfxEnabled")): true,
+  musicEnabled: (localStorage.getItem("musicEnabled") !== null) ? JSON.parse(localStorage.getItem("musicEnabled")) : true,
+  sfxEnabled: (localStorage.getItem("sfxEnabled") !== null) ? JSON.parse(localStorage.getItem("sfxEnabled")) : true,
+  frogsEnabled: (localStorage.getItem("frogs") !== null) ? JSON.parse(localStorage.getItem("frogs")) : false,
+  funEnabled: (localStorage.getItem("fun") !== null) ? JSON.parse(localStorage.getItem("fun")) : false,
   frogTypes: {
     "cannon": {
       path: "cannonFrog0",
@@ -155,6 +157,11 @@ class Game extends Phaser.Scene {
     game.sfx["basicFrogJump"] = this.sound.add("basicFrogJump");
     game.sfx["music1"] = this.sound.add("music1-10").setLoop(true);
     if (game.musicEnabled) game.sfx.music1.play({volume: 0.5});
+
+    // Nothing here...
+    if (game.frogsEnabled) {
+      new froggies();
+    }
 
     // Create cursor
     this.engine.mouseInput();
@@ -326,7 +333,7 @@ class Game extends Phaser.Scene {
 
     // ---------- Intervals ----------
     this.time.addEvent({
-      delay: 1500,
+      delay: !game.funEnabled ? 1500 : 100,
       callback: () => {
         game.tiles.getChildren().forEach(tile => {
           let hasFrog = null;
@@ -380,7 +387,7 @@ class Game extends Phaser.Scene {
       repeat: -1
     });
     this.time.addEvent({
-      delay: this.engine.randomBetween(1000, 3000),
+      delay: !game.funEnabled ? this.engine.randomBetween(1000, 3000) : 100,
       callback: () => {
         let row = Math.floor(Math.random() * game.height);
         let randomPercentage = Math.random() * 100;
