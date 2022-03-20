@@ -11,8 +11,8 @@ let game = {
   TILESIZE: 64,
   topMargin: 167,
   sfx: {},
-  musicEnabled: true,
-  sfxEnabled: true,
+  musicEnabled: (localStorage.getItem("musicEnabled") !== null) ? JSON.parse(localStorage.getItem("musicEnabled")): true,
+  sfxEnabled: (localStorage.getItem("sfxEnabled") !== null) ? JSON.parse(localStorage.getItem("sfxEnabled")): true,
   frogTypes: {
     "cannon": {
       path: "cannonFrog0",
@@ -616,16 +616,20 @@ class Settings extends Phaser.Scene {
       game.musicEnabled = !game.musicEnabled;
       if (game.musicEnabled) {
         this.musicCheckbox.setTexture("checkboxChecked");
+        localStorage.setItem("musicEnabled", true);
       } else {
         this.musicCheckbox.setTexture("checkboxUnchecked");
+        localStorage.setItem("musicEnabled", false);
       }
     });
     this.sfxCheckbox.on("pointerdown", () => {
       game.sfxEnabled = !game.sfxEnabled;
       if (game.sfxEnabled) {
         this.sfxCheckbox.setTexture("checkboxChecked");
+        localStorage.setItem("sfxEnabled", true);
       } else {
         this.sfxCheckbox.setTexture("checkboxUnchecked");
+        localStorage.setItem("sfxEnabled", false);
       }
     });
     this.backSetting.on("pointerup", () => {
