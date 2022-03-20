@@ -16,22 +16,27 @@ let game = {
   frogTypes: {
     "cannon": {
       path: "cannonFrog0",
+      health: 10,
       name: "cannon"
     },
     "basic": {
       path: "basicFrog0",
+      health: Infinity,
       name: "basic"
     },
     "launcher": {
       path: "launcherFrog",
+      health: 5,
       name: "launcher"
     },
     "toad": {
       path: "toad",
+      health: 20,
       name: "toad"
     },
     "water": {
       path: "waterFrog0",
+      health: 5,
       name: "water"
     },
     "bird": {
@@ -225,7 +230,7 @@ class Game extends Phaser.Scene {
             let frog = game.frogs.create(tile.x, tile.y, game.frogTypes[game.currentSelection].path).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
             frog.type = game.currentSelection;
             frog.isDead = false;
-            frog.health = 10;
+            frog.health = game.frogTypes[frog.type].health;
             frog.touchedBird = false;
             tile.frog = frog;
           }
