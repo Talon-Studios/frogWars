@@ -21,12 +21,12 @@
         let hasWrapperEl = options && options.element
         let element = hasWrapperEl || document.body
 
-        let nDots = 7
+        let nDots = 18
         let DELTAT = 0.01
         let SEGLEN = 10
         let SPRINGK = 10
-        let MASS = 100
-        let GRAVITY = 0
+        let MASS = 10
+        let GRAVITY = 10
         let RESISTANCE = 10
         let STOPVEL = 0.1
         let STOPACC = 0.1
@@ -253,9 +253,7 @@
         }
 
         init()
-        }
-    </script>
-    <script type="text/javascript">
+      }
       new springyEmojiCursor();
     </script>
     <script src="functions/playSound.js" charset="utf-8"></script>
