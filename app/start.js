@@ -51,11 +51,15 @@ class Start extends Phaser.Scene {
       phaser.scene.stop();
       phaser.scene.start("Game");
     });
-    this.settingsButton.on("pointerup", () => {
+    this.settingsButton.on("pointerup", (mouse) => {
       playSound(this, "optionSelect");
       if(game.musicEnabled) phaser.sfx.introMusic.stop();
       phaser.scene.stop();
-      phaser.scene.start("Settings");
+      if (mouse.event.button !== 2) {
+        phaser.scene.start("Settings");
+      } else {
+        phaser.scene.start("Settings2");
+      }
     });
     this.settingsButton.on("pointerover", () => {
       phaser.pickerGroup.create(phaser.settingsButton.x - 190, phaser.settingsButton.y - 8, "picker").setScale(8);
