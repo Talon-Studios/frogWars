@@ -62,6 +62,10 @@ let game = {
     cannonRobot: {
       speed: 0.3,
       health: 5
+    },
+    dodgerRobot: {
+      speed: 0.8,
+      health: 7
     }
   },
   currencies: {
@@ -118,6 +122,9 @@ class Game extends Phaser.Scene {
     this.load.image("cannonRobot0", "assets/cannonRobot0.png");
     this.load.image("cannonRobot1", "assets/cannonRobot1.png");
     this.load.image("hurtCannonRobot", "assets/hurtCannonRobot.png");
+    this.load.image("dodgerRobot0", "assets/dodgerRobot0.png");
+    this.load.image("dodgerRobot1", "assets/dodgerRobot1.png");
+    this.load.image("hurtDodgerRobot", "assets/hurtDodgerRobot.png");
 
     // ---------- Other ----------
     this.load.image("tile0", "assets/tile0.png");
@@ -216,6 +223,7 @@ class Game extends Phaser.Scene {
     this.engine.addAnimation("armoredRobotWalk", 5, false, false, "armoredRobot0", "armoredRobot1");
     this.engine.addAnimation("speedRobotWalk", 5, false, false, "speedRobot0", "speedRobot1");
     this.engine.addAnimation("cannonRobotWalk", 5, false, false, "cannonRobot0", "cannonRobot1");
+    this.engine.addAnimation("dodgerRobotWalk", 5, false, false, "dodgerRobot0", "dodgerRobot1");
 
     // Other
     this.engine.addAnimation("jump", 10, false, false, "basicFrog0", "basicFrog1", "basicFrog2", "basicFrog0");
@@ -332,6 +340,7 @@ class Game extends Phaser.Scene {
     });
 
     // ---------- Intervals ----------
+    // Frog action
     this.time.addEvent({
       delay: !game.funEnabled ? 1500 : 100,
       callback: () => {
@@ -401,6 +410,37 @@ class Game extends Phaser.Scene {
       callbackScope: this,
       repeat: -1
     });
+
+    // Robot actions
+    this.time.addEvent({
+      delay: 1500,
+      callback: () => {
+        game.robots.getChildren().forEach(robot => {
+          if (robot.type === "cannon") {
+            let projectile = game.cannonRobotProjectiles.create(robot.x - 40, robot.y + 20, "cannonProjectile").setScale(8).setGravityY(-1500).setVelocityX(-300);
+            projectile.setSize(2, 2);
+            projectile.setOffset(6, 2);
+          } else if (robot.type === "dodger") {
+            let randomDir = Math.floor(Math.random() * 2);
+            if (randomDir === 0) {
+              robot.y -= game.TILESIZE;
+              if (robot.y < game.topMargin) {
+                robot.y += game.TILESIZE * 2;
+              }
+            } else {
+              robot.y += game.TILESIZE;
+              if (robot.y > game.height * game.TILESIZE) {
+                robot.y -= game.TILESIZE * 2;
+              }
+            }
+          }
+        });
+      },
+      callbackScope: this,
+      repeat: -1
+    });
+
+    // Spawn robots
     this.time.addEvent({
       delay: !game.funEnabled ? this.engine.randomBetween(1000, 3000) : 100,
       callback: () => {
@@ -417,34 +457,24 @@ class Game extends Phaser.Scene {
           type = "armored";
           health = game.robotTypes.armoredRobot.health;
           speed = game.robotTypes.armoredRobot.speed;
-        } else if (randomPercentage >= 75 && randomPercentage < 87.5) {
+        } else if (randomPercentage >= 75 && randomPercentage < 82.7) {
           type = "speed";
           health = game.robotTypes.speedRobot.health;
           speed = game.robotTypes.speedRobot.speed;
-        } else if (randomPercentage >= 87.5) {
+        } else if (randomPercentage >= 82.7 && randomPercentage < 91.7) {
           type = "cannon";
           health = game.robotTypes.cannonRobot.health;
           speed = game.robotTypes.cannonRobot.speed;
+        } else if (randomPercentage >= 91.7) {
+          type = "dodger";
+          health = game.robotTypes.dodgerRobot.health;
+          speed = game.robotTypes.dodgerRobot.speed;
         }
         let robot = game.robots.create(game.width * game.TILESIZE, (game.TILESIZE / 2 + game.TILESIZE * row) + game.topMargin, `${type}Robot0`).setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0);
         robot.type = type;
         robot.health = health;
         robot.speed = speed;
         robot.dead = false;
-      },
-      callbackScope: this,
-      repeat: -1
-    });
-    this.time.addEvent({
-      delay: 1500,
-      callback: () => {
-        game.robots.getChildren().forEach(robot => {
-          if (robot.type === "cannon") {
-            let projectile = game.cannonRobotProjectiles.create(robot.x - 40, robot.y + 20, "cannonProjectile").setScale(8).setGravityY(-1500).setVelocityX(-300);
-            projectile.setSize(2, 2);
-            projectile.setOffset(6, 2);
-          }
-        });
       },
       callbackScope: this,
       repeat: -1
@@ -468,6 +498,9 @@ class Game extends Phaser.Scene {
             break;
           case "cannon":
             robot.anims.play("cannonRobotWalk", true);
+            break;
+          case "dodger":
+            robot.anims.play("dodgerRobotWalk", true);
             break;
         }
       }
