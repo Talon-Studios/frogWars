@@ -354,13 +354,13 @@ class Game extends Phaser.Scene {
         });
         game.frogs.getChildren().forEach(frog => {
           let robotOnRow = false;
+          game.robots.getChildren().forEach(robot => {
+            if (robot.y === frog.y) {
+              robotOnRow = true;
+            }
+          });
           switch (frog.type) {
             case "basic":
-              game.robots.getChildren().forEach(robot => {
-                if (robot.y === frog.y) {
-                  robotOnRow = true;
-                }
-              });
               if (robotOnRow) {
                 playSound(game, "basicFrogJump");
                 frog.anims.play("jump", true);
@@ -370,11 +370,6 @@ class Game extends Phaser.Scene {
               }
               break;
             case "cannon":
-              game.robots.getChildren().forEach(robot => {
-                if (robot.y === frog.y) {
-                  robotOnRow = true;
-                }
-              });
               if (robotOnRow) {
                 frog.anims.play("shootCannonball", true);
                 setTimeout(function() {
@@ -397,11 +392,13 @@ class Game extends Phaser.Scene {
               }
               break;
             case "water":
-              frog.anims.play("shootWater", true);
-              setTimeout(function() {
-                let projectile = game.projectiles.create(frog.x + 58, frog.y + 48, "water").setScale(8).setGravityY(-1500).setVelocityX(300).setSize(1, 1).setOffset(0, 0);
-                projectile.type = "water";
-              }, 100);
+              if (robotOnRow) {
+                frog.anims.play("shootWater", true);
+                setTimeout(function() {
+                  let projectile = game.projectiles.create(frog.x + 58, frog.y + 48, "water").setScale(8).setGravityY(-1500).setVelocityX(300).setSize(1, 1).setOffset(0, 0);
+                  projectile.type = "water";
+                }, 100);
+              }
               break;
           }
         });
@@ -533,7 +530,7 @@ class Game extends Phaser.Scene {
       }
     });
     game.projectiles.getChildren().forEach(projectile => {
-      if (projectile.x > game.width * game.TILESIZE || projectile.y > (game.height * game.TILESIZE) + game.topMargin || projectile.y < game.topMargin) {
+      if (projectile.x > game.width * game.TILESIZE || projectile.y > this.engine.gameHeight || projectile.y < game.topMargin) {
         projectile.destroy();
       }
     });
