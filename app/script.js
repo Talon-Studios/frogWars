@@ -425,7 +425,7 @@ class Game extends Phaser.Scene {
               }
             } else {
               robot.y += game.TILESIZE;
-              if (robot.y > this.engine.gameHeight) {
+              if (robot.y > (game.height * game.TILESIZE) + game.topMargin) {
                 robot.y -= game.TILESIZE * 2;
               }
             }
@@ -466,7 +466,7 @@ class Game extends Phaser.Scene {
           health = game.robotTypes.dodgerRobot.health;
           speed = game.robotTypes.dodgerRobot.speed;
         }
-        let robot = game.robots.create(game.width * game.TILESIZE, (game.TILESIZE / 2 + game.TILESIZE * row) + game.topMargin, `${type}Robot0`).setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0);
+        let robot = game.robots.create(game.width * game.TILESIZE + 8, (game.TILESIZE / 2 + game.TILESIZE * row) + game.topMargin, `${type}Robot0`).setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0);
         robot.type = type;
         robot.health = health;
         robot.speed = speed;
