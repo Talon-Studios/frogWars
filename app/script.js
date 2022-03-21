@@ -429,7 +429,7 @@ class Game extends Phaser.Scene {
               }
             } else {
               robot.y += game.TILESIZE;
-              if (robot.y > game.height * game.TILESIZE) {
+              if (robot.y > this.engine.gameHeight) {
                 robot.y -= game.TILESIZE * 2;
               }
             }
