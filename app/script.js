@@ -15,6 +15,7 @@ let game = {
   sfxEnabled: (localStorage.getItem("sfxEnabled") !== null) ? JSON.parse(localStorage.getItem("sfxEnabled")) : true,
   frogsEnabled: (localStorage.getItem("frogs") !== null) ? JSON.parse(localStorage.getItem("frogs")) : false,
   funEnabled: (localStorage.getItem("fun") !== null) ? JSON.parse(localStorage.getItem("fun")) : false,
+  ultimateEnabled: (localStorage.getItem("ultimate") !== null) ? JSON.parse(localStorage.getItem("ultimate")) : false,
   frogTypes: {
     "cannon": {
       path: "cannonFrog0",
