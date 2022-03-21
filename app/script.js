@@ -166,9 +166,7 @@ class Game extends Phaser.Scene {
     if (game.musicEnabled) game.sfx.music1.play({volume: 0.5});
 
     // Nothing here...
-    if (game.frogsEnabled) {
-      new froggies();
-    }
+    if (game.frogsEnabled) new froggies();
 
     // Create cursor
     this.engine.mouseInput();
@@ -313,6 +311,7 @@ class Game extends Phaser.Scene {
 
     // ---------- Colliders ----------
     this.physics.add.collider(game.frogs, game.robots, (frog, robot) => {
+      robot.anims.stop();
       if (frog.type === "basic") {
         frog.destroy();
         killRobot(this, game, robot, 5);
@@ -481,8 +480,11 @@ class Game extends Phaser.Scene {
     });
   }
   update() {
+    // Set position of mouse
     game.cursor.x = this.input.mousePointer.x;
     game.cursor.y = this.input.mousePointer.y;
+
+    // Updating groups
     game.robots.getChildren().forEach(robot => {
       if (!robot.dead) {
         robot.setVelocityX(-robot.speed * 45);
