@@ -46,10 +46,14 @@ class Start extends Phaser.Scene {
     this.startButton = this.add.image(this.engine.gameWidthCenter + 16, 350, "start").setScale(8).setInteractive();
     this.settingsButton = this.add.image(this.engine.gameWidthCenter, 450, "settings").setScale(8).setInteractive();
     this.startButton.on("pointerup", () => {
-      playSound(this, "optionSelect");
-      if(game.musicEnabled) phaser.sfx.introMusic.stop();
-      phaser.scene.stop();
-      phaser.scene.start("Game");
+      if (!game.ultimateEnabled) {
+        playSound(this, "optionSelect");
+        if (game.musicEnabled) phaser.sfx.introMusic.stop();
+        phaser.scene.stop();
+        phaser.scene.start("Game");
+      } else {
+        open("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+      }
     });
     this.settingsButton.on("pointerup", (mouse) => {
       playSound(this, "optionSelect");
