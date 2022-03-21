@@ -99,6 +99,7 @@ class Settings2 extends Phaser.Scene {
     this.load.image("backSetting", "assets/backSetting.png");
     this.load.image("frogsText", "assets/frogsText.png");
     this.load.image("funText", "assets/funText.png");
+    this.load.image("ultimateText", "assets/ultimateText.png");
   }
   create() {
     this.engine = new Engine(this);
@@ -115,14 +116,17 @@ class Settings2 extends Phaser.Scene {
     this.engine.setBackgroundColor(this, "#ffffff");
 
     // Create options
-    this.add.image(this.engine.gameWidthCenter + 42, 200, "frogsText").setScale(8).setInteractive();
-    this.add.image(this.engine.gameWidthCenter + 30, 300, "funText").setScale(8).setInteractive();
+    this.add.image(this.engine.gameWidthCenter + 42, 100, "frogsText").setScale(8).setInteractive();
+    this.add.image(this.engine.gameWidthCenter + 30, 200, "funText").setScale(8).setInteractive();
+    this.add.image(this.engine.gameWidthCenter + 30, 300, "ultimateText").setScale(8).setInteractive();
 
     // Create checkboxes
     this.frogCheckbox = this.add.image(this.engine.gameWidthCenter - 180, 190, "checkboxUnchecked").setScale(8).setInteractive();
     if (game.frogsEnabled) this.frogCheckbox.setTexture("checkboxChecked");
     game.funCheckbox = this.add.image(this.engine.gameWidthCenter - 180, 290, "checkboxUnchecked").setScale(8).setInteractive();
     if (game.funEnabled) game.funCheckbox.setTexture("checkboxChecked");
+    game.funCheckbox = this.add.image(this.engine.gameWidthCenter - 180, 390, "checkboxUnchecked").setScale(8).setInteractive();
+    if (game.ultimateEnabled) game.ultimateCheckbox.setTexture("checkboxChecked");
     this.frogCheckbox.on("pointerdown", () => {
       game.frogsEnabled = !game.frogsEnabled;
       if (game.frogsEnabled) {
@@ -141,6 +145,16 @@ class Settings2 extends Phaser.Scene {
       } else {
         game.funCheckbox.setTexture("checkboxUnchecked");
         localStorage.setItem("fun", false);
+      }
+    });
+    game.ultimateCheckbox.on("pointerdown", () => {
+      game.ultimateEnabled = !game.ultimateEnabled;
+      if (game.ultimateEnabled) {
+        game.ultimateCheckbox.setTexture("checkboxChecked");
+        localStorage.setItem("ultimate", true);
+      } else {
+        game.ultimateCheckbox.setTexture("checkboxUnchecked");
+        localStorage.setItem("ultimate", false);
       }
     });
 
