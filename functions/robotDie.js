@@ -13,6 +13,8 @@ function killRobot(phaser, game, robot, damage, callback = () => {}) {
       robot.setTexture("hurtSpeedRobot");
     } else if (robot.type === "cannon") {
       robot.setTexture("hurtCannonRobot");
+    } else if (robot.type === "dodger") {
+      robot.setTexture("hurtDodgerRobot");
     }
   }
   setTimeout(function() {
