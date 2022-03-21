@@ -125,7 +125,7 @@ class Settings2 extends Phaser.Scene {
     if (game.frogsEnabled) this.frogCheckbox.setTexture("checkboxChecked");
     game.funCheckbox = this.add.image(this.engine.gameWidthCenter - 180, 290, "checkboxUnchecked").setScale(8).setInteractive();
     if (game.funEnabled) game.funCheckbox.setTexture("checkboxChecked");
-    game.funCheckbox = this.add.image(this.engine.gameWidthCenter - 180, 390, "checkboxUnchecked").setScale(8).setInteractive();
+    game.ultimateCheckbox = this.add.image(this.engine.gameWidthCenter - 180, 390, "checkboxUnchecked").setScale(8).setInteractive();
     if (game.ultimateEnabled) game.ultimateCheckbox.setTexture("checkboxChecked");
     this.frogCheckbox.on("pointerdown", () => {
       game.frogsEnabled = !game.frogsEnabled;
