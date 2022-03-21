@@ -52,7 +52,7 @@ class Start extends Phaser.Scene {
         phaser.scene.stop();
         phaser.scene.start("Game");
       } else {
-        open("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+        open("https://www.youtube.com/watch?v=dPmZqsQNzGA");
       }
     });
     this.settingsButton.on("pointerup", (mouse) => {
