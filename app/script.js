@@ -124,6 +124,7 @@ class Game extends Phaser.Scene {
     this.load.image("fireball0", "assets/fireball0.png");
     this.load.image("hurtFireFrog", "assets/hurtFireFrog.png");
     this.load.image("fireball1", "assets/fireball1.png");
+    this.load.image("commanderFrog", "assets/commanderFrog.png");
 
     // ---------- Robots ----------
     this.load.image("basicRobot0", "assets/basicRobot0.png");
