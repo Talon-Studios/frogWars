@@ -27,6 +27,9 @@ function killRobot(phaser, game, robot, damage, callback = () => {}) {
     robot.body.enable = false;
     playSound(game, "robotDie");
     robot.dead = true;
+    if (robot.fireDamage) {
+      robot.fireHat.destroy();
+    }
     robot.anims.play("explode", true);
     setTimeout(function() {
       robot.destroy();

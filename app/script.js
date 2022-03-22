@@ -42,6 +42,11 @@ let game = {
       health: 5,
       name: "water"
     },
+    "fire": {
+      path: "fireFrog0",
+      health: 5,
+      name: "fire"
+    },
     "bird": {
       path: "bird0",
       name: "bird"
@@ -83,6 +88,9 @@ let game = {
     },
     "water": {
       damage: 1
+    },
+    "fireball": {
+      damage: 2
     }
   }
 };
@@ -110,6 +118,11 @@ class Game extends Phaser.Scene {
     this.load.image("waterFrog1", "assets/waterFrog1.png");
     this.load.image("hurtWaterFrog", "assets/hurtWaterFrog.png");
     this.load.image("water", "assets/water.png");
+    this.load.image("fireFrog0", "assets/fireFrog0.png");
+    this.load.image("fireFrog1", "assets/fireFrog1.png");
+    this.load.image("fireFrog2", "assets/fireFrog2.png");
+    this.load.image("fireball0", "assets/fireball0.png");
+    this.load.image("fireball1", "assets/fireball1.png");
 
     // ---------- Robots ----------
     this.load.image("basicRobot0", "assets/basicRobot0.png");
@@ -142,6 +155,9 @@ class Game extends Phaser.Scene {
     this.load.image("optionBorder0", "assets/optionBorder0.png");
     this.load.image("optionBorder1", "assets/optionBorder1.png");
     this.load.image("optionBorder2", "assets/optionBorder2.png");
+    this.load.image("fireHat0", "assets/fireHat0.png");
+    this.load.image("fireHat1", "assets/fireHat1.png");
+    this.load.image("fireHat2", "assets/fireHat2.png");
 
     // ********** Sounds **********
     // ---------- Music ----------
@@ -194,9 +210,8 @@ class Game extends Phaser.Scene {
     game.choices = this.physics.add.staticGroup();
     game.choiceBorders = this.physics.add.staticGroup();
     let frogCount = 0;
-    const frogs = ["cannon", "basic", "launcher", "toad", "water", "bird"];
+    const frogs = ["cannon", "basic", "launcher", "toad", "water", "fire", "bird"];
     for (var x = 80; x < frogs.length * (game.TILESIZE + 25); x += game.TILESIZE + 25) {
-      console.log(x);
       let border = game.choiceBorders.create(x, game.TILESIZE, "optionBorder0").setScale(8).setInteractive();
       border.clicked = false;
       if (frogs[frogCount] === game.currentSelection) {
@@ -228,7 +243,10 @@ class Game extends Phaser.Scene {
     this.engine.addAnimation("jump", 10, false, false, "basicFrog0", "basicFrog1", "basicFrog2", "basicFrog0");
     this.engine.addAnimation("shootCannonball", 5, false, true, "cannonFrog0", "cannonFrog1");
     this.engine.addAnimation("explode", 10, false, false, "explosion0", "explosion1", "explosion2", "explosion3");
+    this.engine.addAnimation("shootCannonball", 5, false, true, "cannonFrog0", "cannonFrog1");
+    this.engine.addAnimation("fireFrog", 12, true, false, "fireFrog0", "fireFrog1", "fireFrog2");
     this.engine.addAnimation("shootWater", 5, false, true, "waterFrog0", "waterFrog1");
+    this.engine.addAnimation("fireball", 5, true, false, "fireball0", "fireball1");
 
     // ---------- Interaction ----------
     game.tiles.getChildren().forEach(tile => {
@@ -323,6 +341,9 @@ class Game extends Phaser.Scene {
       killRobot(this, game, robot, game.projectileStats[projectile.type].damage, () => {
         if (projectile.type === "water" && robot.speed > 0.3) {
           robot.speed -= 0.05;
+        } else if (projectile.type === "fireball" && !robot.fireDamage) {
+          robot.fireDamage = true;
+          robot.fireHat = this.add.image(robot.x, robot.y, "fireHat0").setScale(8);
         }
       });
     });
@@ -401,6 +422,14 @@ class Game extends Phaser.Scene {
                 }, 100);
               }
               break;
+            case "fire":
+              let projectile1 = game.projectiles.create(frog.x + 8, frog.y, "fireball0").setScale(8).setGravityY(-1500).setVelocityY(300).setSize(5, 8).setOffset(0, 0);
+              let projectile2 = game.projectiles.create(frog.x + 8, frog.y, "fireball0").setScale(8).setGravityY(-1500).setVelocityY(-300).setSize(5, 8).setOffset(0, 0);
+              projectile1.type = "fireball";
+              projectile2.type = "fireball";
+              projectile1.angle = 90;
+              projectile2.angle = 270;
+              break;
           }
         });
       },
@@ -430,6 +459,9 @@ class Game extends Phaser.Scene {
                 robot.y -= game.TILESIZE * 2;
               }
             }
+          }
+          if (robot.fireDamage) {
+            killRobot(this, game, robot, 0.1);
           }
         });
       },
@@ -472,6 +504,7 @@ class Game extends Phaser.Scene {
         robot.health = health;
         robot.speed = speed;
         robot.dead = false;
+        robot.fireDamage = false;
       },
       callbackScope: this,
       repeat: -1
@@ -503,6 +536,18 @@ class Game extends Phaser.Scene {
             robot.anims.play("dodgerRobotWalk", true);
             break;
         }
+        if (robot.fireDamage) {
+          if (robot.type === "speed" || robot.type === "dodger") {
+            robot.fireHat.x = robot.x + 8;
+            robot.fireHat.y = robot.y;
+          } else if (robot.type === "cannon") {
+            robot.fireHat.x = robot.x + 8;
+            robot.fireHat.y = robot.y - 8;
+          } else {
+            robot.fireHat.x = robot.x + 8;
+            robot.fireHat.y = robot.y - 16;
+          }
+        }
       }
     });
     game.tiles.getChildren().forEach(tile => {
@@ -515,6 +560,9 @@ class Game extends Phaser.Scene {
       tile.frog = hasFrog;
     });
     game.frogs.getChildren().forEach(frog => {
+      if (frog.type === "fire") {
+        frog.anims.play("fireFrog", true);
+      }
       if (frog.x > game.width * game.TILESIZE || frog.y < 0) {
         frog.destroy();
       }
@@ -531,6 +579,9 @@ class Game extends Phaser.Scene {
       }
     });
     game.projectiles.getChildren().forEach(projectile => {
+      if (projectile.type === "fireball") {
+        projectile.anims.play("fireball", true);
+      }
       if (projectile.x > game.width * game.TILESIZE || projectile.y > this.engine.gameHeight || projectile.y < game.topMargin) {
         projectile.destroy();
       }
