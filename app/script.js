@@ -595,7 +595,7 @@ class Game extends Phaser.Scene {
         frog.y -= 8;
       }
       if (frog.commanded) {
-        frog.health = 20;
+        frog.setTexture("fireball0");
       }
     });
     game.removalBirds.getChildren().forEach(bird => {
