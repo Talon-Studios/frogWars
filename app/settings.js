@@ -118,7 +118,7 @@ class Settings2 extends Phaser.Scene {
     // Create options
     this.add.image(this.engine.gameWidthCenter + 42, 200, "frogsText").setScale(8).setInteractive();
     this.add.image(this.engine.gameWidthCenter + 30, 300, "funText").setScale(8).setInteractive();
-    this.add.image(this.engine.gameWidthCenter + 100, 400, "ultimateText").setScale(8).setInteractive();
+    this.add.image(this.engine.gameWidthCenter + 180, 400, "ultimateText").setScale(8).setInteractive();
 
     // Create checkboxes
     this.frogCheckbox = this.add.image(this.engine.gameWidthCenter - 180, 190, "checkboxUnchecked").setScale(8).setInteractive();
