@@ -42,6 +42,11 @@ let game = {
       health: 5,
       name: "water"
     },
+    "fire": {
+      path: "fireFrog0",
+      health: 5,
+      name: "fire"
+    },
     "bird": {
       path: "bird0",
       name: "bird"
@@ -83,6 +88,9 @@ let game = {
     },
     "water": {
       damage: 1
+    },
+    "fireball": {
+      damage: 2
     }
   }
 };
@@ -199,9 +207,8 @@ class Game extends Phaser.Scene {
     game.choices = this.physics.add.staticGroup();
     game.choiceBorders = this.physics.add.staticGroup();
     let frogCount = 0;
-    const frogs = ["cannon", "basic", "launcher", "toad", "water", "bird"];
+    const frogs = ["cannon", "basic", "launcher", "toad", "water", "fire", "bird"];
     for (var x = 80; x < frogs.length * (game.TILESIZE + 25); x += game.TILESIZE + 25) {
-      console.log(x);
       let border = game.choiceBorders.create(x, game.TILESIZE, "optionBorder0").setScale(8).setInteractive();
       border.clicked = false;
       if (frogs[frogCount] === game.currentSelection) {
@@ -233,7 +240,10 @@ class Game extends Phaser.Scene {
     this.engine.addAnimation("jump", 10, false, false, "basicFrog0", "basicFrog1", "basicFrog2", "basicFrog0");
     this.engine.addAnimation("shootCannonball", 5, false, true, "cannonFrog0", "cannonFrog1");
     this.engine.addAnimation("explode", 10, false, false, "explosion0", "explosion1", "explosion2", "explosion3");
+    this.engine.addAnimation("shootCannonball", 5, false, true, "cannonFrog0", "cannonFrog1");
+    this.engine.addAnimation("fireFrog", 12, true, false, "fireFrog0", "fireFrog1", "fireFrog2");
     this.engine.addAnimation("shootWater", 5, false, true, "waterFrog0", "waterFrog1");
+    this.engine.addAnimation("fireball", 5, true, false, "fireball0", "fireball1");
 
     // ---------- Interaction ----------
     game.tiles.getChildren().forEach(tile => {
@@ -406,6 +416,14 @@ class Game extends Phaser.Scene {
                 }, 100);
               }
               break;
+            case "fire":
+              if (robotOnRow) {
+                setTimeout(function() {
+                  let projectile = game.projectiles.create(frog.x + 58, frog.y, "fireball0").setScale(8).setGravityY(-1500).setVelocityX(300).setSize(5, 8).setOffset(0, 0);
+                  projectile.type = "fireball";
+                }, 100);
+              }
+              break;
           }
         });
       },
@@ -520,6 +538,9 @@ class Game extends Phaser.Scene {
       tile.frog = hasFrog;
     });
     game.frogs.getChildren().forEach(frog => {
+      if (frog.type === "fire") {
+        frog.anims.play("fireFrog", true);
+      }
       if (frog.x > game.width * game.TILESIZE || frog.y < 0) {
         frog.destroy();
       }
@@ -536,6 +557,9 @@ class Game extends Phaser.Scene {
       }
     });
     game.projectiles.getChildren().forEach(projectile => {
+      if (projectile.type === "fireball") {
+        projectile.anims.play("fireball", true);
+      }
       if (projectile.x > game.width * game.TILESIZE || projectile.y > this.engine.gameHeight || projectile.y < game.topMargin) {
         projectile.destroy();
       }
