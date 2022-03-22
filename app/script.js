@@ -257,6 +257,7 @@ class Game extends Phaser.Scene {
     this.engine.addAnimation("fireball", 5, true, false, "fireball0", "fireball1");
 
     // ---------- Interaction ----------
+    // Create frogs
     game.tiles.getChildren().forEach(tile => {
       tile.on("pointerover", () => {
         tile.setTexture(tile.textureKey + "select");
@@ -268,10 +269,14 @@ class Game extends Phaser.Scene {
         if (!tile.frog) {
           if (game.currentSelection !== "bird") {
             let frog = game.frogs.create(tile.x, tile.y, game.frogTypes[game.currentSelection].path).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
+            if (game.currentSelection === "commander") {
+              frog.setSize(24, 24).setOffset(-8, -8);
+            }
             frog.type = game.currentSelection;
             frog.isDead = false;
             frog.health = game.frogTypes[frog.type].health;
             frog.touchedBird = false;
+            frog.commanded = false;
             tile.frog = frog;
           }
         } else {
@@ -284,6 +289,8 @@ class Game extends Phaser.Scene {
         }
       });
     });
+
+    // Choose active frog
     game.choices.getChildren().forEach(choice => {
       choice.on("pointerdown", () => {
         if (!choice.border.clicked) {
@@ -330,6 +337,8 @@ class Game extends Phaser.Scene {
         }
       });
     });
+
+    // Change cursor size
     this.input.on("pointerdown", () => {
       game.cursor.setScale(6.5);
     });
@@ -367,6 +376,13 @@ class Game extends Phaser.Scene {
     this.physics.add.overlap(game.cannonRobotProjectiles, game.frogs, (projectile, frog) => {
       projectile.destroy();
       killFrog(this, game, frog, 1);
+    });
+    this.physics.add.overlap(game.frogs, game.frogs, (frog1, frog2) => {
+      if (frog1.type === "commander" && frog2.type !== "commander") {
+        frog2.commanded = true;
+      } else if (frog2.type === "commander" && frog1.type !== "commander") {
+        frog1.commanded = true;
+      }
     });
 
     // ---------- Intervals ----------
@@ -577,6 +593,9 @@ class Game extends Phaser.Scene {
       }
       if (frog.touchedBird) {
         frog.y -= 8;
+      }
+      if (frog.commanded) {
+        frog.health *= 2;
       }
     });
     game.removalBirds.getChildren().forEach(bird => {
