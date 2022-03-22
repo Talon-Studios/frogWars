@@ -155,6 +155,9 @@ class Game extends Phaser.Scene {
     this.load.image("optionBorder0", "assets/optionBorder0.png");
     this.load.image("optionBorder1", "assets/optionBorder1.png");
     this.load.image("optionBorder2", "assets/optionBorder2.png");
+    this.load.image("fireHat0", "assets/fireHat0.png");
+    this.load.image("fireHat1", "assets/fireHat1.png");
+    this.load.image("fireHat2", "assets/fireHat2.png");
 
     // ********** Sounds **********
     // ---------- Music ----------
@@ -338,8 +341,9 @@ class Game extends Phaser.Scene {
       killRobot(this, game, robot, game.projectileStats[projectile.type].damage, () => {
         if (projectile.type === "water" && robot.speed > 0.3) {
           robot.speed -= 0.05;
-        } else if (projectile.type === "fireball") {
+        } else if (projectile.type === "fireball" && !robot.fireDamage) {
           robot.fireDamage = true;
+          robot.fireHat = this.add.image(robot.x, robot.y, "fireHat0").setScale(8);
         }
       });
     });
@@ -531,6 +535,18 @@ class Game extends Phaser.Scene {
           case "dodger":
             robot.anims.play("dodgerRobotWalk", true);
             break;
+        }
+        if (robot.fireDamage) {
+          if (robot.type === "speed" || robot.type === "dodger") {
+            robot.fireHat.x = robot.x + 8;
+            robot.fireHat.y = robot.y;
+          } else if (robot.type === "cannon") {
+            robot.fireHat.x = robot.x + 8;
+            robot.fireHat.y = robot.y - 8;
+          } else {
+            robot.fireHat.x = robot.x + 8;
+            robot.fireHat.y = robot.y - 16;
+          }
         }
       }
     });
