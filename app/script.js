@@ -47,6 +47,11 @@ let game = {
       health: 5,
       name: "fire"
     },
+    "commander": {
+      path: "commanderFrog",
+      health: 10,
+      name: "commander"
+    },
     "bird": {
       path: "bird0",
       name: "bird"
@@ -212,7 +217,7 @@ class Game extends Phaser.Scene {
     game.choices = this.physics.add.staticGroup();
     game.choiceBorders = this.physics.add.staticGroup();
     let frogCount = 0;
-    const frogs = ["cannon", "basic", "launcher", "toad", "water", "fire", "bird"];
+    const frogs = ["cannon", "basic", "launcher", "toad", "water", "fire", "commander", "bird"];
     for (var x = 80; x < frogs.length * (game.TILESIZE + 25); x += game.TILESIZE + 25) {
       let border = game.choiceBorders.create(x, game.TILESIZE, "optionBorder0").setScale(8).setInteractive();
       border.clicked = false;
