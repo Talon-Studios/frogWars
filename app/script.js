@@ -338,6 +338,8 @@ class Game extends Phaser.Scene {
       killRobot(this, game, robot, game.projectileStats[projectile.type].damage, () => {
         if (projectile.type === "water" && robot.speed > 0.3) {
           robot.speed -= 0.05;
+        } else if (projectile.type === "fireball") {
+          robot.fireDamage = true;
         }
       });
     });
@@ -454,6 +456,9 @@ class Game extends Phaser.Scene {
               }
             }
           }
+          if (robot.fireDamage) {
+            killRobot(this, game, robot, 0.1);
+          }
         });
       },
       callbackScope: this,
@@ -495,6 +500,7 @@ class Game extends Phaser.Scene {
         robot.health = health;
         robot.speed = speed;
         robot.dead = false;
+        robot.fireDamage = false;
       },
       callbackScope: this,
       repeat: -1
