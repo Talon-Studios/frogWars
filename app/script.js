@@ -571,7 +571,7 @@ class Game extends Phaser.Scene {
         frog.y -= 8;
       }
       if (frog.commanded) {
-        frog.health = 20;
+        frog.setTexture("fireball0");
       }
       if (frog.type === "commander") {
         game.frogs.getChildren().forEach(frog2 => {
