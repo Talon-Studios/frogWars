@@ -417,12 +417,12 @@ class Game extends Phaser.Scene {
               }
               break;
             case "fire":
-              if (robotOnRow) {
-                setTimeout(function() {
-                  let projectile = game.projectiles.create(frog.x + 58, frog.y, "fireball0").setScale(8).setGravityY(-1500).setVelocityX(300).setSize(5, 8).setOffset(0, 0);
-                  projectile.type = "fireball";
-                }, 100);
-              }
+              let projectile1 = game.projectiles.create(frog.x + 8, frog.y, "fireball0").setScale(8).setGravityY(-1500).setVelocityY(300).setSize(5, 8).setOffset(0, 0);
+              let projectile2 = game.projectiles.create(frog.x + 8, frog.y, "fireball0").setScale(8).setGravityY(-1500).setVelocityY(-300).setSize(5, 8).setOffset(0, 0);
+              projectile1.type = "fireball";
+              projectile2.type = "fireball";
+              projectile1.angle = 90;
+              projectile2.angle = 270;
               break;
           }
         });
