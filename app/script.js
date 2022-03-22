@@ -222,6 +222,7 @@ class Game extends Phaser.Scene {
       let choice = game.choices.create(x, game.TILESIZE, game.frogTypes[frogs[frogCount]].path).setScale(8).setInteractive();
       choice.frogType = game.frogTypes[frogs[frogCount]].name;
       choice.border = border;
+      border.frogType = choice.frogType;
       frogCount++;
     }
 
@@ -307,6 +308,7 @@ class Game extends Phaser.Scene {
             x.clicked = false;
             x.setTexture("optionBorder0");
           });
+          game.currentSelection = border.frogType;
           border.clicked = true;
           border.setTexture("optionBorder2");
         }
