@@ -571,11 +571,13 @@ class Game extends Phaser.Scene {
         frog.y -= 8;
       }
       if (frog.commanded) {
-        frog.setTexture("fireball0");
+        if (frog.actionTimerMax === 200) {
+          frog.actionTimerMax /= 2;
+        }
       }
       if (frog.type === "commander") {
         game.frogs.getChildren().forEach(frog2 => {
-          if (frog2.type !== "commander" && frog2.x <= frog.x + 12 && frog2.x > frog.x - 12 && frog2.y <= frog.y + 12 && frog2.y > frog.y - 12) {
+          if (frog2.type !== "commander" && frog2.x <= frog.x + 64 && frog2.x >= frog.x - 64 && frog2.y <= frog.y + 64 && frog2.y >= frog.y - 64) {
             frog2.commanded = true;
           }
         });
