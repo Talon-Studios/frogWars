@@ -269,13 +269,12 @@ class Game extends Phaser.Scene {
         if (!tile.frog) {
           if (game.currentSelection !== "bird") {
             let frog = game.frogs.create(tile.x, tile.y, game.frogTypes[game.currentSelection].path).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
-            if (game.currentSelection === "commander") {
-              frog.setSize(24, 24).setOffset(-8, -8);
-            }
             frog.type = game.currentSelection;
             frog.isDead = false;
             frog.health = game.frogTypes[frog.type].health;
             frog.touchedBird = false;
+            frog.actionTimer = 200;
+            frog.actionTimerMax = frog.actionTimer;
             frog.commanded = false;
             tile.frog = frog;
           }
@@ -377,91 +376,8 @@ class Game extends Phaser.Scene {
       projectile.destroy();
       killFrog(this, game, frog, 1);
     });
-    this.physics.add.overlap(game.frogs, game.frogs, (frog1, frog2) => {
-      if (frog1.type === "commander" && frog2.type !== "commander") {
-        frog2.commanded = true;
-      } else if (frog2.type === "commander" && frog1.type !== "commander") {
-        frog1.commanded = true;
-      }
-    });
 
     // ---------- Intervals ----------
-    // Frog action
-    this.time.addEvent({
-      delay: !game.funEnabled ? 1500 : 100,
-      callback: () => {
-        game.tiles.getChildren().forEach(tile => {
-          let hasFrog = null;
-          game.frogs.getChildren().forEach(frog => {
-            if (frog.x == tile.x && frog.y == tile.y) {
-              hasFrog = frog;
-            }
-          });
-          tile.frog = hasFrog;
-        });
-        game.frogs.getChildren().forEach(frog => {
-          let robotOnRow = false;
-          game.robots.getChildren().forEach(robot => {
-            if (robot.y === frog.y) {
-              robotOnRow = true;
-            }
-          });
-          switch (frog.type) {
-            case "basic":
-              if (robotOnRow) {
-                playSound(game, "basicFrogJump");
-                frog.anims.play("jump", true);
-                setTimeout(function() {
-                  frog.x += game.tiles.getChildren()[0].width * 8;
-                }, 50);
-              }
-              break;
-            case "cannon":
-              if (robotOnRow) {
-                frog.anims.play("shootCannonball", true);
-                setTimeout(function() {
-                  let projectile = game.projectiles.create(frog.x, frog.y, "cannonProjectile").setScale(8).setGravityY(-1500).setVelocityX(300);
-                  projectile.type = "cannon";
-                }, 200);
-              }
-              break;
-            case "launcher":
-              playSound(game, "launcherFrogShoot");
-              let numOfSprite = 5;
-              for (var i = 0; i < numOfSprite; i++) {
-                let projectile = game.projectiles.create(frog.x, frog.y, "launcherProjectile").setScale(8).setGravityY(-1500);
-                projectile.type = "launcher";
-                projectile.angle = i * 360 / numOfSprite;
-                projectile.setVelocityX(300 * Math.cos(projectile.rotation - 67.5));
-                projectile.setVelocityY(300 * Math.sin(projectile.rotation - 67.5));
-                projectile.setSize(2, 2);
-                projectile.setOffset(0, 0);
-              }
-              break;
-            case "water":
-              if (robotOnRow) {
-                frog.anims.play("shootWater", true);
-                setTimeout(function() {
-                  let projectile = game.projectiles.create(frog.x + 58, frog.y + 48, "water").setScale(8).setGravityY(-1500).setVelocityX(300).setSize(1, 1).setOffset(0, 0);
-                  projectile.type = "water";
-                }, 100);
-              }
-              break;
-            case "fire":
-              let projectile1 = game.projectiles.create(frog.x + 8, frog.y, "fireball0").setScale(8).setGravityY(-1500).setVelocityY(300).setSize(5, 8).setOffset(0, 0);
-              let projectile2 = game.projectiles.create(frog.x + 8, frog.y, "fireball0").setScale(8).setGravityY(-1500).setVelocityY(-300).setSize(5, 8).setOffset(0, 0);
-              projectile1.type = "fireball";
-              projectile2.type = "fireball";
-              projectile1.angle = 90;
-              projectile2.angle = 270;
-              break;
-          }
-        });
-      },
-      callbackScope: this,
-      repeat: -1
-    });
-
     // Robot actions
     this.time.addEvent({
       delay: 1500,
@@ -585,6 +501,66 @@ class Game extends Phaser.Scene {
       tile.frog = hasFrog;
     });
     game.frogs.getChildren().forEach(frog => {
+      frog.actionTimer--;
+      if (frog.actionTimer <= 0) {
+        frog.actionTimer = frog.actionTimerMax;
+        let robotOnRow = false;
+        game.robots.getChildren().forEach(robot => {
+          if (robot.y === frog.y) {
+            robotOnRow = true;
+          }
+        });
+        switch (frog.type) {
+          case "basic":
+            if (robotOnRow) {
+              playSound(game, "basicFrogJump");
+              frog.anims.play("jump", true);
+              setTimeout(function() {
+                frog.x += game.tiles.getChildren()[0].width * 8;
+              }, 50);
+            }
+            break;
+          case "cannon":
+            if (robotOnRow) {
+              frog.anims.play("shootCannonball", true);
+              setTimeout(function() {
+                let projectile = game.projectiles.create(frog.x, frog.y, "cannonProjectile").setScale(8).setGravityY(-1500).setVelocityX(300);
+                projectile.type = "cannon";
+              }, 200);
+            }
+            break;
+          case "launcher":
+            playSound(game, "launcherFrogShoot");
+            let numOfSprite = 5;
+            for (var i = 0; i < numOfSprite; i++) {
+              let projectile = game.projectiles.create(frog.x, frog.y, "launcherProjectile").setScale(8).setGravityY(-1500);
+              projectile.type = "launcher";
+              projectile.angle = i * 360 / numOfSprite;
+              projectile.setVelocityX(300 * Math.cos(projectile.rotation - 67.5));
+              projectile.setVelocityY(300 * Math.sin(projectile.rotation - 67.5));
+              projectile.setSize(2, 2);
+              projectile.setOffset(0, 0);
+            }
+            break;
+          case "water":
+            if (robotOnRow) {
+              frog.anims.play("shootWater", true);
+              setTimeout(function() {
+                let projectile = game.projectiles.create(frog.x + 58, frog.y + 48, "water").setScale(8).setGravityY(-1500).setVelocityX(300).setSize(1, 1).setOffset(0, 0);
+                projectile.type = "water";
+              }, 100);
+            }
+            break;
+          case "fire":
+            let projectile1 = game.projectiles.create(frog.x + 8, frog.y, "fireball0").setScale(8).setGravityY(-1500).setVelocityY(300).setSize(5, 8).setOffset(0, 0);
+            let projectile2 = game.projectiles.create(frog.x + 8, frog.y, "fireball0").setScale(8).setGravityY(-1500).setVelocityY(-300).setSize(5, 8).setOffset(0, 0);
+            projectile1.type = "fireball";
+            projectile2.type = "fireball";
+            projectile1.angle = 90;
+            projectile2.angle = 270;
+            break;
+        }
+      }
       if (frog.type === "fire") {
         frog.anims.play("fireFrog", true);
       }
@@ -596,6 +572,13 @@ class Game extends Phaser.Scene {
       }
       if (frog.commanded) {
         frog.health = 20;
+      }
+      if (frog.type === "commander") {
+        game.frogs.getChildren().forEach(frog2 => {
+          if (frog2.type !== "commander" && frog2.x <= frog.x + 12 && frog2.x > frog.x - 12 && frog2.y <= frog.y + 12 && frog2.y > frog.y - 12) {
+            frog2.commanded = true;
+          }
+        });
       }
     });
     game.removalBirds.getChildren().forEach(bird => {
