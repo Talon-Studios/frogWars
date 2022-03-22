@@ -15,6 +15,8 @@ function killFrog(phaser, game, frog, damage, callback = () => {}) {
       frog.setTexture("hurtToad");
     } else if (frog.type === "water") {
       frog.setTexture("hurtWaterFrog");
+    } else if (frog.type === "fire") {
+      frog.setTexture("hurtFireFrog");
     }
   }
   setTimeout(function() {
