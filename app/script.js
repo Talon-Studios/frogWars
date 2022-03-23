@@ -52,6 +52,11 @@ let game = {
       health: 10,
       name: "commander"
     },
+    "topHat": {
+      path: "topHatFrog",
+      health: 30,
+      name: "topHat"
+    },
     "bird": {
       path: "bird0",
       name: "bird"
@@ -130,6 +135,8 @@ class Game extends Phaser.Scene {
     this.load.image("hurtFireFrog", "assets/hurtFireFrog.png");
     this.load.image("fireball1", "assets/fireball1.png");
     this.load.image("commanderFrog", "assets/commanderFrog.png");
+    this.load.image("topHatFrog", "assets/topHatFrog.png");
+    this.load.image("hurtTopHatFrog", "assets/hurtTopHatFrog.png");
 
     // ---------- Robots ----------
     this.load.image("basicRobot0", "assets/basicRobot0.png");
@@ -217,7 +224,7 @@ class Game extends Phaser.Scene {
     game.choices = this.physics.add.staticGroup();
     game.choiceBorders = this.physics.add.staticGroup();
     let frogCount = 0;
-    const frogs = ["cannon", "basic", "launcher", "toad", "water", "fire", "commander", "bird"];
+    const frogs = ["cannon", "topHat", "basic", "launcher", "toad", "water", "fire", "commander", "bird"];
     for (var x = 80; x < frogs.length * (game.TILESIZE + 25); x += game.TILESIZE + 25) {
       let border = game.choiceBorders.create(x, game.TILESIZE, "optionBorder0").setScale(8).setInteractive();
       border.clicked = false;
