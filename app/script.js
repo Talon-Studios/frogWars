@@ -100,8 +100,8 @@ let game = {
   }
 };
 class Game extends Phaser.Scene {
-  constructor() {
-    super("Game");
+  constructor(sceneKey) {
+    super(sceneKey);
   }
   preload() {
     // ********** Images **********
@@ -592,11 +592,11 @@ class Game extends Phaser.Scene {
       }
     });
     game.projectiles.getChildren().forEach(projectile => {
+      if (projectile.x > game.width * game.TILESIZE || projectile.y > (game.height * game.TILESIZE) + game.topMargin || projectile.y < game.topMargin) {
+        projectile.destroy();
+      }
       if (projectile.type === "fireball") {
         projectile.anims.play("fireball", true);
-      }
-      if (projectile.x > game.width * game.TILESIZE || projectile.y > this.engine.gameHeight || projectile.y < game.topMargin) {
-        projectile.destroy();
       }
     });
   }

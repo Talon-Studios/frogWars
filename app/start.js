@@ -50,7 +50,7 @@ class Start extends Phaser.Scene {
         playSound(this, "optionSelect");
         if (game.musicEnabled) phaser.sfx.introMusic.stop();
         phaser.scene.stop();
-        phaser.scene.start("Game");
+        phaser.scene.start("Level_1");
       } else {
         open("https://www.youtube.com/watch?v=dPmZqsQNzGA");
       }
