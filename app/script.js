@@ -602,7 +602,7 @@ class Game extends Phaser.Scene {
       if (projectile.type === "fireball") {
         projectile.anims.play("fireball", true);
       }
-      if (projectile.x > game.width * game.TILESIZE || projectile.y > (game.height * game.TILESIZE) + game.topMargin || projectile.y < game.topMargin) {
+      if (projectile.x > game.width * game.TILESIZE || projectile.x < 0) {
         projectile.destroy();
       }
     });
