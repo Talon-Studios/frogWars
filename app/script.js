@@ -357,7 +357,6 @@ class Game extends Phaser.Scene {
 
     // ---------- Colliders ----------
     this.physics.add.collider(game.frogs, game.robots, (frog, robot) => {
-      robot.anims.stop();
       if (frog.type === "basic") {
         frog.destroy();
         killRobot(this, game, robot, 5);
