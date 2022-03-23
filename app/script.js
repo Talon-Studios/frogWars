@@ -20,42 +20,50 @@ let game = {
     "cannon": {
       path: "cannonFrog0",
       health: 10,
-      name: "cannon"
+      name: "cannon",
+      price: 30
     },
     "basic": {
       path: "basicFrog0",
       health: Infinity,
-      name: "basic"
+      name: "basic",
+      price: 40
     },
     "launcher": {
       path: "launcherFrog",
       health: 5,
-      name: "launcher"
+      name: "launcher",
+      price: 45
     },
     "toad": {
       path: "toad",
       health: 20,
-      name: "toad"
+      name: "toad",
+      price: 100
     },
     "water": {
       path: "waterFrog0",
       health: 5,
-      name: "water"
+      name: "water",
+      price: 50
     },
     "fire": {
       path: "fireFrog0",
       health: 5,
-      name: "fire"
+      name: "fire",
+      price: 250
     },
     "commander": {
       path: "commanderFrog",
       health: 10,
-      name: "commander"
+      name: "commander",
+      price: 100
     },
     "topHat": {
       path: "topHatFrog",
       health: 30,
-      name: "topHat"
+      name: "topHat",
+      price: 35
     },
     "bird": {
       path: "bird0",
