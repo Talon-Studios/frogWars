@@ -24,6 +24,6 @@ const config = {
       // debug: true
     }
   },
-  scene: [Start, Settings, Game, Level_1]
+  scene: [Start, Settings, Settings2, Game, Level_1]
 };
 const phaserGame = new Phaser.Game(config);
