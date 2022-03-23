@@ -283,6 +283,9 @@ class Game extends Phaser.Scene {
             frog.actionTimer = 200;
             frog.actionTimerMax = frog.actionTimer;
             frog.commanded = false;
+            if (frog.type === "launcher") {
+              frog.launchNum = 5
+            }
             tile.frog = frog;
           }
         } else {
@@ -538,7 +541,7 @@ class Game extends Phaser.Scene {
             break;
           case "launcher":
             playSound(game, "launcherFrogShoot");
-            let numOfSprite = 5;
+            let numOfSprite = frog.launchNum;
             for (var i = 0; i < numOfSprite; i++) {
               let projectile = game.projectiles.create(frog.x, frog.y, "launcherProjectile").setScale(8).setGravityY(-1500);
               projectile.type = "launcher";
@@ -579,7 +582,13 @@ class Game extends Phaser.Scene {
       }
       if (frog.commanded) {
         if (frog.actionTimerMax === 200) {
-          frog.actionTimerMax /= 2;
+          if (frog.type === "launcher") {
+            if (frog.launchNum < 6) {
+              frog.launchNum += 1;
+            }
+          } else {
+            frog.actionTimerMax /= 2;
+          }
         }
       }
       if (frog.type === "commander") {
