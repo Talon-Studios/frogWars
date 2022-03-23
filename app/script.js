@@ -132,8 +132,8 @@ class Game extends Phaser.Scene {
     this.load.image("fireFrog1", "assets/fireFrog1.png");
     this.load.image("fireFrog2", "assets/fireFrog2.png");
     this.load.image("fireball0", "assets/fireball0.png");
-    this.load.image("hurtFireFrog", "assets/hurtFireFrog.png");
     this.load.image("fireball1", "assets/fireball1.png");
+    this.load.image("hurtFireFrog", "assets/hurtFireFrog.png");
     this.load.image("commanderFrog", "assets/commanderFrog.png");
     this.load.image("topHatFrog", "assets/topHatFrog.png");
     this.load.image("hurtTopHatFrog", "assets/hurtTopHatFrog.png");
@@ -599,11 +599,11 @@ class Game extends Phaser.Scene {
       }
     });
     game.projectiles.getChildren().forEach(projectile => {
-      if (projectile.x > game.width * game.TILESIZE || projectile.y > (game.height * game.TILESIZE) + game.topMargin || projectile.y < game.topMargin) {
-        projectile.destroy();
-      }
       if (projectile.type === "fireball") {
         projectile.anims.play("fireball", true);
+      }
+      if (projectile.x > game.width * game.TILESIZE || projectile.y > (game.height * game.TILESIZE) + game.topMargin || projectile.y < game.topMargin) {
+        projectile.destroy();
       }
     });
   }
