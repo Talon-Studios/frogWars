@@ -190,6 +190,7 @@ class Game extends Phaser.Scene {
     this.load.audio("cannonFrogShoot", "assets/cannonFrogShoot.wav");
     this.load.audio("launcherFrogShoot", "assets/launcherFrogShoot.wav");
     this.load.audio("waterFrogShoot", "assets/waterFrogShoot.wav");
+    this.load.audio("fireFrogShoot", "assets/fireFrogShoot.wav");
     this.load.audio("robotDie", "assets/robotDie.wav");
     this.load.audio("robotHit", "assets/robotHit.wav");
     this.load.audio("basicFrogJump", "assets/basicFrogJump.wav");
@@ -201,6 +202,7 @@ class Game extends Phaser.Scene {
     game.sfx["cannonFrogShoot"] = this.sound.add("cannonFrogShoot");
     game.sfx["launcherFrogShoot"] = this.sound.add("launcherFrogShoot");
     game.sfx["waterFrogShoot"] = this.sound.add("waterFrogShoot");
+    game.sfx["fireFrogShoot"] = this.sound.add("fireFrogShoot");
     game.sfx["robotDie"] = this.sound.add("robotDie");
     game.sfx["robotHit"] = this.sound.add("robotHit");
     game.sfx["basicFrogJump"] = this.sound.add("basicFrogJump");
@@ -588,6 +590,7 @@ class Game extends Phaser.Scene {
             }
             break;
           case "fire":
+            playSound(game, "fireFrogShoot");
             let projectile1 = game.projectiles.create(frog.x + 8, frog.y, "fireball0").setScale(8).setGravityY(-1500).setVelocityY(300).setSize(5, 8).setOffset(0, 0);
             let projectile2 = game.projectiles.create(frog.x + 8, frog.y, "fireball0").setScale(8).setGravityY(-1500).setVelocityY(-300).setSize(5, 8).setOffset(0, 0);
             projectile1.type = "fireball";
