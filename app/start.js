@@ -92,9 +92,9 @@ class Start extends Phaser.Scene {
     });
 
     // Add book button
-    this.book = this.add.image(75, 75, "book").setScale(8);
+    this.book = this.add.image(75, 75, "book").setScale(8).setInteractive();
     this.book.on("pointerup", () => {
-      console.log("L");
+      this.scene.start("HerpetologistsHandbook");
     });
   }
   update() {
