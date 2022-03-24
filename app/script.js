@@ -20,42 +20,50 @@ let game = {
     "cannon": {
       path: "cannonFrog0",
       health: 10,
-      name: "cannon"
+      name: "cannon",
+      price: 30
     },
     "basic": {
       path: "basicFrog0",
       health: Infinity,
-      name: "basic"
+      name: "basic",
+      price: 40
     },
     "launcher": {
       path: "launcherFrog",
       health: 5,
-      name: "launcher"
+      name: "launcher",
+      price: 45
     },
     "toad": {
       path: "toad",
       health: 20,
-      name: "toad"
+      name: "toad",
+      price: 100
     },
     "water": {
       path: "waterFrog0",
       health: 5,
-      name: "water"
+      name: "water",
+      price: 50
     },
     "fire": {
       path: "fireFrog0",
       health: 5,
-      name: "fire"
+      name: "fire",
+      price: 250
     },
     "commander": {
       path: "commanderFrog",
       health: 10,
-      name: "commander"
+      name: "commander",
+      price: 100
     },
     "topHat": {
       path: "topHatFrog",
       health: 30,
-      name: "topHat"
+      name: "topHat",
+      price: 35
     },
     "bird": {
       path: "bird0",
@@ -85,7 +93,7 @@ let game = {
     }
   },
   currencies: {
-    flies: 0,
+    flies: Infinity,
     lilyPads: 0
   },
   currentSelection: "cannon",
@@ -172,6 +180,7 @@ class Game extends Phaser.Scene {
     this.load.image("fireHat0", "assets/fireHat0.png");
     this.load.image("fireHat1", "assets/fireHat1.png");
     this.load.image("fireHat2", "assets/fireHat2.png");
+    this.load.image("X", "assets/X.png");
 
     // ********** Sounds **********
     // ---------- Music ----------
@@ -273,7 +282,7 @@ class Game extends Phaser.Scene {
         tile.setTexture(tile.textureKey);
       });
       tile.on("pointerdown", (pointer) => {
-        if (!tile.frog) {
+        if (!tile.frog && game.currentSelection) {
           if (game.currentSelection !== "bird") {
             let frog = game.frogs.create(tile.x, tile.y, game.frogTypes[game.currentSelection].path).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
             frog.type = game.currentSelection;
@@ -287,6 +296,20 @@ class Game extends Phaser.Scene {
               frog.launchNum = 5
             }
             tile.frog = frog;
+            game.currencies.flies -= game.frogTypes[frog.type].price;
+            let canBuySomething = false;
+            Object.keys(game.frogTypes).forEach(frogType => {
+              if (game.frogTypes[frogType].price <= game.currencies.flies) {
+                canBuySomething = true;
+              }
+            });
+            if (!canBuySomething) {
+              game.currentSelection = "";
+              game.choiceBorders.getChildren().forEach(border => {
+                border.clicked = false;
+                border.setTexture("optionBorder0");
+              });
+            }
           }
         } else {
           if (game.currentSelection === "bird" && !tile.frog.isDead) {
@@ -302,7 +325,7 @@ class Game extends Phaser.Scene {
     // Choose active frog
     game.choices.getChildren().forEach(choice => {
       choice.on("pointerdown", () => {
-        if (!choice.border.clicked) {
+        if (!choice.border.clicked && (game.currencies.flies >= game.frogTypes[choice.frogType].price || choice.frogType === "bird")) {
           game.choiceBorders.getChildren().forEach(x => {
             x.clicked = false;
             x.setTexture("optionBorder0");
@@ -313,7 +336,7 @@ class Game extends Phaser.Scene {
         }
       });
       choice.on("pointerover", () => {
-        if (!choice.border.clicked) {
+        if (!choice.border.clicked && (game.currencies.flies >= game.frogTypes[choice.frogType].price || choice.frogType === "bird")) {
           choice.border.setTexture("optionBorder1");
         }
       });
@@ -325,7 +348,7 @@ class Game extends Phaser.Scene {
     });
     game.choiceBorders.getChildren().forEach(border => {
       border.on("pointerdown", () => {
-        if (!border.clicked) {
+        if (!border.clicked && (game.currencies.flies >= game.frogTypes[border.frogType].price || border.frogType === "bird")) {
           game.choiceBorders.getChildren().forEach(x => {
             x.clicked = false;
             x.setTexture("optionBorder0");
@@ -336,7 +359,7 @@ class Game extends Phaser.Scene {
         }
       });
       border.on("pointerover", () => {
-        if (!border.clicked) {
+        if (!border.clicked && (game.currencies.flies >= game.frogTypes[border.frogType].price || border.frogType === "bird")) {
           border.setTexture("optionBorder1");
         }
       });
