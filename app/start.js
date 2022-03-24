@@ -18,6 +18,7 @@ class Start extends Phaser.Scene {
     this.load.audio("optionSelect", "assets/optionSelect.wav");
     this.load.audio("introMusic", "assets/introMusic.wav");
     this.load.image("cursor", "assets/cursor.png");
+    this.load.image("book", "assets/book.png");
   }
   create() {
     this.engine = new Engine(this);
@@ -88,6 +89,12 @@ class Start extends Phaser.Scene {
     });
     this.input.on("pointerup", () => {
       game.cursor.setScale(8);
+    });
+
+    // Add book button
+    this.book = this.add.image(75, 75, "book").setScale(8);
+    this.book.on("pointerup", () => {
+      console.log("L");
     });
   }
   update() {
