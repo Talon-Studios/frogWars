@@ -93,7 +93,7 @@ let game = {
     }
   },
   currencies: {
-    flies: 1000,
+    flies: Infinity,
     lilyPads: 0
   },
   currentSelection: "cannon",
