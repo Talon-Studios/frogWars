@@ -556,6 +556,7 @@ class Game extends Phaser.Scene {
             break;
           case "cannon":
             if (robotOnRow) {
+              playSound(game, "cannonFrogShoot");
               frog.anims.play("shootCannonball", true);
               setTimeout(function() {
                 let projectile = game.projectiles.create(frog.x, frog.y, "cannonProjectile").setScale(8).setGravityY(-1500).setVelocityX(300);
