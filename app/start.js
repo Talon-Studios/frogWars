@@ -59,7 +59,7 @@ class Start extends Phaser.Scene {
       playSound(this, "optionSelect");
       if(game.musicEnabled) phaser.sfx.introMusic.stop();
       phaser.scene.stop();
-      if (mouse.event.button === 1 && Phaser.Input.Keyboard.JustDown(this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F)) && Phaser.Input.Keyboard.JustDown(this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R))) {
+      if (mouse.event.button === 1 && this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F).isDown && this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R).isDown) {
         phaser.scene.start("Settings2");
       } else {
         phaser.scene.start("Settings");
