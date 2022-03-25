@@ -295,7 +295,11 @@ class Game extends Phaser.Scene {
       tile.on("pointerdown", (pointer) => {
         if (!tile.frog && game.currentSelection) {
           if (game.currentSelection !== "bird") {
-            let frog = game.frogs.create(tile.x, tile.y, game.frogTypes[game.currentSelection].path).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
+            if (game.currentSelection === "bullfrog") {
+              let frog = game.frogs.create(0, tile.y, "bullfrog").setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
+            } else {
+              let frog = game.frogs.create(tile.x, tile.y, game.frogTypes[game.currentSelection].path).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
+            }
             frog.type = game.currentSelection;
             frog.isDead = false;
             frog.health = game.frogTypes[frog.type].health;
