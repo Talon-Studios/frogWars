@@ -293,7 +293,7 @@ class Game extends Phaser.Scene {
             frog.isDead = false;
             frog.health = game.frogTypes[frog.type].health;
             frog.touchedBird = false;
-            frog.actionTimer = 200;
+            frog.actionTimer = game.fun ? 10 : 200;
             frog.actionTimerMax = frog.actionTimer;
             frog.commanded = false;
             if (frog.type === "launcher") {
