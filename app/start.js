@@ -59,7 +59,7 @@ class Start extends Phaser.Scene {
       playSound(this, "optionSelect");
       if(game.musicEnabled) phaser.sfx.introMusic.stop();
       phaser.scene.stop();
-      if (mouse.event.button !== 2) {
+      if (mouse.event.button !== 2 && mouse.event.button !== 1 && mouse.event.button !== 0) {
         phaser.scene.start("Settings");
       } else {
         phaser.scene.start("Settings2");
