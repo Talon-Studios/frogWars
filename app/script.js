@@ -296,9 +296,9 @@ class Game extends Phaser.Scene {
         if (!tile.frog && game.currentSelection) {
           if (game.currentSelection !== "bird") {
             if (game.currentSelection === "bullfrog") {
-              let frog = game.frogs.create(0, tile.y, "bullfrog").setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
+              var frog = game.frogs.create(0, tile.y, "bullfrog").setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
             } else {
-              let frog = game.frogs.create(tile.x, tile.y, game.frogTypes[game.currentSelection].path).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
+              var frog = game.frogs.create(tile.x, tile.y, game.frogTypes[game.currentSelection].path).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
             }
             frog.type = game.currentSelection;
             frog.isDead = false;
@@ -637,6 +637,9 @@ class Game extends Phaser.Scene {
             frog2.commanded = true;
           }
         });
+      }
+      if (frog.type === "bullfrog") {
+        frog.x += 10;
       }
     });
     game.removalBirds.getChildren().forEach(bird => {
