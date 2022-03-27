@@ -10,7 +10,8 @@ class HerpetologistsHandbook extends Phaser.Scene {
   }
   preload() {
     // ---------- Load the assets ----------
-
+    this.load.image("leftArrow", "assets/leftArrow.png");
+    this.load.image("rightArrow", "assets/rightArrow.png");
   }
   create() {
     // Set background color
