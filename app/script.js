@@ -117,6 +117,8 @@ class Game extends Phaser.Scene {
     super(sceneKey);
   }
   preload() {
+    this.engine = new Engine(this);
+
     // ********** Images **********
     // ---------- Frogs ----------
     this.load.image("basicFrog0", "assets/basicFrog0.png");
@@ -194,10 +196,11 @@ class Game extends Phaser.Scene {
     this.load.audio("robotDie", "assets/robotDie.wav");
     this.load.audio("robotHit", "assets/robotHit.wav");
     this.load.audio("basicFrogJump", "assets/basicFrogJump.wav");
+
+    // Initialize loading bar
+    loadingBar(this);
   }
   create() {
-    this.engine = new Engine(this);
-
     // Add sounds
     game.sfx["cannonFrogShoot"] = this.sound.add("cannonFrogShoot");
     game.sfx["launcherFrogShoot"] = this.sound.add("launcherFrogShoot");

@@ -10,6 +10,9 @@ class Settings extends Phaser.Scene {
     this.sfx = {};
   }
   preload() {
+    this.engine = new Engine(this);
+
+    // Load assets
     this.load.audio("optionSelect", "assets/optionSelect.wav");
     this.load.audio("introMusic", "assets/introMusic.mp3");
     this.load.image("cursor", "assets/cursor.png");
@@ -18,10 +21,11 @@ class Settings extends Phaser.Scene {
     this.load.image("musicSetting", "assets/musicSetting.png");
     this.load.image("sfxSetting", "assets/sfxSetting.png");
     this.load.image("backSetting", "assets/backSetting.png");
+
+    // Loading bar
+    loadingBar(this);
   }
   create() {
-    this.engine = new Engine(this);
-
     // Add sounds
     this.sfx.optionSelect = this.sound.add("optionSelect");
 
@@ -91,6 +95,9 @@ class Settings2 extends Phaser.Scene {
     this.sfx = {};
   }
   preload() {
+    this.engine = new Engine(this);
+
+    // Load assets
     this.load.audio("optionSelect", "assets/optionSelect.wav");
     this.load.audio("introMusic", "assets/introMusic.mp3");
     this.load.image("cursor", "assets/cursor.png");
@@ -100,10 +107,11 @@ class Settings2 extends Phaser.Scene {
     this.load.image("frogsText", "assets/frogsText.png");
     this.load.image("funText", "assets/funText.png");
     this.load.image("ultimateText", "assets/ultimateText.png");
+
+    // Loading bar
+    loadingBar(this);
   }
   create() {
-    this.engine = new Engine(this);
-
     // Add sounds
     this.sfx.optionSelect = this.sound.add("optionSelect");
 
