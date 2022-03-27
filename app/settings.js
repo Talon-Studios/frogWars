@@ -21,9 +21,6 @@ class Settings extends Phaser.Scene {
     this.load.image("musicSetting", "assets/musicSetting.png");
     this.load.image("sfxSetting", "assets/sfxSetting.png");
     this.load.image("backSetting", "assets/backSetting.png");
-
-    // Loading bar
-    loadingBar(this);
   }
   create() {
     // Add sounds
@@ -107,9 +104,6 @@ class Settings2 extends Phaser.Scene {
     this.load.image("frogsText", "assets/frogsText.png");
     this.load.image("funText", "assets/funText.png");
     this.load.image("ultimateText", "assets/ultimateText.png");
-
-    // Loading bar
-    loadingBar(this);
   }
   create() {
     // Add sounds

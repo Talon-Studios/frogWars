@@ -13,6 +13,7 @@ class Start extends Phaser.Scene {
     this.engine = new Engine(this);
 
     // ---------- Assets ----------
+    this.load.image("basicFrog0", "assets/basicFrog0.png");
     this.load.image("picker", "assets/picker.png");
     this.load.image("title", "assets/title.png");
     this.load.image("start", "assets/start.png");
@@ -20,9 +21,6 @@ class Start extends Phaser.Scene {
     this.load.audio("optionSelect", "assets/optionSelect.wav");
     this.load.audio("introMusic", "assets/introMusic.wav");
     this.load.image("cursor", "assets/cursor.png");
-
-    // Loading bar
-    loadingBar(this);
   }
   create() {
     // Add sounds
