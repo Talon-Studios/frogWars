@@ -117,6 +117,8 @@ class Game extends Phaser.Scene {
     super(sceneKey);
   }
   preload() {
+    this.engine = new Engine(this);
+
     // ********** Images **********
     // ---------- Frogs ----------
     this.load.image("basicFrog0", "assets/basicFrog0.png");
@@ -189,16 +191,21 @@ class Game extends Phaser.Scene {
     // ---------- SFX ----------
     this.load.audio("cannonFrogShoot", "assets/cannonFrogShoot.wav");
     this.load.audio("launcherFrogShoot", "assets/launcherFrogShoot.wav");
+    this.load.audio("waterFrogShoot", "assets/waterFrogShoot.wav");
+    this.load.audio("fireFrogShoot", "assets/fireFrogShoot.wav");
     this.load.audio("robotDie", "assets/robotDie.wav");
     this.load.audio("robotHit", "assets/robotHit.wav");
     this.load.audio("basicFrogJump", "assets/basicFrogJump.wav");
+
+    // Initialize loading bar
+    loadingBar(this);
   }
   create() {
-    this.engine = new Engine(this);
-
     // Add sounds
     game.sfx["cannonFrogShoot"] = this.sound.add("cannonFrogShoot");
     game.sfx["launcherFrogShoot"] = this.sound.add("launcherFrogShoot");
+    game.sfx["waterFrogShoot"] = this.sound.add("waterFrogShoot");
+    game.sfx["fireFrogShoot"] = this.sound.add("fireFrogShoot");
     game.sfx["robotDie"] = this.sound.add("robotDie");
     game.sfx["robotHit"] = this.sound.add("robotHit");
     game.sfx["basicFrogJump"] = this.sound.add("basicFrogJump");
@@ -289,7 +296,7 @@ class Game extends Phaser.Scene {
             frog.isDead = false;
             frog.health = game.frogTypes[frog.type].health;
             frog.touchedBird = false;
-            frog.actionTimer = 200;
+            frog.actionTimer = game.fun ? 10 : 200;
             frog.actionTimerMax = frog.actionTimer;
             frog.commanded = false;
             if (frog.type === "launcher") {
@@ -554,6 +561,7 @@ class Game extends Phaser.Scene {
             break;
           case "cannon":
             if (robotOnRow) {
+              playSound(game, "cannonFrogShoot");
               frog.anims.play("shootCannonball", true);
               setTimeout(function() {
                 let projectile = game.projectiles.create(frog.x, frog.y, "cannonProjectile").setScale(8).setGravityY(-1500).setVelocityX(300);
@@ -576,6 +584,7 @@ class Game extends Phaser.Scene {
             break;
           case "water":
             if (robotOnRow) {
+              playSound(game, "waterFrogShoot");
               frog.anims.play("shootWater", true);
               setTimeout(function() {
                 let projectile = game.projectiles.create(frog.x + 58, frog.y + 48, "water").setScale(8).setGravityY(-1500).setVelocityX(300).setSize(1, 1).setOffset(0, 0);
@@ -584,6 +593,7 @@ class Game extends Phaser.Scene {
             }
             break;
           case "fire":
+            playSound(game, "fireFrogShoot");
             let projectile1 = game.projectiles.create(frog.x + 8, frog.y, "fireball0").setScale(8).setGravityY(-1500).setVelocityY(300).setSize(5, 8).setOffset(0, 0);
             let projectile2 = game.projectiles.create(frog.x + 8, frog.y, "fireball0").setScale(8).setGravityY(-1500).setVelocityY(-300).setSize(5, 8).setOffset(0, 0);
             projectile1.type = "fireball";

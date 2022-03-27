@@ -10,7 +10,10 @@ class Start extends Phaser.Scene {
     this.sfx = {};
   }
   preload() {
+    this.engine = new Engine(this);
+
     // ---------- Assets ----------
+    this.load.image("basicFrog0", "assets/basicFrog0.png");
     this.load.image("picker", "assets/picker.png");
     this.load.image("title", "assets/title.png");
     this.load.image("start", "assets/start.png");
@@ -21,8 +24,6 @@ class Start extends Phaser.Scene {
     this.load.image("book", "assets/book.png");
   }
   create() {
-    this.engine = new Engine(this);
-
     // Add sounds
     this.sfx["optionSelect"] = this.sound.add("optionSelect");
     this.sfx["introMusic"] = this.sound.add("introMusic").setLoop(true);
@@ -60,10 +61,10 @@ class Start extends Phaser.Scene {
       playSound(this, "optionSelect");
       if(game.musicEnabled) phaser.sfx.introMusic.stop();
       phaser.scene.stop();
-      if (mouse.event.button !== 2) {
-        phaser.scene.start("Settings");
-      } else {
+      if (mouse.event.button === 1 && this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F).isDown && this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R).isDown) {
         phaser.scene.start("Settings2");
+      } else {
+        phaser.scene.start("Settings");
       }
     });
     this.settingsButton.on("pointerover", () => {
