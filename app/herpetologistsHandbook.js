@@ -8,7 +8,7 @@ class HerpetologistsHandbook extends Phaser.Scene {
   constructor() {
     super("HerpetologistsHandbook");
     this.currentPage = 1;
-    this.totalPages = 2;
+    this.totalPages = 3;
   }
   preload() {
     this.engine = new Engine(this);
