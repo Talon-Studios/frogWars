@@ -264,6 +264,7 @@ class Game extends Phaser.Scene {
     game.projectiles = this.physics.add.group();
     game.cannonRobotProjectiles = this.physics.add.group();
     game.removalBirds = this.physics.add.group();
+    game.flies = this.physics.add.group();
 
     // ---------- Animation ----------
     // Walking
@@ -498,7 +499,7 @@ class Game extends Phaser.Scene {
     this.time.addEvent({
       delay: 1000,
       callback: () => {
-
+        game.flies.create(Math.random() * this.engine.gameWidth, Math.random() * this.engine.gameHeight, "fly0").setInteractive().setScale(8).setOffset(0, 0).setGravityY(-1500);
       },
       callbackScope: this,
       repeat: -1
