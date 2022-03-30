@@ -16,6 +16,8 @@ class HerpetologistsHandbook extends Phaser.Scene {
     // ---------- Load the assets ----------
     this.load.image("leftArrow", "assets/leftArrow.png");
     this.load.image("rightArrow", "assets/rightArrow.png");
+    this.load.image("leftArrowDisabled", "assets/leftArrowDisabled.png");
+    this.load.image("rightArrowDisabled", "assets/rightArrowDisabled.png");
     this.load.image("handbookPage1", "assets/handbookPage1.png");
     this.load.image("handbookPage2", "assets/handbookPage2.png");
     this.load.image("handbookPage3", "assets/handbookPage3.png");
@@ -36,27 +38,41 @@ class HerpetologistsHandbook extends Phaser.Scene {
     this.engine.setBackgroundColor(this, "#ffffff");
 
     // Create arrows
-    this.leftArrow = this.add.image(this.engine.gameWidthCenter - 200, this.engine.gameHeight - 50, "leftArrow").setScale(8).setInteractive();
+    this.leftArrow = this.add.image(this.engine.gameWidthCenter - 200, this.engine.gameHeight - 50, "leftArrowDisabled").setScale(8).setInteractive();
     this.rightArrow = this.add.image(this.engine.gameWidthCenter + 200, this.engine.gameHeight - 50, "rightArrow").setScale(8).setInteractive();
     this.leftArrow.on("pointerdown", () => {
       if (this.currentPage > 1) {
         this.leftArrow.setScale(6.5);
         this.currentPage--;
         this.pages.setTexture(`handbookPage${this.currentPage}`);
+        this.leftArrow.setTexture("leftArrow");
+      }
+      if (this.currentPage < this.totalPages) {
+        this.rightArrow.setTexture("rightArrow");
       }
     });
     this.leftArrow.on("pointerup", () => {
       this.leftArrow.setScale(8);
+      if (this.currentPage <= 1) {
+        this.leftArrow.setTexture("leftArrowDisabled");
+      }
     });
     this.rightArrow.on("pointerdown", () => {
       if (this.currentPage < this.totalPages) {
         this.rightArrow.setScale(6.5);
         this.currentPage++;
         this.pages.setTexture(`handbookPage${this.currentPage}`);
+        this.rightArrow.setTexture("rightArrow");
+      }
+      if (this.currentPage > 1) {
+        this.leftArrow.setTexture("leftArrow");
       }
     });
     this.rightArrow.on("pointerup", () => {
       this.rightArrow.setScale(8);
+      if (this.currentPage >= this.totalPages) {
+        this.rightArrow.setTexture("rightArrowDisabled");
+      }
     });
 
     // Create pages
