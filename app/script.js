@@ -110,7 +110,8 @@ let game = {
     "fireball": {
       damage: 2
     }
-  }
+  },
+  robotSpawnDelay: 5000
 };
 class Game extends Phaser.Scene {
   constructor(sceneKey) {
@@ -451,7 +452,7 @@ class Game extends Phaser.Scene {
 
     // Spawn robots
     this.time.addEvent({
-      delay: !game.funEnabled ? this.engine.randomBetween(1000, 3000) : 100,
+      delay: game.robotSpawnDelay,
       callback: () => {
         let row = Math.floor(Math.random() * game.height);
         let randomPercentage = Math.random() * 100;
@@ -485,6 +486,7 @@ class Game extends Phaser.Scene {
         robot.speed = speed;
         robot.dead = false;
         robot.fireDamage = false;
+        game.robotSpawnDelay = !game.funEnabled ? this.engine.randomBetween(1000, 3000) : 100;
       },
       callbackScope: this,
       repeat: -1
