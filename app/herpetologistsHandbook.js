@@ -18,9 +18,9 @@ class HerpetologistsHandbook extends Phaser.Scene {
     this.load.image("rightArrow", "assets/rightArrow.png");
     this.load.image("leftArrowDisabled", "assets/leftArrowDisabled.png");
     this.load.image("rightArrowDisabled", "assets/rightArrowDisabled.png");
-    this.load.image("handbookPage1", "assets/handbookPage1.png");
-    this.load.image("handbookPage2", "assets/handbookPage2.png");
-    this.load.image("handbookPage3", "assets/handbookPage3.png");
+    for (var i = 1; i < this.totalPages + 1; i++) {
+      this.load.image(`handbookPage${i}`, `assets/handbookPage${i}.png`);
+    }
   }
   create() {
     // Create cursor
