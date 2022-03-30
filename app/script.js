@@ -302,6 +302,9 @@ class Game extends Phaser.Scene {
             frog.health = game.frogTypes[frog.type].health;
             frog.touchedBird = false;
             frog.actionTimer = game.fun ? 10 : 200;
+            if (frog.type === "basic") {
+              frog.actionTimer = game.fun ? 10 : 100;
+            }
             frog.actionTimerMax = frog.actionTimer;
             frog.commanded = false;
             if (frog.type === "launcher") {
