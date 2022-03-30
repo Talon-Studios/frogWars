@@ -282,6 +282,7 @@ class Game extends Phaser.Scene {
     this.engine.addAnimation("fireFrog", 12, true, false, "fireFrog0", "fireFrog1", "fireFrog2");
     this.engine.addAnimation("shootWater", 5, false, true, "waterFrog0", "waterFrog1");
     this.engine.addAnimation("fireball", 5, true, false, "fireball0", "fireball1");
+    this.engine.addAnimation("flies", 10, true, false, "fly0", "fly1");
 
     // ---------- Interaction ----------
     // Create frogs
@@ -499,7 +500,11 @@ class Game extends Phaser.Scene {
     this.time.addEvent({
       delay: 1000,
       callback: () => {
-        game.flies.create(Math.random() * this.engine.gameWidth, Math.random() * this.engine.gameHeight, "fly0").setInteractive().setScale(8).setOffset(0, 0).setGravityY(-1500);
+        let fly = game.flies.create(Math.random() * this.engine.gameWidth, Math.random() * this.engine.gameHeight, "fly0").setInteractive().setScale(8).setOffset(0, 0).setGravityY(-1500);
+        fly.on("pointerdown", () => {
+          game.currencies.flies++;
+          fly.destroy();
+        });
       },
       callbackScope: this,
       repeat: -1
@@ -661,6 +666,9 @@ class Game extends Phaser.Scene {
       if (projectile.x > game.width * game.TILESIZE || projectile.x < 0) {
         projectile.destroy();
       }
+    });
+    game.flies.getChildren().forEach(fly => {
+      fly.anims.play("flies", true);
     });
   }
 }
