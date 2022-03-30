@@ -498,9 +498,17 @@ class Game extends Phaser.Scene {
 
     // Create flies
     this.time.addEvent({
-      delay: 1000,
+      delay: 5000,
       callback: () => {
         let fly = game.flies.create(Math.random() * this.engine.gameWidth, Math.random() * this.engine.gameHeight, "fly0").setInteractive().setScale(8).setOffset(0, 0).setGravityY(-1500);
+        this.tweens.add({
+          targets: fly,
+          x: fly.x + 20,
+          ease: "Sinusoidal.easeInOut",
+          duration: 800,
+          repeat: -1,
+          yoyo: true
+        });
         fly.on("pointerdown", () => {
           game.currencies.flies++;
           fly.destroy();
