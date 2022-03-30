@@ -184,6 +184,8 @@ class Game extends Phaser.Scene {
     this.load.image("fireHat1", "assets/fireHat1.png");
     this.load.image("fireHat2", "assets/fireHat2.png");
     this.load.image("X", "assets/X.png");
+    this.load.image("fly0", "assets/fly0.png");
+    this.load.image("fly1", "assets/fly1.png");
 
     // ********** Sounds **********
     // ---------- Music ----------
@@ -262,6 +264,7 @@ class Game extends Phaser.Scene {
     game.projectiles = this.physics.add.group();
     game.cannonRobotProjectiles = this.physics.add.group();
     game.removalBirds = this.physics.add.group();
+    game.flies = this.physics.add.group();
 
     // ---------- Animation ----------
     // Walking
@@ -279,6 +282,7 @@ class Game extends Phaser.Scene {
     this.engine.addAnimation("fireFrog", 12, true, false, "fireFrog0", "fireFrog1", "fireFrog2");
     this.engine.addAnimation("shootWater", 5, false, true, "waterFrog0", "waterFrog1");
     this.engine.addAnimation("fireball", 5, true, false, "fireball0", "fireball1");
+    this.engine.addAnimation("flies", 10, true, false, "fly0", "fly1");
 
     // ---------- Interaction ----------
     // Create frogs
@@ -491,6 +495,28 @@ class Game extends Phaser.Scene {
       callbackScope: this,
       repeat: -1
     });
+
+    // Create flies
+    this.time.addEvent({
+      delay: 5000,
+      callback: () => {
+        let fly = game.flies.create(Math.random() * this.engine.gameWidth, Math.random() * this.engine.gameHeight, "fly0").setInteractive().setScale(8).setOffset(0, 0).setGravityY(-1500);
+        this.tweens.add({
+          targets: fly,
+          x: fly.x + 20,
+          ease: "Sinusoidal.easeInOut",
+          duration: 800,
+          repeat: -1,
+          yoyo: true
+        });
+        fly.on("pointerdown", () => {
+          game.currencies.flies++;
+          fly.destroy();
+        });
+      },
+      callbackScope: this,
+      repeat: -1
+    });
   }
   update() {
     // Set position of mouse
@@ -648,6 +674,9 @@ class Game extends Phaser.Scene {
       if (projectile.x > game.width * game.TILESIZE || projectile.x < 0) {
         projectile.destroy();
       }
+    });
+    game.flies.getChildren().forEach(fly => {
+      fly.anims.play("flies", true);
     });
   }
 }
