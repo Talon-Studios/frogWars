@@ -184,6 +184,8 @@ class Game extends Phaser.Scene {
     this.load.image("fireHat1", "assets/fireHat1.png");
     this.load.image("fireHat2", "assets/fireHat2.png");
     this.load.image("X", "assets/X.png");
+    this.load.image("fly0", "assets/fly0.png");
+    this.load.image("fly1", "assets/fly1.png");
 
     // ********** Sounds **********
     // ---------- Music ----------
@@ -487,6 +489,16 @@ class Game extends Phaser.Scene {
         robot.dead = false;
         robot.fireDamage = false;
         game.robotSpawnDelay = !game.funEnabled ? this.engine.randomBetween(1000, 3000) : 100;
+      },
+      callbackScope: this,
+      repeat: -1
+    });
+
+    // Create flies
+    this.time.addEvent({
+      delay: 1000,
+      callback: () => {
+
       },
       callbackScope: this,
       repeat: -1
