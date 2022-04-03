@@ -30,20 +30,6 @@ export let game = {
     lilyPads: 0
   },
   currentSelection: "cannon",
-  projectileStats: {
-    "cannon": {
-      damage: 1
-    },
-    "launcher": {
-      damage: 0.5
-    },
-    "water": {
-      damage: 1
-    },
-    "fireball": {
-      damage: 2
-    }
-  },
   robotSpawnDelay: 5000
 };
 
@@ -53,10 +39,14 @@ const database = getFirestore(firebase);
 (async () => {
   const frogTypesDoc = doc(database, "frog-wars-data", "frog-types", "name", "types");
   const robotTypesDoc = doc(database, "frog-wars-data", "robot-types", "name", "types");
+  const projectilesDoc = doc(database, "frog-wars-data", "projectiles", "name", "types");
   const frogTypesSnapshot = await getDoc(frogTypesDoc);
   const robotTypesSnapshot = await getDoc(robotTypesDoc);
+  const projectilesSnapshot = await getDoc(projectilesDoc);
   game.frogTypes = frogTypesSnapshot.data();
   game.robotTypes = robotTypesSnapshot.data();
+  game.projectileStats = projectilesSnapshot.data();
+  console.log(game.projectileStats);
 })();
 
 // ---------- Game Scene ----------
