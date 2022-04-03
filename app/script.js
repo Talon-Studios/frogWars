@@ -25,60 +25,6 @@ export let game = {
   frogsEnabled: (localStorage.getItem("frogs") !== null) ? JSON.parse(localStorage.getItem("frogs")) : false,
   funEnabled: (localStorage.getItem("fun") !== null) ? JSON.parse(localStorage.getItem("fun")) : false,
   ultimateEnabled: (localStorage.getItem("ultimate") !== null) ? JSON.parse(localStorage.getItem("ultimate")) : false,
-  frogTypes: {
-    "cannon": {
-      path: "cannonFrog0",
-      health: 10,
-      name: "cannon",
-      price: 30
-    },
-    "basic": {
-      path: "basicFrog0",
-      health: Infinity,
-      name: "basic",
-      price: 40
-    },
-    "launcher": {
-      path: "launcherFrog",
-      health: 5,
-      name: "launcher",
-      price: 45
-    },
-    "toad": {
-      path: "toad",
-      health: 20,
-      name: "toad",
-      price: 100
-    },
-    "water": {
-      path: "waterFrog0",
-      health: 5,
-      name: "water",
-      price: 50
-    },
-    "fire": {
-      path: "fireFrog0",
-      health: 5,
-      name: "fire",
-      price: 250
-    },
-    "commander": {
-      path: "commanderFrog",
-      health: 10,
-      name: "commander",
-      price: 100
-    },
-    "topHat": {
-      path: "topHatFrog",
-      health: 30,
-      name: "topHat",
-      price: 35
-    },
-    "bird": {
-      path: "bird0",
-      name: "bird"
-    }
-  },
   robotTypes: {
     normalRobot: {
       speed: 0.6,
@@ -122,6 +68,15 @@ export let game = {
   },
   robotSpawnDelay: 5000
 };
+
+// ---------- Initialize Firebase ----------
+const firebase = initializeApp(firebaseConfig);
+const database = getFirestore(firebase);
+(async () => {
+  const frogTypesDoc = doc(database, "frog-wars-data", "frog-types", "name", "types");
+  const frogTypesSnapshot = await getDoc(frogTypesDoc);
+  game.frogTypes = frogTypesSnapshot.data();
+})();
 export class Game extends Phaser.Scene {
   constructor(sceneKey) {
     super(sceneKey);
