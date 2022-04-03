@@ -135,6 +135,7 @@ export class Game extends Phaser.Scene {
     this.load.audio("robotDie", "assets/robotDie.wav");
     this.load.audio("robotHit", "assets/robotHit.wav");
     this.load.audio("basicFrogJump", "assets/basicFrogJump.wav");
+    this.load.audio("fly", "assets/fly.wav");
 
     // Initialize loading bar
     loadingBar(this);
@@ -148,6 +149,7 @@ export class Game extends Phaser.Scene {
     game.sfx["robotDie"] = this.sound.add("robotDie");
     game.sfx["robotHit"] = this.sound.add("robotHit");
     game.sfx["basicFrogJump"] = this.sound.add("basicFrogJump");
+    game.sfx["fly"] = this.sound.add("fly");
     game.sfx["music1"] = this.sound.add("music1-10").setLoop(true);
     if (game.musicEnabled) game.sfx.music1.play({volume: 0.5});
 
@@ -450,6 +452,7 @@ export class Game extends Phaser.Scene {
           yoyo: true
         });
         fly.on("pointerover", () => {
+          playSound(game, "fly");
           game.currencies.flies++;
           fly.destroy();
         });
