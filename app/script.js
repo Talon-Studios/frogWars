@@ -415,18 +415,22 @@ export class Game extends Phaser.Scene {
           type = "armored";
           health = game.robotTypes.armoredRobot.health;
           speed = game.robotTypes.armoredRobot.speed;
-        } else if (randomPercentage >= 75 && randomPercentage < 82.7) {
+        } else if (randomPercentage >= 75 && randomPercentage < 81.25) {
           type = "speed";
           health = game.robotTypes.speedRobot.health;
           speed = game.robotTypes.speedRobot.speed;
-        } else if (randomPercentage >= 82.7 && randomPercentage < 91.7) {
+        } else if (randomPercentage >= 81.25 && randomPercentage < 87.5) {
           type = "cannon";
           health = game.robotTypes.cannonRobot.health;
           speed = game.robotTypes.cannonRobot.speed;
-        } else if (randomPercentage >= 91.7) {
+        } else if (randomPercentage >= 87.5 && randomPercentage < 93.75) {
           type = "dodger";
           health = game.robotTypes.dodgerRobot.health;
           speed = game.robotTypes.dodgerRobot.speed;
+        } else if (randomPercentage >= 93.75) {
+          type = "missile";
+          health = game.robotTypes.missileRobot.health;
+          speed = game.robotTypes.missileRobot.speed;
         }
         let robot = game.robots.create(game.width * game.TILESIZE + 8, (game.TILESIZE / 2 + game.TILESIZE * row) + game.topMargin, `${type}Robot0`).setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0);
         robot.type = type;
