@@ -13,7 +13,7 @@ import {firebaseConfig} from "../firebaseConfig.js";
 import {initializeApp} from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
 import {collection, addDoc, getFirestore, doc, getDoc} from "https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore.js";
 
-// ********** Game Scene **********
+// ********** Game Object **********
 export let game = {
   width: 20,
   height: 7,
@@ -25,28 +25,6 @@ export let game = {
   frogsEnabled: (localStorage.getItem("frogs") !== null) ? JSON.parse(localStorage.getItem("frogs")) : false,
   funEnabled: (localStorage.getItem("fun") !== null) ? JSON.parse(localStorage.getItem("fun")) : false,
   ultimateEnabled: (localStorage.getItem("ultimate") !== null) ? JSON.parse(localStorage.getItem("ultimate")) : false,
-  robotTypes: {
-    normalRobot: {
-      speed: 0.6,
-      health: 5
-    },
-    armoredRobot: {
-      speed: 0.6,
-      health: 10
-    },
-    speedRobot: {
-      speed: 1.8,
-      health: 3
-    },
-    cannonRobot: {
-      speed: 0.3,
-      health: 5
-    },
-    dodgerRobot: {
-      speed: 0.8,
-      health: 7
-    }
-  },
   currencies: {
     flies: Infinity,
     lilyPads: 0
@@ -74,9 +52,14 @@ const firebase = initializeApp(firebaseConfig);
 const database = getFirestore(firebase);
 (async () => {
   const frogTypesDoc = doc(database, "frog-wars-data", "frog-types", "name", "types");
+  const robotTypesDoc = doc(database, "frog-wars-data", "robot-types", "name", "types");
   const frogTypesSnapshot = await getDoc(frogTypesDoc);
+  const robotTypesSnapshot = await getDoc(robotTypesDoc);
   game.frogTypes = frogTypesSnapshot.data();
+  game.robotTypes = robotTypesSnapshot.data();
 })();
+
+// ---------- Game Scene ----------
 export class Game extends Phaser.Scene {
   constructor(sceneKey) {
     super(sceneKey);
