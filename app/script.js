@@ -46,7 +46,6 @@ const database = getFirestore(firebase);
   game.frogTypes = frogTypesSnapshot.data();
   game.robotTypes = robotTypesSnapshot.data();
   game.projectileStats = projectilesSnapshot.data();
-  console.log(game.projectileStats);
 })();
 
 // ---------- Game Scene ----------
@@ -449,7 +448,7 @@ export class Game extends Phaser.Scene {
           repeat: -1,
           yoyo: true
         });
-        fly.on("pointerdown", () => {
+        fly.on("pointerover", () => {
           game.currencies.flies++;
           fly.destroy();
         });
