@@ -375,7 +375,12 @@ export class Game extends Phaser.Scene {
             let projectile = game.cannonRobotProjectiles.create(robot.x - 40, robot.y + 20, "cannonProjectile").setScale(8).setGravityY(-1500).setVelocityX(-300);
             projectile.setSize(2, 2);
             projectile.setOffset(6, 2);
-          } else if (robot.type === "dodger") {
+          } else if (robot.type === "missile") {
+            let projectile = game.cannonRobotProjectiles.create(robot.x - 40, robot.y - 4, "missile").setScale(8).setGravityY(-1500).setVelocityX(-300);
+            projectile.setSize(8, 7);
+            projectile.setOffset(0, 1);
+          }
+          else if (robot.type === "dodger") {
             let randomDir = Math.floor(Math.random() * 2);
             if (randomDir === 0) {
               robot.y -= game.TILESIZE;
