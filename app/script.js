@@ -4,8 +4,13 @@ script.js
 The main script for Frog Wars.
 *^*^*^*^*^*^*^*/
 
+import {loadingBar} from "../functions/loadingBar.js";
+import {playSound} from "../functions/playSound.js";
+import {killRobot} from "../functions/robotDie.js";
+import {killFrog} from "../functions/frogDie.js";
+
 // ********** Game Scene **********
-let game = {
+export let game = {
   width: 20,
   height: 7,
   TILESIZE: 64,
@@ -113,7 +118,7 @@ let game = {
   },
   robotSpawnDelay: 5000
 };
-class Game extends Phaser.Scene {
+export class Game extends Phaser.Scene {
   constructor(sceneKey) {
     super(sceneKey);
   }
@@ -328,7 +333,7 @@ class Game extends Phaser.Scene {
           }
         } else {
           if (game.currentSelection === "bird" && !tile.frog.isDead) {
-            let bird = game.removalBirds.create(0, tile.y - game.TILESIZE + (game.TILESIZE / 8), "bird1").setScale(8).setGravityY(-config.physics.arcade.gravity.y).setVelocityX(500).setSize(3, 8).setOffset(0, 0);
+            let bird = game.removalBirds.create(0, tile.y - game.TILESIZE + (game.TILESIZE / 8), "bird1").setScale(8).setGravityY(-1500).setVelocityX(500).setSize(3, 8).setOffset(0, 0);
             bird.flipX = true;
             bird.touchedFrog = false;
             tile.frog.isDead = true;

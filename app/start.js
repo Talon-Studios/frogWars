@@ -4,7 +4,10 @@ start.js
 The start page.
 *^*^*^*^*^*^*^*/
 
-class Start extends Phaser.Scene {
+import {game} from "./script.js";
+import {playSound} from "../functions/playSound.js";
+
+export class Start extends Phaser.Scene {
   constructor() {
     super("Start");
     this.sfx = {};

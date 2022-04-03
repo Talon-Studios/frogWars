@@ -4,7 +4,9 @@ settings.js
 The settings page for sfx and music.
 *^*^*^*^*^*^*^*/
 
-class Settings extends Phaser.Scene {
+import {game} from "./script.js";
+
+export class Settings extends Phaser.Scene {
   constructor() {
     super("Settings");
     this.sfx = {};
@@ -86,7 +88,7 @@ class Settings extends Phaser.Scene {
 }
 
 // Nothing here... hehe...
-class Settings2 extends Phaser.Scene {
+export class Settings2 extends Phaser.Scene {
   constructor() {
     super("Settings2");
     this.sfx = {};

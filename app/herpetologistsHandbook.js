@@ -4,7 +4,7 @@ herpetologistsHandbook.js
 A catalog of all the types of frogs.
 *^*^*^*^*^*^*^*/
 
-class HerpetologistsHandbook extends Phaser.Scene {
+export class HerpetologistsHandbook extends Phaser.Scene {
   constructor() {
     super("HerpetologistsHandbook");
     this.currentPage = 1;

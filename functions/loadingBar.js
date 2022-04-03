@@ -4,7 +4,9 @@ loadingBar.js
 Code that adds a loading bar before each scene.
 *^*^*^*^*^*^*^*/
 
-function loadingBar(phaser) {
+import {game} from "../app/script.js";
+
+export function loadingBar(phaser) {
   phaser.load.image("basicFrog0", "assets/basicFrog0.png");
   game.progressBar = phaser.add.graphics();
   game.loadingFrog = phaser.add.image(phaser.engine.gameWidthCenter - 400, phaser.engine.gameHeightCenter - 50, "basicFrog0").setScale(8);
