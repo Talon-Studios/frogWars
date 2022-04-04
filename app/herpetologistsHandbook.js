@@ -18,6 +18,7 @@ export class HerpetologistsHandbook extends Phaser.Scene {
     this.load.image("rightArrow", "assets/rightArrow.png");
     this.load.image("leftArrowDisabled", "assets/leftArrowDisabled.png");
     this.load.image("rightArrowDisabled", "assets/rightArrowDisabled.png");
+    this.load.image("backSetting", "assets/backSetting.png");
     for (var i = 1; i < this.totalPages + 1; i++) {
       this.load.image(`handbookPage${i}`, `assets/handbookPage${i}.png`);
     }
@@ -77,6 +78,13 @@ export class HerpetologistsHandbook extends Phaser.Scene {
 
     // Create pages
     this.pages = this.add.image(this.engine.gameWidthCenter, this.engine.gameHeightCenter - 50, `handbookPage${this.currentPage}`).setScale(8);
+
+    // Create backbutton
+    this.backButton = this.add.image(180, 80, "backSetting").setScale(8).setInteractive();
+    this.backButton.on("pointerup", () => {
+      this.scene.stop();
+      this.scene.start("Start");
+    });
   }
   update() {
     this.cursor.x = this.input.mousePointer.x;
