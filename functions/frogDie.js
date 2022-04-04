@@ -26,7 +26,7 @@ export function killFrog(phaser, game, frog, damage, callback = () => {}) {
   }
   setTimeout(function() {
     frog.setTexture(lastFrame);
-  }, 250);
+  }, 200);
   playSound(game, "robotHit");
   frog.health -= damage;
   callback();
