@@ -100,6 +100,10 @@ export class Game extends Phaser.Scene {
     this.load.image("dodgerRobot0", "assets/dodgerRobot0.png");
     this.load.image("dodgerRobot1", "assets/dodgerRobot1.png");
     this.load.image("hurtDodgerRobot", "assets/hurtDodgerRobot.png");
+    this.load.image("missileRobot0", "assets/missileRobot0.png");
+    this.load.image("missileRobot1", "assets/missileRobot1.png");
+    this.load.image("hurtMissileRobot", "assets/hurtMissileRobot.png");
+    this.load.image("missile", "assets/missile.png");
 
     // ---------- Other ----------
     this.load.image("tile0", "assets/tile0.png");
@@ -211,6 +215,7 @@ export class Game extends Phaser.Scene {
     this.engine.addAnimation("speedRobotWalk", 5, false, false, "speedRobot0", "speedRobot1");
     this.engine.addAnimation("cannonRobotWalk", 5, false, false, "cannonRobot0", "cannonRobot1");
     this.engine.addAnimation("dodgerRobotWalk", 5, false, false, "dodgerRobot0", "dodgerRobot1");
+    this.engine.addAnimation("missileRobotWalk", 5, false, false, "missileRobot0", "missileRobot1");
 
     // Other
     this.engine.addAnimation("jump", 10, false, false, "basicFrog0", "basicFrog1", "basicFrog2", "basicFrog0");
@@ -372,7 +377,12 @@ export class Game extends Phaser.Scene {
             let projectile = game.cannonRobotProjectiles.create(robot.x - 40, robot.y + 20, "cannonProjectile").setScale(8).setGravityY(-1500).setVelocityX(-300);
             projectile.setSize(2, 2);
             projectile.setOffset(6, 2);
-          } else if (robot.type === "dodger") {
+          } else if (robot.type === "missile") {
+            let projectile = game.cannonRobotProjectiles.create(robot.x - 40, robot.y - 4, "missile").setScale(8).setGravityY(-1500).setVelocityX(-300);
+            projectile.setSize(8, 7);
+            projectile.setOffset(0, 1);
+          }
+          else if (robot.type === "dodger") {
             let randomDir = Math.floor(Math.random() * 2);
             if (randomDir === 0) {
               robot.y -= game.TILESIZE;
@@ -412,18 +422,22 @@ export class Game extends Phaser.Scene {
           type = "armored";
           health = game.robotTypes.armoredRobot.health;
           speed = game.robotTypes.armoredRobot.speed;
-        } else if (randomPercentage >= 75 && randomPercentage < 82.7) {
+        } else if (randomPercentage >= 75 && randomPercentage < 81.25) {
           type = "speed";
           health = game.robotTypes.speedRobot.health;
           speed = game.robotTypes.speedRobot.speed;
-        } else if (randomPercentage >= 82.7 && randomPercentage < 91.7) {
+        } else if (randomPercentage >= 81.25 && randomPercentage < 87.5) {
           type = "cannon";
           health = game.robotTypes.cannonRobot.health;
           speed = game.robotTypes.cannonRobot.speed;
-        } else if (randomPercentage >= 91.7) {
+        } else if (randomPercentage >= 87.5 && randomPercentage < 93.75) {
           type = "dodger";
           health = game.robotTypes.dodgerRobot.health;
           speed = game.robotTypes.dodgerRobot.speed;
+        } else if (randomPercentage >= 93.75) {
+          type = "missile";
+          health = game.robotTypes.missileRobot.health;
+          speed = game.robotTypes.missileRobot.speed;
         }
         let robot = game.robots.create(game.width * game.TILESIZE + 8, (game.TILESIZE / 2 + game.TILESIZE * row) + game.topMargin, `${type}Robot0`).setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0);
         robot.type = type;
@@ -485,6 +499,9 @@ export class Game extends Phaser.Scene {
             break;
           case "dodger":
             robot.anims.play("dodgerRobotWalk", true);
+            break;
+          case "missile":
+            robot.anims.play("missileRobotWalk", true);
             break;
         }
         if (robot.fireDamage) {
