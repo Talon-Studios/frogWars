@@ -4,12 +4,17 @@ settings.js
 The settings page for sfx and music.
 *^*^*^*^*^*^*^*/
 
-class Settings extends Phaser.Scene {
+import {game} from "./script.js";
+
+export class Settings extends Phaser.Scene {
   constructor() {
     super("Settings");
     this.sfx = {};
   }
   preload() {
+    this.engine = new Engine(this);
+
+    // Load assets
     this.load.audio("optionSelect", "assets/optionSelect.wav");
     this.load.audio("introMusic", "assets/introMusic.mp3");
     this.load.image("cursor", "assets/cursor.png");
@@ -20,8 +25,6 @@ class Settings extends Phaser.Scene {
     this.load.image("backSetting", "assets/backSetting.png");
   }
   create() {
-    this.engine = new Engine(this);
-
     // Add sounds
     this.sfx.optionSelect = this.sound.add("optionSelect");
 
@@ -85,12 +88,15 @@ class Settings extends Phaser.Scene {
 }
 
 // Nothing here... hehe...
-class Settings2 extends Phaser.Scene {
+export class Settings2 extends Phaser.Scene {
   constructor() {
     super("Settings2");
     this.sfx = {};
   }
   preload() {
+    this.engine = new Engine(this);
+
+    // Load assets
     this.load.audio("optionSelect", "assets/optionSelect.wav");
     this.load.audio("introMusic", "assets/introMusic.mp3");
     this.load.image("cursor", "assets/cursor.png");
@@ -102,8 +108,6 @@ class Settings2 extends Phaser.Scene {
     this.load.image("ultimateText", "assets/ultimateText.png");
   }
   create() {
-    this.engine = new Engine(this);
-
     // Add sounds
     this.sfx.optionSelect = this.sound.add("optionSelect");
 

@@ -4,7 +4,10 @@ robotDie.js
 Kill the robot.
 *^*^*^*^*^*^*^*/
 
-function killRobot(phaser, game, robot, damage, callback = () => {}) {
+import {game} from "../app/script.js";
+import {playSound} from "./playSound.js";
+
+export function killRobot(phaser, game, robot, damage, callback = () => {}) {
   let lastFrame = robot.texture.key;
   if (!robot.dead) {
     if (robot.type === "basic" || robot.type === "armored") {
@@ -15,6 +18,8 @@ function killRobot(phaser, game, robot, damage, callback = () => {}) {
       robot.setTexture("hurtCannonRobot");
     } else if (robot.type === "dodger") {
       robot.setTexture("hurtDodgerRobot");
+    } else if (robot.type === "missile") {
+      robot.setTexture("hurtMissileRobot");
     }
   }
   setTimeout(function() {

@@ -4,7 +4,10 @@ frogDie.js
 Kill the frog.
 *^*^*^*^*^*^*^*/
 
-function killFrog(phaser, game, frog, damage, callback = () => {}) {
+import {game} from "../app/script.js";
+import {playSound} from "./playSound.js";
+
+export function killFrog(phaser, game, frog, damage, callback = () => {}) {
   let lastFrame = frog.texture.key;
   if (!frog.dead) {
     if (frog.type === "cannon") {
@@ -23,7 +26,7 @@ function killFrog(phaser, game, frog, damage, callback = () => {}) {
   }
   setTimeout(function() {
     frog.setTexture(lastFrame);
-  }, 250);
+  }, 200);
   playSound(game, "robotHit");
   frog.health -= damage;
   callback();

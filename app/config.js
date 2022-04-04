@@ -4,7 +4,13 @@ config.js
 The configuration for the Phaser 3 framework.
 *^*^*^*^*^*^*^*/
 
-const config = {
+import {Start} from "./start.js";
+import {Settings, Settings2} from "./settings.js";
+import {HerpetologistsHandbook} from "./herpetologistsHandbook.js";
+import {Game} from "./script.js";
+import {Level_1} from "./levels.js";
+
+export const config = {
   type: Phaser.AUTO,
   scale: {
     autoCenter: Phaser.Scale.CENTER_BOTH,
@@ -24,6 +30,6 @@ const config = {
       // debug: true
     }
   },
-  scene: [Start, Settings, Settings2, Game, Level_1]
+  scene: [Start, Settings, Settings2, HerpetologistsHandbook, Game, Level_1]
 };
 const phaserGame = new Phaser.Game(config);
