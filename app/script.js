@@ -102,6 +102,7 @@ export class Game extends Phaser.Scene {
     this.load.image("hurtDodgerRobot", "assets/hurtDodgerRobot.png");
     this.load.image("missileRobot0", "assets/missileRobot0.png");
     this.load.image("missileRobot1", "assets/missileRobot1.png");
+    this.load.image("hurtMissileRobot", "assets/hurtMissileRobot.png");
     this.load.image("missile", "assets/missile.png");
 
     // ---------- Other ----------
@@ -214,6 +215,7 @@ export class Game extends Phaser.Scene {
     this.engine.addAnimation("speedRobotWalk", 5, false, false, "speedRobot0", "speedRobot1");
     this.engine.addAnimation("cannonRobotWalk", 5, false, false, "cannonRobot0", "cannonRobot1");
     this.engine.addAnimation("dodgerRobotWalk", 5, false, false, "dodgerRobot0", "dodgerRobot1");
+    this.engine.addAnimation("missileRobotWalk", 5, false, false, "missileRobot0", "missileRobot1");
 
     // Other
     this.engine.addAnimation("jump", 10, false, false, "basicFrog0", "basicFrog1", "basicFrog2", "basicFrog0");
@@ -497,6 +499,9 @@ export class Game extends Phaser.Scene {
             break;
           case "dodger":
             robot.anims.play("dodgerRobotWalk", true);
+            break;
+          case "missile":
+            robot.anims.play("missileRobotWalk", true);
             break;
         }
         if (robot.fireDamage) {
