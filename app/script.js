@@ -11,7 +11,7 @@ import {killFrog} from "../functions/frogDie.js";
 
 import {firebaseConfig} from "../firebaseConfig.js";
 import {initializeApp} from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
-import {collection, addDoc, getFirestore, doc, getDoc} from "https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore.js";
+import {collection, addDoc, getFirestore, doc, getDoc, setDoc} from "https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore.js";
 
 // ********** Game Object **********
 export let game = {
