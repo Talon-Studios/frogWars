@@ -338,6 +338,11 @@ export class Game extends Phaser.Scene {
 
     // ---------- Colliders ----------
     this.physics.add.collider(game.frogs, game.robots, (frog, robot) => {
+      robot.killTimer--;
+      if (robot.killTimer <= 0) {
+        killFrog(this, game, frog, 0.1);
+        robot.killTimer = 100;
+      }
       if (frog.type === "basic") {
         frog.destroy();
         killRobot(this, game, robot, 5);
@@ -445,6 +450,7 @@ export class Game extends Phaser.Scene {
         robot.speed = speed;
         robot.dead = false;
         robot.fireDamage = false;
+        robot.killTimer = 100;
         game.robotSpawnDelay = !game.funEnabled ? this.engine.randomBetween(1000, 3000) : 100;
       },
       callbackScope: this,
