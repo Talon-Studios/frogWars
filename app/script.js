@@ -84,6 +84,7 @@ export class Game extends Phaser.Scene {
     this.load.image("commanderFrog", "assets/commanderFrog.png");
     this.load.image("topHatFrog", "assets/topHatFrog.png");
     this.load.image("hurtTopHatFrog", "assets/hurtTopHatFrog.png");
+    this.load.image("bullfrog", "assets/bullfrog.png");
 
     // ---------- Robots ----------
     this.load.image("basicRobot0", "assets/basicRobot0.png");
@@ -185,7 +186,7 @@ export class Game extends Phaser.Scene {
     game.choices = this.physics.add.staticGroup();
     game.choiceBorders = this.physics.add.staticGroup();
     let frogCount = 0;
-    const frogs = ["cannon", "topHat", "basic", "launcher", "toad", "water", "fire", "commander", "bird"];
+    const frogs = ["cannon", "topHat", "basic", "launcher", "toad", "water", "fire", "commander", "bullfrog", "bird"];
     for (var x = 80; x < frogs.length * (game.TILESIZE + 25); x += game.TILESIZE + 25) {
       let border = game.choiceBorders.create(x, game.TILESIZE, "optionBorder0").setScale(8).setInteractive();
       border.clicked = false;
@@ -239,7 +240,11 @@ export class Game extends Phaser.Scene {
       tile.on("pointerdown", (pointer) => {
         if (!tile.frog && game.currentSelection) {
           if (game.currentSelection !== "bird") {
-            let frog = game.frogs.create(tile.x, tile.y, game.frogTypes[game.currentSelection].path).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
+            if (game.currentSelection === "bullfrog") {
+              var frog = game.frogs.create(0, tile.y, "bullfrog").setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
+            } else {
+              var frog = game.frogs.create(tile.x, tile.y, game.frogTypes[game.currentSelection].path).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
+            }
             frog.type = game.currentSelection;
             frog.isDead = false;
             frog.health = game.frogTypes[frog.type].health;
@@ -346,6 +351,11 @@ export class Game extends Phaser.Scene {
       if (frog.type === "basic") {
         frog.destroy();
         killRobot(this, game, robot, 5);
+      }
+    });
+    this.physics.add.overlap(game.frogs, game.robots, (frog, robot) => {
+      if (frog.type === "bullfrog") {
+        killRobot(this, game, robot, 0.1);
       }
     });
     this.physics.add.overlap(game.projectiles, game.robots, (projectile, robot) => {
@@ -623,6 +633,9 @@ export class Game extends Phaser.Scene {
             frog2.commanded = true;
           }
         });
+      }
+      if (frog.type === "bullfrog") {
+        frog.x += 10;
       }
     });
     game.removalBirds.getChildren().forEach(bird => {
