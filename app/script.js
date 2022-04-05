@@ -349,8 +349,9 @@ export class Game extends Phaser.Scene {
         robot.killTimer = 100;
       }
       if (frog.type === "basic") {
+        console.log(robot.health);
         frog.destroy();
-        killRobot(this, game, robot, 5);
+        killRobot(this, game, robot, robot.health / 2);
       }
     });
     this.physics.add.overlap(game.frogs, game.robots, (frog, robot) => {
