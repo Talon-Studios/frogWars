@@ -98,6 +98,7 @@ export class Start extends Phaser.Scene {
     // Add book button
     this.book = this.add.image(75, 75, "book").setScale(8).setInteractive();
     this.book.on("pointerup", () => {
+      if(game.musicEnabled) this.sfx.introMusic.stop();
       this.scene.stop();
       this.scene.start("HerpetologistsHandbook");
     });
