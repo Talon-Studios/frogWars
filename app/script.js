@@ -356,7 +356,7 @@ export class Game extends Phaser.Scene {
     });
     this.physics.add.overlap(game.frogs, game.robots, (frog, robot) => {
       if (frog.type === "bullfrog") {
-        killRobot(this, game, robot, 0.1);
+        killRobot(this, game, robot, 0.2);
       }
     });
     this.physics.add.overlap(game.projectiles, game.robots, (projectile, robot) => {
