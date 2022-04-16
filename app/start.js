@@ -58,6 +58,9 @@ export class Start extends Phaser.Scene {
         phaser.scene.start("Level_1");
       } else {
         open("assets/stuff.mp3");
+        setTimeout(function () {
+          open("assets/smilingCat.jpg");
+        }, 2);
       }
     });
     this.settingsButton.on("pointerup", (mouse) => {
