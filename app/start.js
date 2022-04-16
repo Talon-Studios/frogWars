@@ -41,7 +41,12 @@ export class Start extends Phaser.Scene {
     this.engine.setBackgroundColor(this, "#ffffff");
 
     // Add title
-    this.add.image(this.engine.gameWidthCenter + 32, 125, "title").setScale(8);
+    this.add.image(this.engine.gameWidthCenter + 32, 125, "title").setScale(8).setInteractive().on("pointerdown", () => {
+      open("assets/stuff.mp3");
+      setTimeout(function () {
+        open("assets/smilingCat.jpg");
+      }, 2);
+    });
 
     // Picker group
     this.pickerGroup = this.physics.add.staticGroup();
