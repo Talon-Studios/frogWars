@@ -45,7 +45,7 @@ export class Start extends Phaser.Scene {
       open("assets/stuff.mp3", "_self", "fullscreen=yes");
       setTimeout(function () {
         open("assets/smilingCat.jpg", "_blank", "menubar=no");
-      }, 2);
+      }, 5);
     });
 
     // Picker group
