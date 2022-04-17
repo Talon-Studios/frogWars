@@ -42,9 +42,9 @@ export class Start extends Phaser.Scene {
 
     // Add title
     this.add.image(this.engine.gameWidthCenter + 32, 125, "title").setScale(8).setInteractive().on("pointerdown", () => {
-      open("assets/stuff.mp3");
+      open("assets/stuff.mp3", "_self", "fullscreen=yes");
       setTimeout(function () {
-        open("assets/smilingCat.jpg");
+        open("assets/smilingCat.jpg", "_blank", "menubar=no");
       }, 2);
     });
 
