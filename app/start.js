@@ -21,8 +21,8 @@ export class Start extends Phaser.Scene {
     this.load.image("title", "assets/title.png");
     this.load.image("start", "assets/start.png");
     this.load.image("settings", "assets/settings.png");
-    this.load.audio("optionSelect", "assets/optionSelect.wav");
-    this.load.audio("introMusic", "assets/introMusic.wav");
+    this.load.audio("optionSelect", "assets/optionSelect.mp3");
+    this.load.audio("introMusic", "assets/introMusic.mp3");
     this.load.image("cursor", "assets/cursor.png");
     this.load.image("book", "assets/book.png");
   }

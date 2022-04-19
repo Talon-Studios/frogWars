@@ -130,17 +130,17 @@ export class Game extends Phaser.Scene {
 
     // ********** Sounds **********
     // ---------- Music ----------
-    this.load.audio("music1-10", "assets/music1-10.wav");
+    this.load.audio("music1-10", "assets/music1-10.mp3");
 
     // ---------- SFX ----------
-    this.load.audio("cannonFrogShoot", "assets/cannonFrogShoot.wav");
-    this.load.audio("launcherFrogShoot", "assets/launcherFrogShoot.wav");
-    this.load.audio("waterFrogShoot", "assets/waterFrogShoot.wav");
-    this.load.audio("fireFrogShoot", "assets/fireFrogShoot.wav");
-    this.load.audio("robotDie", "assets/robotDie.wav");
-    this.load.audio("robotHit", "assets/robotHit.wav");
-    this.load.audio("basicFrogJump", "assets/basicFrogJump.wav");
-    this.load.audio("fly", "assets/fly.wav");
+    this.load.audio("cannonFrogShoot", "assets/cannonFrogShoot.mp3");
+    this.load.audio("launcherFrogShoot", "assets/launcherFrogShoot.mp3");
+    this.load.audio("waterFrogShoot", "assets/waterFrogShoot.mp3");
+    this.load.audio("fireFrogShoot", "assets/fireFrogShoot.mp3");
+    this.load.audio("robotDie", "assets/robotDie.mp3");
+    this.load.audio("robotHit", "assets/robotHit.mp3");
+    this.load.audio("basicFrogJump", "assets/basicFrogJump.mp3");
+    this.load.audio("fly", "assets/fly.mp3");
 
     // Initialize loading bar
     loadingBar(this);
