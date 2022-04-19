@@ -174,10 +174,14 @@ export class Game extends Phaser.Scene {
     for (var x = game.TILESIZE / 2; x < game.width * game.TILESIZE; x += game.TILESIZE) {
       for (var y = (game.TILESIZE / 2) + game.topMargin; y < (game.height * game.TILESIZE) + game.topMargin; y += game.TILESIZE) {
         if (tileCount % 2 == 0) {
-          let tile = game.tiles.create(x, y, "tile0").setScale(8).setInteractive();
+          let tile = game.tiles.create(x, y, "tile0");
+          tile.setScale(8);
+          tile.setInteractive();
           tile.textureKey = "tile0";
         } else {
           let tile = game.tiles.create(x, y, "tile1").setScale(8).setInteractive();
+          tile.setScale(8);
+          tile.setInteractive();
           tile.textureKey = "tile1";
         }
         tileCount++;
@@ -190,13 +194,17 @@ export class Game extends Phaser.Scene {
     let frogCount = 0;
     const frogs = ["cannon", "topHat", "basic", "launcher", "toad", "water", "fire", "commander", "bullfrog", "bomber", "bird"];
     for (var x = 80; x < frogs.length * (game.TILESIZE + 25); x += game.TILESIZE + 25) {
-      let border = game.choiceBorders.create(x, game.TILESIZE, "optionBorder0").setScale(8).setInteractive();
+      let border = game.choiceBorders.create(x, game.TILESIZE, "optionBorder0");
+      border.setScale(8);
+      border.setInteractive();
       border.clicked = false;
       if (frogs[frogCount] === game.currentSelection) {
         border.clicked = true;
         border.setTexture("optionBorder2");
       }
-      let choice = game.choices.create(x, game.TILESIZE, game.frogTypes[frogs[frogCount]].path).setScale(8).setInteractive();
+      let choice = game.choices.create(x, game.TILESIZE, game.frogTypes[frogs[frogCount]].path);
+      choice.setScale(8);
+      choice.setInteractive();
       choice.frogType = game.frogTypes[frogs[frogCount]].name;
       choice.border = border;
       border.frogType = choice.frogType;
@@ -243,10 +251,20 @@ export class Game extends Phaser.Scene {
         if (!tile.frog && game.currentSelection) {
           if (game.currentSelection !== "bird") {
             if (game.currentSelection === "bullfrog") {
-              var frog = game.frogs.create(0, tile.y, "bullfrog").setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
+              var frog = game.frogs.create(0, tile.y, "bullfrog");
+              frog.setScale(8);
+              frog.setGravityY(-1500);
+              frog.setSize(7, 8);
+              frog.setOffset(0, 0);
+              frog.setImmovable();
             } else {
-              var frog = game.frogs.create(tile.x, tile.y, game.frogTypes[game.currentSelection].path).setScale(8).setGravityY(-1500).setSize(7, 8).setOffset(0, 0).setImmovable();
+              var frog = game.frogs.create(tile.x, tile.y, game.frogTypes[game.currentSelection].path);
             }
+            frog.setScale(8);
+            frog.setGravityY(-1500);
+            frog.setSize(7, 8);
+            frog.setOffset(0, 0);
+            frog.setImmovable();
             frog.type = game.currentSelection;
             frog.isDead = false;
             frog.health = game.frogTypes[frog.type].health;
