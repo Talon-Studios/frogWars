@@ -85,6 +85,8 @@ export class Game extends Phaser.Scene {
     this.load.image("topHatFrog", "assets/topHatFrog.png");
     this.load.image("hurtTopHatFrog", "assets/hurtTopHatFrog.png");
     this.load.image("bullfrog", "assets/bullfrog.png");
+    this.load.image("bomberFrog", "assets/bomberFrog.png");
+    this.load.image("bomb", "assets/bomb.png");
 
     // ---------- Robots ----------
     this.load.image("basicRobot0", "assets/basicRobot0.png");
@@ -186,7 +188,7 @@ export class Game extends Phaser.Scene {
     game.choices = this.physics.add.staticGroup();
     game.choiceBorders = this.physics.add.staticGroup();
     let frogCount = 0;
-    const frogs = ["cannon", "topHat", "basic", "launcher", "toad", "water", "fire", "commander", "bullfrog", "bird"];
+    const frogs = ["cannon", "topHat", "basic", "launcher", "toad", "water", "fire", "commander", "bullfrog", "bomber", "bird"];
     for (var x = 80; x < frogs.length * (game.TILESIZE + 25); x += game.TILESIZE + 25) {
       let border = game.choiceBorders.create(x, game.TILESIZE, "optionBorder0").setScale(8).setInteractive();
       border.clicked = false;
@@ -470,7 +472,7 @@ export class Game extends Phaser.Scene {
 
     // Create flies
     this.time.addEvent({
-      delay: 5000,
+      delay: 2500,
       callback: () => {
         let fly = game.flies.create(Math.random() * this.engine.gameWidth, Math.random() * this.engine.gameHeight, "fly0").setInteractive().setScale(8).setOffset(0, 0).setGravityY(-1500);
         this.tweens.add({
@@ -605,6 +607,11 @@ export class Game extends Phaser.Scene {
             projectile2.type = "fireball";
             projectile1.angle = 90;
             projectile2.angle = 270;
+            break;
+          case "bomber":
+            let bomb = game.projectile.create(frog.x, frog.y, "bomb").setScale(8).setVelocityY(-500).setVelocityX(500);
+            bomb.type = "bomb";
+            bomb.setAngularVelocity(500);
             break;
         }
       }
