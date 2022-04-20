@@ -163,10 +163,8 @@ export class Game extends Phaser.Scene {
     // Nothing here...
     if (game.frogsEnabled) new froggies();
 
-    // Create cursor
-    this.engine.mouseInput();
-    game.cursor = this.physics.add.sprite(this.input.mousePointer.x, this.input.mousePointer.y, "cursor").setScale(8).setGravityY(-1500).setSize(2, 2).setOffset(0, 0).setOrigin(0, 0);
-    game.cursor.setDepth(1);
+    // Create pixel cursor
+    this.engine.pixelCursor();
 
     // Create tiles
     game.tiles = this.physics.add.staticGroup();
@@ -513,9 +511,8 @@ export class Game extends Phaser.Scene {
     });
   }
   update() {
-    // Set position of mouse
-    game.cursor.x = this.input.mousePointer.x;
-    game.cursor.y = this.input.mousePointer.y;
+    // Set position of pixel cursor
+    this.engine.updatePixelCursor();
 
     // Updating groups
     game.robots.getChildren().forEach(robot => {
