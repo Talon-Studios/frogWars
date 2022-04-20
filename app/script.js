@@ -627,7 +627,7 @@ export class Game extends Phaser.Scene {
             projectile2.angle = 270;
             break;
           case "bomber":
-            let bomb = game.projectile.create(frog.x, frog.y, "bomb").setScale(8).setVelocityY(-500).setVelocityX(500);
+            let bomb = game.projectiles.create(frog.x, frog.y, "bomb").setScale(8).setVelocityY(-500).setVelocityX(500);
             bomb.type = "bomb";
             bomb.setAngularVelocity(500);
             break;
