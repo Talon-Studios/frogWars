@@ -369,7 +369,7 @@ export class Game extends Phaser.Scene {
       if (frog.type === "basic") {
         console.log(robot.health);
         frog.destroy();
-        killRobot(this, game, robot, robot.health / 2);
+        killRobot(this, game, robot, 5);
       }
     });
     this.physics.add.overlap(game.frogs, game.robots, (frog, robot) => {
@@ -624,7 +624,7 @@ export class Game extends Phaser.Scene {
             projectile2.angle = 270;
             break;
           case "bomber":
-            let bomb = game.projectiles.create(frog.x, frog.y, "bomb").setScale(8).setVelocityY(-500).setVelocityX(500);
+            let bomb = game.projectiles.create(frog.x, frog.y, "bomb").setScale(8).setVelocityY(-500).setVelocityX(300);
             bomb.type = "bomb";
             bomb.setAngularVelocity(500);
             break;
