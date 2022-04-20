@@ -490,7 +490,7 @@ export class Game extends Phaser.Scene {
 
     // Create flies
     this.time.addEvent({
-      delay: 2500,
+      delay: 10000,
       callback: () => {
         let fly = game.flies.create(Math.random() * this.engine.gameWidth, Math.random() * this.engine.gameHeight, "fly0").setInteractive().setScale(8).setOffset(0, 0).setGravityY(-1500);
         this.tweens.add({
