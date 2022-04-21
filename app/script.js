@@ -30,7 +30,7 @@ export let game = {
     lilyPads: 0
   },
   currentSelection: "cannon",
-  robotSpawnDelay: 5000
+  robotSpawnDelay: 50
 };
 
 // ---------- Initialize Firebase ----------
@@ -117,6 +117,10 @@ export class Game extends Phaser.Scene {
     this.load.image("explosion1", "assets/explosion1.png");
     this.load.image("explosion2", "assets/explosion2.png");
     this.load.image("explosion3", "assets/explosion3.png");
+    this.load.image("bigExplosion0", "assets/bigExplosion0.png");
+    this.load.image("bigExplosion1", "assets/bigExplosion1.png");
+    this.load.image("bigExplosion2", "assets/bigExplosion2.png");
+    this.load.image("bigExplosion3", "assets/bigExplosion3.png");
     this.load.image("bird0", "assets/bird0.png");
     this.load.image("bird1", "assets/bird1.png");
     this.load.image("cursor", "assets/cursor.png");
@@ -216,6 +220,7 @@ export class Game extends Phaser.Scene {
     game.cannonRobotProjectiles = this.physics.add.group();
     game.removalBirds = this.physics.add.group();
     game.flies = this.physics.add.group();
+    game.explosions = this.physics.add.group();
 
     // ---------- Animation ----------
     // Walking
@@ -230,6 +235,7 @@ export class Game extends Phaser.Scene {
     this.engine.addAnimation("jump", 10, false, false, "basicFrog0", "basicFrog1", "basicFrog2", "basicFrog0");
     this.engine.addAnimation("shootCannonball", 5, false, true, "cannonFrog0", "cannonFrog1");
     this.engine.addAnimation("explode", 10, false, false, "explosion0", "explosion1", "explosion2", "explosion3");
+    this.engine.addAnimation("explodeBig", 10, false, false, "bigExplosion0", "bigExplosion1", "bigExplosion2", "bigExplosion3");
     this.engine.addAnimation("shootCannonball", 5, false, true, "cannonFrog0", "cannonFrog1");
     this.engine.addAnimation("fireFrog", 12, true, false, "fireFrog0", "fireFrog1", "fireFrog2");
     this.engine.addAnimation("shootWater", 5, false, true, "waterFrog0", "waterFrog1");
@@ -378,15 +384,17 @@ export class Game extends Phaser.Scene {
       }
     });
     this.physics.add.overlap(game.projectiles, game.robots, (projectile, robot) => {
-      projectile.destroy();
-      killRobot(this, game, robot, game.projectileStats[projectile.type].damage, () => {
-        if (projectile.type === "water" && robot.speed > 0.3) {
-          robot.speed -= 0.05;
-        } else if (projectile.type === "fireball" && !robot.fireDamage) {
-          robot.fireDamage = true;
-          robot.fireHat = this.add.image(robot.x, robot.y, "fireHat0").setScale(8);
-        }
-      });
+      if (projectile.type !== "bomb") {
+        projectile.destroy();
+        killRobot(this, game, robot, game.projectileStats[projectile.type].damage, () => {
+          if (projectile.type === "water" && robot.speed > 0.3) {
+            robot.speed -= 0.05;
+          } else if (projectile.type === "fireball" && !robot.fireDamage) {
+            robot.fireDamage = true;
+            robot.fireHat = this.add.image(robot.x, robot.y, "fireHat0").setScale(8);
+          }
+        });
+      }
     });
     this.physics.add.overlap(game.frogs, game.removalBirds, (frog, bird) => {
       if (frog.isDead) {
@@ -399,6 +407,9 @@ export class Game extends Phaser.Scene {
     this.physics.add.overlap(game.cannonRobotProjectiles, game.frogs, (projectile, frog) => {
       projectile.destroy();
       killFrog(this, game, frog, 1);
+    });
+    this.physics.add.collider(game.explosions, game.robots, (explosion, robot) => {
+      killRobot(this, game, robot, 2);
     });
 
     // ---------- Intervals ----------
@@ -627,6 +638,21 @@ export class Game extends Phaser.Scene {
             let bomb = game.projectiles.create(frog.x, frog.y, "bomb").setScale(8).setVelocityY(-500).setVelocityX(300);
             bomb.type = "bomb";
             bomb.setAngularVelocity(500);
+            this.time.addEvent({
+              delay: 650,
+              callback: () => {
+                let explosion = game.explosions.create(bomb.x, bomb.y, "bigExplosion0");
+                explosion.setScale(8);
+                explosion.setGravityY(-1500);
+                explosion.anims.play("explodeBig", true);
+                setTimeout(function() {
+                  explosion.destroy();
+                }, 400);
+                bomb.destroy();
+              },
+              callbackScope: this,
+              repeat: false
+            });
             break;
         }
       }

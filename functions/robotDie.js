@@ -38,6 +38,6 @@ export function killRobot(phaser, game, robot, damage, callback = () => {}) {
     robot.anims.play("explode", true);
     setTimeout(function() {
       robot.destroy();
-    }, 300);
+    }, 400);
   }
 }

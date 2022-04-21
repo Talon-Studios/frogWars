@@ -37,6 +37,6 @@ export function killFrog(phaser, game, frog, damage, callback = () => {}) {
     frog.anims.play("explode", true);
     setTimeout(function() {
       frog.destroy();
-    }, 300);
+    }, 400);
   }
 }
