@@ -30,7 +30,7 @@ export let game = {
     lilyPads: 0
   },
   currentSelection: "cannon",
-  robotSpawnDelay: 5000
+  robotSpawnDelay: 500
 };
 
 // ---------- Initialize Firebase ----------
@@ -409,7 +409,7 @@ export class Game extends Phaser.Scene {
       killFrog(this, game, frog, 1);
     });
     this.physics.add.collider(game.explosions, game.robots, (explosion, robot) => {
-      killRobot(this, game, robot, 2);
+      killRobot(this, game, robot, 0.5);
     });
 
     // ---------- Intervals ----------
