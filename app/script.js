@@ -30,7 +30,7 @@ export let game = {
     lilyPads: 0
   },
   currentSelection: "cannon",
-  robotSpawnDelay: 50
+  robotSpawnDelay: 5000
 };
 
 // ---------- Initialize Firebase ----------
