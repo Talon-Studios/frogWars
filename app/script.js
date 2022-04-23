@@ -30,7 +30,7 @@ export let game = {
     lilyPads: 0
   },
   currentSelection: "cannon",
-  robotSpawnDelay: 50
+  robotSpawnDelay: 500
 };
 
 // ---------- Initialize Firebase ----------
@@ -147,6 +147,8 @@ export class Game extends Phaser.Scene {
     this.load.audio("robotHit", "assets/robotHit.mp3");
     this.load.audio("basicFrogJump", "assets/basicFrogJump.mp3");
     this.load.audio("fly", "assets/fly.mp3");
+    this.load.audio("bigExplosion", "assets/bigExplosion.wav");
+    this.load.audio("bullfrog", "assets/bullfrog.wav");
 
     // Initialize loading bar
     loadingBar(this);
@@ -162,6 +164,8 @@ export class Game extends Phaser.Scene {
     game.sfx["basicFrogJump"] = this.sound.add("basicFrogJump");
     game.sfx["fly"] = this.sound.add("fly");
     game.sfx["music1"] = this.sound.add("music1-10").setLoop(true);
+    game.sfx["bullfrog"] = this.sound.add("bullfrog");
+    game.sfx["bigExplosion"] = this.sound.add("bigExplosion");
     if (game.musicEnabled) game.sfx.music1.play({volume: 0.5});
 
     // Nothing here...
@@ -255,6 +259,7 @@ export class Game extends Phaser.Scene {
         if (!tile.frog && game.currentSelection) {
           if (game.currentSelection !== "bird") {
             if (game.currentSelection === "bullfrog") {
+              playSound(game, "bullfrog");
               var frog = game.frogs.create(0, tile.y, "bullfrog");
               frog.setScale(8);
               frog.setGravityY(-1500);
@@ -641,6 +646,7 @@ export class Game extends Phaser.Scene {
             this.time.addEvent({
               delay: 650,
               callback: () => {
+                playSound(game, "bigExplosion");
                 let explosion = game.explosions.create(bomb.x, bomb.y, "bigExplosion0");
                 explosion.setScale(8);
                 explosion.setGravityY(-1500);
