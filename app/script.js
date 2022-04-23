@@ -419,112 +419,97 @@ export class Game extends Phaser.Scene {
 
     // ---------- Intervals ----------
     // Robot actions
-    this.time.addEvent({
-      delay: 1500,
-      callback: () => {
-        game.robots.getChildren().forEach(robot => {
-          if (robot.type === "cannon") {
-            let projectile = game.cannonRobotProjectiles.create(robot.x - 40, robot.y + 20, "cannonProjectile").setScale(8).setGravityY(-1500).setVelocityX(-300);
-            projectile.setSize(2, 2);
-            projectile.setOffset(6, 2);
-          } else if (robot.type === "missile") {
-            let projectile = game.cannonRobotProjectiles.create(robot.x - 40, robot.y - 4, "missile").setScale(8).setGravityY(-1500).setVelocityX(-300);
-            projectile.setSize(8, 7);
-            projectile.setOffset(0, 1);
-          }
-          else if (robot.type === "dodger") {
-            let randomDir = Math.floor(Math.random() * 2);
-            if (randomDir === 0) {
-              robot.y -= game.TILESIZE;
-              if (robot.y < game.topMargin) {
-                robot.y += game.TILESIZE * 2;
-              }
-            } else {
-              robot.y += game.TILESIZE;
-              if (robot.y > (game.height * game.TILESIZE) + game.topMargin) {
-                robot.y -= game.TILESIZE * 2;
-              }
+    this.engine.setPhaserInterval(() => {
+      game.robots.getChildren().forEach(robot => {
+        if (robot.type === "cannon") {
+          let projectile = game.cannonRobotProjectiles.create(robot.x - 40, robot.y + 20, "cannonProjectile").setScale(8).setGravityY(-1500).setVelocityX(-300);
+          projectile.setSize(2, 2);
+          projectile.setOffset(6, 2);
+        } else if (robot.type === "missile") {
+          let projectile = game.cannonRobotProjectiles.create(robot.x - 40, robot.y - 4, "missile").setScale(8).setGravityY(-1500).setVelocityX(-300);
+          projectile.setSize(8, 7);
+          projectile.setOffset(0, 1);
+        }
+        else if (robot.type === "dodger") {
+          let randomDir = Math.floor(Math.random() * 2);
+          if (randomDir === 0) {
+            robot.y -= game.TILESIZE;
+            if (robot.y < game.topMargin) {
+              robot.y += game.TILESIZE * 2;
+            }
+          } else {
+            robot.y += game.TILESIZE;
+            if (robot.y > (game.height * game.TILESIZE) + game.topMargin) {
+              robot.y -= game.TILESIZE * 2;
             }
           }
-          if (robot.fireDamage) {
-            killRobot(this, game, robot, 0.1);
-          }
-        });
-      },
-      callbackScope: this,
-      repeat: -1
-    });
+        }
+        if (robot.fireDamage) {
+          killRobot(this, game, robot, 0.1);
+        }
+      });
+    }, 1500);
 
     // Spawn robots
-    this.time.addEvent({
-      delay: game.robotSpawnDelay,
-      callback: () => {
-        let row = Math.floor(Math.random() * game.height);
-        let randomPercentage = Math.random() * 100;
-        let type;
-        let health;
-        let speed;
-        if (randomPercentage < 50) {
-          type = "basic";
-          health = game.robotTypes.normalRobot.health;
-          speed = game.robotTypes.normalRobot.speed;
-        } else if (randomPercentage >= 50 && randomPercentage < 75) {
-          type = "armored";
-          health = game.robotTypes.armoredRobot.health;
-          speed = game.robotTypes.armoredRobot.speed;
-        } else if (randomPercentage >= 75 && randomPercentage < 81.25) {
-          type = "speed";
-          health = game.robotTypes.speedRobot.health;
-          speed = game.robotTypes.speedRobot.speed;
-        } else if (randomPercentage >= 81.25 && randomPercentage < 87.5) {
-          type = "cannon";
-          health = game.robotTypes.cannonRobot.health;
-          speed = game.robotTypes.cannonRobot.speed;
-        } else if (randomPercentage >= 87.5 && randomPercentage < 93.75) {
-          type = "dodger";
-          health = game.robotTypes.dodgerRobot.health;
-          speed = game.robotTypes.dodgerRobot.speed;
-        } else if (randomPercentage >= 93.75) {
-          type = "missile";
-          health = game.robotTypes.missileRobot.health;
-          speed = game.robotTypes.missileRobot.speed;
-        }
-        let robot = game.robots.create(game.width * game.TILESIZE + 8, (game.TILESIZE / 2 + game.TILESIZE * row) + game.topMargin, `${type}Robot0`).setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0);
-        robot.type = type;
-        robot.health = health;
-        robot.speed = speed;
-        robot.dead = false;
-        robot.fireDamage = false;
-        robot.killTimer = 100;
-        game.robotSpawnDelay = !game.funEnabled ? this.engine.randomBetween(1000, 3000) : 100;
-      },
-      callbackScope: this,
-      repeat: -1
-    });
+    this.engine.setPhaserInterval(() => {
+      let row = Math.floor(Math.random() * game.height);
+      let randomPercentage = Math.random() * 100;
+      let type;
+      let health;
+      let speed;
+      if (randomPercentage < 50) {
+        type = "basic";
+        health = game.robotTypes.normalRobot.health;
+        speed = game.robotTypes.normalRobot.speed;
+      } else if (randomPercentage >= 50 && randomPercentage < 75) {
+        type = "armored";
+        health = game.robotTypes.armoredRobot.health;
+        speed = game.robotTypes.armoredRobot.speed;
+      } else if (randomPercentage >= 75 && randomPercentage < 81.25) {
+        type = "speed";
+        health = game.robotTypes.speedRobot.health;
+        speed = game.robotTypes.speedRobot.speed;
+      } else if (randomPercentage >= 81.25 && randomPercentage < 87.5) {
+        type = "cannon";
+        health = game.robotTypes.cannonRobot.health;
+        speed = game.robotTypes.cannonRobot.speed;
+      } else if (randomPercentage >= 87.5 && randomPercentage < 93.75) {
+        type = "dodger";
+        health = game.robotTypes.dodgerRobot.health;
+        speed = game.robotTypes.dodgerRobot.speed;
+      } else if (randomPercentage >= 93.75) {
+        type = "missile";
+        health = game.robotTypes.missileRobot.health;
+        speed = game.robotTypes.missileRobot.speed;
+      }
+      let robot = game.robots.create(game.width * game.TILESIZE + 8, (game.TILESIZE / 2 + game.TILESIZE * row) + game.topMargin, `${type}Robot0`).setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0);
+      robot.type = type;
+      robot.health = health;
+      robot.speed = speed;
+      robot.dead = false;
+      robot.fireDamage = false;
+      robot.killTimer = 100;
+      game.robotSpawnDelay = !game.funEnabled ? this.engine.randomBetween(1000, 3000) : 100;
+    }, game.robotSpawnDelay);
 
     // Create flies
-    this.time.addEvent({
-      delay: 10000,
-      callback: () => {
-        let fly = game.flies.create(Math.random() * this.engine.gameWidth, Math.random() * this.engine.gameHeight, "fly0").setInteractive().setScale(8).setOffset(0, 0).setGravityY(-1500);
-        this.tweens.add({
-          targets: fly,
-          x: this.engine.randomBetween(fly.x - 20, fly.x + 20),
-          y: this.engine.randomBetween(fly.y - 20, fly.y + 20),
-          ease: "Sinusoidal.easeInOut",
-          duration: 800,
-          repeat: -1,
-          yoyo: true
-        });
-        fly.on("pointerover", () => {
-          playSound(game, "fly");
-          game.currencies.flies++;
-          fly.destroy();
-        });
-      },
-      callbackScope: this,
-      repeat: -1
-    });
+    this.engine.setPhaserInterval(() => {
+      let fly = game.flies.create(Math.random() * this.engine.gameWidth, Math.random() * this.engine.gameHeight, "fly0").setInteractive().setScale(8).setOffset(0, 0).setGravityY(-1500);
+      this.tweens.add({
+        targets: fly,
+        x: this.engine.randomBetween(fly.x - 20, fly.x + 20),
+        y: this.engine.randomBetween(fly.y - 20, fly.y + 20),
+        ease: "Sinusoidal.easeInOut",
+        duration: 800,
+        repeat: -1,
+        yoyo: true
+      });
+      fly.on("pointerover", () => {
+        playSound(game, "fly");
+        game.currencies.flies++;
+        fly.destroy();
+      });
+    }, 10000);
   }
   update() {
     // Set position of pixel cursor
