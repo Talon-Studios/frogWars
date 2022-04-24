@@ -30,7 +30,8 @@ export let game = {
     lilyPads: 0
   },
   currentSelection: "cannon",
-  robotSpawnDelay: 500
+  robotSpawnDelay: 500,
+  robotSpawnTimer: 0
 };
 
 // ---------- Initialize Firebase ----------
@@ -450,48 +451,6 @@ export class Game extends Phaser.Scene {
       });
     }, 1500);
 
-    // Spawn robots
-    this.engine.setPhaserInterval(() => {
-      let row = Math.floor(Math.random() * game.height);
-      let randomPercentage = Math.random() * 100;
-      let type;
-      let health;
-      let speed;
-      if (randomPercentage < 50) {
-        type = "basic";
-        health = game.robotTypes.normalRobot.health;
-        speed = game.robotTypes.normalRobot.speed;
-      } else if (randomPercentage >= 50 && randomPercentage < 75) {
-        type = "armored";
-        health = game.robotTypes.armoredRobot.health;
-        speed = game.robotTypes.armoredRobot.speed;
-      } else if (randomPercentage >= 75 && randomPercentage < 81.25) {
-        type = "speed";
-        health = game.robotTypes.speedRobot.health;
-        speed = game.robotTypes.speedRobot.speed;
-      } else if (randomPercentage >= 81.25 && randomPercentage < 87.5) {
-        type = "cannon";
-        health = game.robotTypes.cannonRobot.health;
-        speed = game.robotTypes.cannonRobot.speed;
-      } else if (randomPercentage >= 87.5 && randomPercentage < 93.75) {
-        type = "dodger";
-        health = game.robotTypes.dodgerRobot.health;
-        speed = game.robotTypes.dodgerRobot.speed;
-      } else if (randomPercentage >= 93.75) {
-        type = "missile";
-        health = game.robotTypes.missileRobot.health;
-        speed = game.robotTypes.missileRobot.speed;
-      }
-      let robot = game.robots.create(game.width * game.TILESIZE + 8, (game.TILESIZE / 2 + game.TILESIZE * row) + game.topMargin, `${type}Robot0`).setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0);
-      robot.type = type;
-      robot.health = health;
-      robot.speed = speed;
-      robot.dead = false;
-      robot.fireDamage = false;
-      robot.killTimer = 100;
-      game.robotSpawnDelay = !game.funEnabled ? this.engine.randomBetween(1000, 3000) : 100;
-    }, game.robotSpawnDelay);
-
     // Create flies
     this.engine.setPhaserInterval(() => {
       let fly = game.flies.create(Math.random() * this.engine.gameWidth, Math.random() * this.engine.gameHeight, "fly0").setInteractive().setScale(8).setOffset(0, 0).setGravityY(-1500);
@@ -697,5 +656,50 @@ export class Game extends Phaser.Scene {
     game.flies.getChildren().forEach(fly => {
       fly.anims.play("flies", true);
     });
+
+    // Update timers
+    console.log(game.robotSpawnTimer);
+    game.robotSpawnTimer++;
+    if (game.robotSpawnTimer >= game.robotSpawnDelay) {
+      let row = Math.floor(Math.random() * game.height);
+      let randomPercentage = Math.random() * 100;
+      let type;
+      let health;
+      let speed;
+      if (randomPercentage < 50) {
+        type = "basic";
+        health = game.robotTypes.normalRobot.health;
+        speed = game.robotTypes.normalRobot.speed;
+      } else if (randomPercentage >= 50 && randomPercentage < 75) {
+        type = "armored";
+        health = game.robotTypes.armoredRobot.health;
+        speed = game.robotTypes.armoredRobot.speed;
+      } else if (randomPercentage >= 75 && randomPercentage < 81.25) {
+        type = "speed";
+        health = game.robotTypes.speedRobot.health;
+        speed = game.robotTypes.speedRobot.speed;
+      } else if (randomPercentage >= 81.25 && randomPercentage < 87.5) {
+        type = "cannon";
+        health = game.robotTypes.cannonRobot.health;
+        speed = game.robotTypes.cannonRobot.speed;
+      } else if (randomPercentage >= 87.5 && randomPercentage < 93.75) {
+        type = "dodger";
+        health = game.robotTypes.dodgerRobot.health;
+        speed = game.robotTypes.dodgerRobot.speed;
+      } else if (randomPercentage >= 93.75) {
+        type = "missile";
+        health = game.robotTypes.missileRobot.health;
+        speed = game.robotTypes.missileRobot.speed;
+      }
+      let robot = game.robots.create(game.width * game.TILESIZE + 8, (game.TILESIZE / 2 + game.TILESIZE * row) + game.topMargin, `${type}Robot0`).setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0);
+      robot.type = type;
+      robot.health = health;
+      robot.speed = speed;
+      robot.dead = false;
+      robot.fireDamage = false;
+      robot.killTimer = 100;
+      game.robotSpawnDelay = !game.funEnabled ? this.engine.randomBetween(1000, 3000) : 5;
+      game.robotSpawnTimer = 0;
+    }
   }
 }
