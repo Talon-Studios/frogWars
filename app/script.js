@@ -417,7 +417,7 @@ export class Game extends Phaser.Scene {
       killFrog(this, game, frog, 1);
     });
     this.physics.add.collider(game.explosions, game.robots, (explosion, robot) => {
-      killRobot(this, game, robot, 0.5);
+      killRobot(this, game, robot, 0.1);
     });
 
     // ---------- Intervals ----------
