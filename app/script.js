@@ -31,7 +31,9 @@ export let game = {
   },
   currentSelection: "cannon",
   robotSpawnDelay: 500,
-  robotSpawnTimer: 0
+  robotSpawnTimer: 0,
+  robotSpawnRateMin: 100,
+  robotSpawnRateMax: 300
 };
 
 // ---------- Initialize Firebase ----------
@@ -658,7 +660,6 @@ export class Game extends Phaser.Scene {
     });
 
     // Update timers
-    console.log(game.robotSpawnTimer);
     game.robotSpawnTimer++;
     if (game.robotSpawnTimer >= game.robotSpawnDelay) {
       let row = Math.floor(Math.random() * game.height);
@@ -698,7 +699,7 @@ export class Game extends Phaser.Scene {
       robot.dead = false;
       robot.fireDamage = false;
       robot.killTimer = 100;
-      game.robotSpawnDelay = !game.funEnabled ? this.engine.randomBetween(1000, 3000) : 5;
+      game.robotSpawnDelay = !game.funEnabled ? this.engine.randomBetween(game.robotSpawnRateMin, game.robotSpawnRateMax) : 5;
       game.robotSpawnTimer = 0;
     }
   }
