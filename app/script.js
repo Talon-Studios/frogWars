@@ -261,16 +261,17 @@ export class Game extends Phaser.Scene {
       tile.on("pointerdown", (pointer) => {
         if (!tile.frog && game.currentSelection) {
           if (game.currentSelection !== "bird") {
+            let frog;
             if (game.currentSelection === "bullfrog") {
               playSound(game, "bullfrog");
-              let frog = game.frogs.create(0, tile.y, "bullfrog");
+              frog = game.frogs.create(0, tile.y, "bullfrog");
               frog.setScale(8);
               frog.setGravityY(-1500);
               frog.setSize(7, 8);
               frog.setOffset(0, 0);
               frog.setImmovable();
             } else {
-              let frog = game.frogs.create(tile.x, tile.y, game.frogTypes[game.currentSelection].path);
+              frog = game.frogs.create(tile.x, tile.y, game.frogTypes[game.currentSelection].path);
             }
             frog.setScale(8);
             frog.setGravityY(-1500);
