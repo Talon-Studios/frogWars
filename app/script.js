@@ -476,7 +476,17 @@ export class Game extends Phaser.Scene {
       fly.on("pointerover", () => {
         playSound(game, "fly");
         game.currencies.flies++;
-        fly.destroy();
+        this.tweens.add({
+          targets: fly,
+          x: this.engine.gameWidth - 50,
+          y: 50,
+          ease: "Expo.easeOut",
+          duration: 1000,
+          onRepeat: () => {
+            fly.destroy();
+          },
+          repeat: 1
+        });
       });
     }, 10000);
   }
