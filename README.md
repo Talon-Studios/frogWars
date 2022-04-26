@@ -53,6 +53,6 @@ This project is licensed under the MIT License - see the [LICENSE](https://githu
 ## Acknowledgments
 
 * Inspiration: [Plants vs Zombies](https://en.wikipedia.org/wiki/Plants_vs._Zombies)
-* Music: [Video Game Music (Kirby)](https://downloads.khinsider.com/game-soundtracks/album/kirby-the-very-best-of-kirby)
+* Music: [Pop Music Pack from VOID1 Gaming](https://void1gaming.itch.io/pop-music-pack)
 * Graphics: [@codingbuffoon](https://github.com/codingbuffoon) and me
 * Level Design: [@codingbuffoon](https://github.com/codingbuffoon)
