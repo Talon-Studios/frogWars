@@ -466,6 +466,13 @@ export class Game extends Phaser.Scene {
         repeat: -1,
         yoyo: true
       });
+      this.time.addEvent({
+        delay: 90000,
+        callback: () => {
+          fly.destroy();
+        },
+        callbackScope: this
+      });
       fly.on("pointerover", () => {
         playSound(game, "fly");
         game.currencies.flies++;
