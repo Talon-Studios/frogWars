@@ -4,7 +4,6 @@ frogDie.js
 Kill the frog.
 *^*^*^*^*^*^*^*/
 
-import {game} from "../app/script.js";
 import {playSound} from "./playSound.js";
 
 export function killFrog(phaser, game, frog, damage, callback = () => {}) {

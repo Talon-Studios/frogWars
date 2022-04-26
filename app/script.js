@@ -11,7 +11,7 @@ import {killFrog} from "../functions/frogDie.js";
 
 import {firebaseConfig} from "../firebaseConfig.js";
 import {initializeApp} from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
-import {collection, addDoc, getFirestore, doc, getDoc, setDoc} from "https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore.js";
+import {getFirestore, doc, getDoc} from "https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore.js";
 
 // ********** Game Object **********
 export let game = {
@@ -263,14 +263,14 @@ export class Game extends Phaser.Scene {
           if (game.currentSelection !== "bird") {
             if (game.currentSelection === "bullfrog") {
               playSound(game, "bullfrog");
-              var frog = game.frogs.create(0, tile.y, "bullfrog");
+              let frog = game.frogs.create(0, tile.y, "bullfrog");
               frog.setScale(8);
               frog.setGravityY(-1500);
               frog.setSize(7, 8);
               frog.setOffset(0, 0);
               frog.setImmovable();
             } else {
-              var frog = game.frogs.create(tile.x, tile.y, game.frogTypes[game.currentSelection].path);
+              let frog = game.frogs.create(tile.x, tile.y, game.frogTypes[game.currentSelection].path);
             }
             frog.setScale(8);
             frog.setGravityY(-1500);

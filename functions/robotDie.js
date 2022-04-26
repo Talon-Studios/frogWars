@@ -4,7 +4,6 @@ robotDie.js
 Kill the robot.
 *^*^*^*^*^*^*^*/
 
-import {game} from "../app/script.js";
 import {playSound} from "./playSound.js";
 
 export function killRobot(phaser, game, robot, damage, callback = () => {}) {
