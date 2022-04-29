@@ -41,7 +41,7 @@ export class Start extends Phaser.Scene {
     // Set background
     for (let x = 0; x < 5; x++) {
       for (let y = 0; y < 5; y++) {
-        this.add.image(x * 2400 + 1200, y * 2400 + 1200, "pondBackground").setScale(8);
+        this.add.image(x * 2400, y * 2400, "pondBackground").setScale(8);
       }
     }
 
