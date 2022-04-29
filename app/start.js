@@ -25,7 +25,8 @@ export class Start extends Phaser.Scene {
     this.load.audio("introMusic", "assets/introMusic.mp3");
     this.load.image("cursor", "assets/cursor.png");
     this.load.image("book", "assets/book.png");
-    this.load.image("pondBackground", "assets/pondBackground.png");
+    this.load.image("pond0", "assets/pond0.png");
+    this.load.image("pond1", "assets/pond1.png");
   }
   create() {
     // Add sounds
@@ -39,9 +40,9 @@ export class Start extends Phaser.Scene {
     game.cursor.setDepth(1);
 
     // Set background
-    for (let x = 0; x < 5; x++) {
-      for (let y = 0; y < 5; y++) {
-        this.add.image(x * 2400, y * 2400, "pondBackground").setScale(8);
+    for (var x = 0; x < 6; x++) {
+      for (var y = 0; y < 3; y++) {
+        this.add.image(x * 240, y * 240 + 120, `pond${x === 1 && y === 1 ? 0 : 1}`).setScale(8);
       }
     }
 
