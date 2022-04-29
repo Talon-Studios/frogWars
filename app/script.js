@@ -177,6 +177,9 @@ export class Game extends Phaser.Scene {
     // Create pixel cursor
     this.engine.pixelCursor();
 
+    // Fade into game
+    this.cameras.main.fadeIn(500, 0, 0, 0);
+
     // Create tiles
     game.tiles = this.physics.add.staticGroup();
     let tileCount = 0;

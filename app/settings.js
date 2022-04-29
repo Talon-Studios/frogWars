@@ -36,6 +36,9 @@ export class Settings extends Phaser.Scene {
     // Set background color
     this.engine.setBackgroundColor(this, "#ffffff");
 
+    // Fade in
+    this.cameras.main.fadeIn(500, 0, 0, 0);
+
     // Create text
     this.musicSetting = this.add.image(this.engine.gameWidthCenter + 42, 200, "musicSetting").setScale(8).setInteractive();
     this.sfxSetting = this.add.image(this.engine.gameWidthCenter + 70, 300, "sfxSetting").setScale(8).setInteractive();
@@ -71,8 +74,11 @@ export class Settings extends Phaser.Scene {
       }
     });
     this.backSetting.on("pointerup", () => {
-      this.scene.stop();
-      this.scene.start("Start");
+      this.cameras.main.fadeOut(500, 0, 0, 0);
+      this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
+        this.scene.stop();
+        this.scene.start("Start");
+      });
     });
     this.input.on("pointerdown", () => {
       game.cursor.setScale(6.5);
@@ -118,6 +124,9 @@ export class Settings2 extends Phaser.Scene {
 
     // Set background color
     this.engine.setBackgroundColor(this, "#ffffff");
+
+    // Fade in
+    this.cameras.main.fadeIn(500, 0, 0, 0);
 
     // Create options
     this.add.image(this.engine.gameWidthCenter + 42, 200, "frogsText").setScale(8).setInteractive();
@@ -165,8 +174,11 @@ export class Settings2 extends Phaser.Scene {
     // Create backbutton
     this.backSetting = this.add.image(this.engine.gameWidthCenter, 490, "backSetting").setScale(8).setInteractive();
     this.backSetting.on("pointerup", () => {
-      this.scene.stop();
-      this.scene.start("Start");
+      this.cameras.main.fadeOut(500, 0, 0, 0);
+      this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
+        this.scene.stop();
+        this.scene.start("Start");
+      });
     });
     this.input.on("pointerdown", () => {
       game.cursor.setScale(6.5);

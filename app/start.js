@@ -65,8 +65,11 @@ export class Start extends Phaser.Scene {
       if (!game.ultimateEnabled) {
         playSound(this, "optionSelect");
         if (game.musicEnabled) phaser.sfx.introMusic.stop();
-        phaser.scene.stop();
-        phaser.scene.start("Level_1");
+        this.cameras.main.fadeOut(500, 0, 0, 0);
+        this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
+          phaser.scene.stop();
+          phaser.scene.start("Level_1");
+      	});
       } else {
         open("assets/stuff.mp3");
         setTimeout(function () {
@@ -77,12 +80,15 @@ export class Start extends Phaser.Scene {
     this.settingsButton.on("pointerup", (mouse) => {
       playSound(this, "optionSelect");
       if(game.musicEnabled) phaser.sfx.introMusic.stop();
-      phaser.scene.stop();
-      if (mouse.event.button === 1 && this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F).isDown && this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R).isDown) {
-        phaser.scene.start("Settings2");
-      } else {
-        phaser.scene.start("Settings");
-      }
+      this.cameras.main.fadeOut(500, 0, 0, 0);
+      this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
+        phaser.scene.stop();
+        if (mouse.event.button === 1 && this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F).isDown && this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R).isDown) {
+          phaser.scene.start("Settings2");
+        } else {
+          phaser.scene.start("Settings");
+        }
+      });
     });
     this.settingsButton.on("pointerover", () => {
       phaser.pickerGroup.create(phaser.settingsButton.x - 190, phaser.settingsButton.y - 8, "picker").setScale(8);
@@ -113,8 +119,11 @@ export class Start extends Phaser.Scene {
     this.book = this.add.image(75, 75, "book").setScale(8).setInteractive();
     this.book.on("pointerup", () => {
       if(game.musicEnabled) this.sfx.introMusic.stop();
-      this.scene.stop();
-      this.scene.start("HerpetologistsHandbook");
+      this.cameras.main.fadeOut(500, 0, 0, 0);
+      this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
+        this.scene.stop();
+        this.scene.start("HerpetologistsHandbook");
+      });
     });
   }
   update() {
