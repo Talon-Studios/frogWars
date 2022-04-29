@@ -25,6 +25,7 @@ export class Start extends Phaser.Scene {
     this.load.audio("introMusic", "assets/introMusic.mp3");
     this.load.image("cursor", "assets/cursor.png");
     this.load.image("book", "assets/book.png");
+    this.load.image("pondBackground", "assets/pondBackground.png");
   }
   create() {
     // Add sounds
@@ -37,8 +38,12 @@ export class Start extends Phaser.Scene {
     game.cursor = this.physics.add.sprite(this.input.mousePointer.x, this.input.mousePointer.y, "cursor").setScale(8).setGravityY(-1500).setSize(2, 2).setOffset(0, 0).setOrigin(0, 0);
     game.cursor.setDepth(1);
 
-    // Set background color
-    this.engine.setBackgroundColor(this, "#ffffff");
+    // Set background
+    for (var x = 0; x < 5; x++) {
+      for (var y = 0; x < 5; y++) {
+        this.add.image(x * 240 + 120, y * 240 + 120, "pondBackground").setScale(8);
+      }
+    }
 
     // Add title
     this.add.image(this.engine.gameWidthCenter + 32, 125, "title").setScale(8).setInteractive().on("pointerdown", () => {
