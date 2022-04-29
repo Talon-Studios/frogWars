@@ -20,11 +20,11 @@ export let game = {
   TILESIZE: 64,
   topMargin: 167,
   sfx: {},
-  musicEnabled: (localStorage.getItem("musicEnabled") !== null) ? JSON.parse(localStorage.getItem("musicEnabled")) : true,
-  sfxEnabled: (localStorage.getItem("sfxEnabled") !== null) ? JSON.parse(localStorage.getItem("sfxEnabled")) : true,
-  frogsEnabled: (localStorage.getItem("frogs") !== null) ? JSON.parse(localStorage.getItem("frogs")) : false,
-  funEnabled: (localStorage.getItem("fun") !== null) ? JSON.parse(localStorage.getItem("fun")) : false,
-  ultimateEnabled: (localStorage.getItem("ultimate") !== null) ? JSON.parse(localStorage.getItem("ultimate")) : false,
+  musicEnabled: localStorage.getItem("musicEnabled") || true,
+  sfxEnabled: localStorage.getItem("sfxEnabled") || true,
+  frogsEnabled: JSON.parse(localStorage.getItem("frogs")) || false,
+  funEnabled: JSON.parse(localStorage.getItem("fun")) || false,
+  ultimateEnabled: JSON.parse(localStorage.getItem("ultimate")) || false,
   currencies: {
     flies: Infinity,
     lilyPads: 0
