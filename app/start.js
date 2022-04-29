@@ -39,8 +39,8 @@ export class Start extends Phaser.Scene {
     game.cursor.setDepth(1);
 
     // Set background
-    for (var x = 0; x < 5; x++) {
-      for (var y = 0; x < 5; y++) {
+    for (let x = 0; x < 5; x++) {
+      for (let y = 0; y < 5; y++) {
         this.add.image(x * 240 + 120, y * 240 + 120, "pondBackground").setScale(8);
       }
     }
