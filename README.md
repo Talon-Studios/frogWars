@@ -4,7 +4,8 @@
 
 [![DeepScan grade](https://deepscan.io/api/teams/14666/projects/20253/branches/547887/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=14666&pid=20253&bid=547887)
 
-**Live Demo:** [thcheetah777.github.io/frogWars/](https://thcheetah777.github.io/frogWars/)
+**Live Demo (Beta):** [thcheetah777.github.io/frogWars/](https://thcheetah777.github.io/frogWars/)\
+**Live Demo (Stable):** [thcheetah777.itch.io/frog-wars/](https://thcheetah777.itch.io/frog-wars/)
 
 ## Description
 
