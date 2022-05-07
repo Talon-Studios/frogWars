@@ -90,6 +90,10 @@ export class Game extends Phaser.Scene {
     this.load.image("bullfrog", "assets/bullfrog.png");
     this.load.image("bomberFrog", "assets/bomberFrog.png");
     this.load.image("bomb", "assets/bomb.png");
+    this.load.image("boxedFrog0", "assets/boxedFrog0.png");
+    this.load.image("boxedFrog1", "assets/boxedFrog1.png");
+    this.load.image("boxedFrog2", "assets/boxedFrog2.png");
+    this.load.image("boxedFrog3", "assets/boxedFrog3.png");
 
     // ---------- Robots ----------
     this.load.image("basicRobot0", "assets/basicRobot0.png");
