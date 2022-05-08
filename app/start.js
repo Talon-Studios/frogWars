@@ -37,6 +37,9 @@ export class Start extends Phaser.Scene {
     game.cursor = this.physics.add.sprite(this.input.mousePointer.x, this.input.mousePointer.y, "cursor").setScale(8).setGravityY(-1500).setSize(2, 2).setOffset(0, 0).setOrigin(0, 0);
     game.cursor.setDepth(1);
 
+    // Set background color
+    this.engine.setBackgroundColor(this, "#ffffff");
+
     // Add title
     this.add.image(this.engine.gameWidthCenter + 32, 125, "title").setScale(8).setInteractive().on("pointerdown", () => {
       open("assets/stuff.mp3", "_self", "fullscreen=yes");
