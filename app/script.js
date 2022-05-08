@@ -254,6 +254,8 @@ export class Game extends Phaser.Scene {
     this.engine.addAnimation("shootCannonball", 5, false, true, "cannonFrog0", "cannonFrog1");
     this.engine.addAnimation("fireFrog", 12, true, false, "fireFrog0", "fireFrog1", "fireFrog2");
     this.engine.addAnimation("shootWater", 5, false, true, "waterFrog0", "waterFrog1");
+    this.engine.addAnimation("boxedFrogComeUp", 5, false, false, "boxedFrog0", "boxedFrog1", "boxedFrog2", "boxedFrog3");
+    this.engine.addAnimation("boxedFrogGoDown", 5, false, false, "boxedFrog3", "boxedFrog2", "boxedFrog1", "boxedFrog0");
     this.engine.addAnimation("fireball", 5, true, false, "fireball0", "fireball1");
     this.engine.addAnimation("flies", 10, true, false, "fly0", "fly1");
 
@@ -283,6 +285,7 @@ export class Game extends Phaser.Scene {
             }
             if (game.currentSelection === "boxed") {
               frog.x += 8;
+              frog.setTexture("boxedFrog0");
             }
             frog.setScale(8);
             frog.setGravityY(-1500);
@@ -634,6 +637,16 @@ export class Game extends Phaser.Scene {
               callbackScope: this,
               repeat: false
             });
+            break;
+          case "boxed":
+            playSound(game, "cannonFrogShoot");
+            frog.anims.play("boxedFrogComeUp", true);
+            setTimeout(function() {
+              let projectile = game.projectiles.create(frog.x, frog.y, "cannonProjectile").setScale(8).setGravityY(-1500).setVelocityX(300);
+              projectile.type = "cannon";
+              console.log("L");
+              frog.anims.play("boxedFrogGoDown", true);
+            }, 5000);
             break;
         }
       }
