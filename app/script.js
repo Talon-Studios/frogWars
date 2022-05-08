@@ -90,6 +90,11 @@ export class Game extends Phaser.Scene {
     this.load.image("bullfrog", "assets/bullfrog.png");
     this.load.image("bomberFrog", "assets/bomberFrog.png");
     this.load.image("bomb", "assets/bomb.png");
+    this.load.image("boxedFrog0", "assets/boxedFrog0.png");
+    this.load.image("boxedFrog1", "assets/boxedFrog1.png");
+    this.load.image("boxedFrog2", "assets/boxedFrog2.png");
+    this.load.image("boxedFrog3", "assets/boxedFrog3.png");
+    this.load.image("hurtBoxedFrog", "assets/hurtBoxedFrog.png");
 
     // ---------- Robots ----------
     this.load.image("basicRobot0", "assets/basicRobot0.png");
@@ -204,8 +209,9 @@ export class Game extends Phaser.Scene {
     game.choices = this.physics.add.staticGroup();
     game.choiceBorders = this.physics.add.staticGroup();
     let frogCount = 0;
-    const frogs = ["cannon", "topHat", "basic", "launcher", "toad", "water", "fire", "commander", "bullfrog", "bomber", "bird"];
+    const frogs = ["cannon", "topHat", "basic", "launcher", "toad", "water", "fire", "commander", "bullfrog", "bomber", "boxed", "bird"];
     for (var x = 80; x < frogs.length * (game.TILESIZE + 25); x += game.TILESIZE + 25) {
+      let frog = game.frogTypes[frogs[frogCount]];
       let border = game.choiceBorders.create(x, game.TILESIZE, "optionBorder0");
       border.setScale(8);
       border.setInteractive();
@@ -214,10 +220,13 @@ export class Game extends Phaser.Scene {
         border.clicked = true;
         border.setTexture("optionBorder2");
       }
-      let choice = game.choices.create(x, game.TILESIZE, game.frogTypes[frogs[frogCount]].path);
+      let choice = game.choices.create(x, game.TILESIZE, frog.path);
+      if (frog.name === "boxed") {
+        choice.x += 8;
+      }
       choice.setScale(8);
       choice.setInteractive();
-      choice.frogType = game.frogTypes[frogs[frogCount]].name;
+      choice.frogType = frog.name;
       choice.border = border;
       border.frogType = choice.frogType;
       frogCount++;
@@ -227,7 +236,7 @@ export class Game extends Phaser.Scene {
     game.frogs = this.physics.add.group();
     game.robots = this.physics.add.group();
     game.projectiles = this.physics.add.group();
-    game.cannonRobotProjectiles = this.physics.add.group();
+    game.robotProjectiles = this.physics.add.group();
     game.removalBirds = this.physics.add.group();
     game.flies = this.physics.add.group();
     game.explosions = this.physics.add.group();
@@ -249,6 +258,8 @@ export class Game extends Phaser.Scene {
     this.engine.addAnimation("shootCannonball", 5, false, true, "cannonFrog0", "cannonFrog1");
     this.engine.addAnimation("fireFrog", 12, true, false, "fireFrog0", "fireFrog1", "fireFrog2");
     this.engine.addAnimation("shootWater", 5, false, true, "waterFrog0", "waterFrog1");
+    this.engine.addAnimation("boxedFrogComeUp", 5, false, false, "boxedFrog0", "boxedFrog1", "boxedFrog2", "boxedFrog3");
+    this.engine.addAnimation("boxedFrogGoDown", 5, false, false, "boxedFrog3", "boxedFrog2", "boxedFrog1", "boxedFrog0");
     this.engine.addAnimation("fireball", 5, true, false, "fireball0", "fireball1");
     this.engine.addAnimation("flies", 10, true, false, "fly0", "fly1");
 
@@ -276,6 +287,10 @@ export class Game extends Phaser.Scene {
             } else {
               frog = game.frogs.create(tile.x, tile.y, game.frogTypes[game.currentSelection].path);
             }
+            if (game.currentSelection === "boxed") {
+              frog.x += 8;
+              frog.setTexture("boxedFrog0");
+            }
             frog.setScale(8);
             frog.setGravityY(-1500);
             frog.setSize(7, 8);
@@ -288,6 +303,8 @@ export class Game extends Phaser.Scene {
             frog.actionTimer = game.funEnabled ? 10 : 200;
             if (frog.type === "basic") {
               frog.actionTimer = game.fun ? 10 : 100;
+            } else if (frog.type === "boxed") {
+              frog.actionTimer = 600;
             }
             frog.actionTimerMax = frog.actionTimer;
             frog.commanded = false;
@@ -416,9 +433,15 @@ export class Game extends Phaser.Scene {
         frog.body.enable = false;
       }
     });
-    this.physics.add.overlap(game.cannonRobotProjectiles, game.frogs, (projectile, frog) => {
+    this.physics.add.overlap(game.robotProjectiles, game.frogs, (projectile, frog) => {
       projectile.destroy();
-      killFrog(this, game, frog, 1);
+      if (frog.type === "boxed") {
+        if (frog.damageable) {
+          killFrog(this, game, frog, 1);
+        }
+      } else {
+        killFrog(this, game, frog, 1);
+      }
     });
     this.physics.add.collider(game.explosions, game.robots, (explosion, robot) => {
       killRobot(this, game, robot, 0.1);
@@ -429,11 +452,11 @@ export class Game extends Phaser.Scene {
     this.engine.setPhaserInterval(() => {
       game.robots.getChildren().forEach(robot => {
         if (robot.type === "cannon") {
-          let projectile = game.cannonRobotProjectiles.create(robot.x - 40, robot.y + 20, "cannonProjectile").setScale(8).setGravityY(-1500).setVelocityX(-300);
+          let projectile = game.robotProjectiles.create(robot.x - 40, robot.y + 20, "cannonProjectile").setScale(8).setGravityY(-1500).setVelocityX(-300);
           projectile.setSize(2, 2);
           projectile.setOffset(6, 2);
         } else if (robot.type === "missile") {
-          let projectile = game.cannonRobotProjectiles.create(robot.x - 40, robot.y - 4, "missile").setScale(8).setGravityY(-1500).setVelocityX(-300);
+          let projectile = game.robotProjectiles.create(robot.x - 40, robot.y - 4, "missile").setScale(8).setGravityY(-1500).setVelocityX(-300);
           projectile.setSize(8, 7);
           projectile.setOffset(0, 1);
         }
@@ -538,7 +561,7 @@ export class Game extends Phaser.Scene {
     game.tiles.getChildren().forEach(tile => {
       let hasFrog = null;
       game.frogs.getChildren().forEach(frog => {
-        if (frog.x == tile.x && frog.y == tile.y) {
+        if ((frog.x === tile.x || frog.x - 8 === tile.x) && frog.y === tile.y) {
           hasFrog = frog;
         }
       });
@@ -626,6 +649,17 @@ export class Game extends Phaser.Scene {
               callbackScope: this,
               repeat: false
             });
+            break;
+          case "boxed":
+            frog.anims.play("boxedFrogComeUp", true);
+            frog.damageable = true;
+            setTimeout(function() {
+              playSound(game, "cannonFrogShoot");
+              let projectile = game.projectiles.create(frog.x, frog.y, "cannonProjectile").setScale(8).setGravityY(-1500).setVelocityX(300);
+              projectile.type = "cannon";
+              frog.anims.play("boxedFrogGoDown", true);
+              frog.damageable = false;
+            }, 5000);
             break;
         }
       }
