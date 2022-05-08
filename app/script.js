@@ -398,11 +398,16 @@ export class Game extends Phaser.Scene {
     this.physics.add.collider(game.frogs, game.robots, (frog, robot) => {
       robot.killTimer--;
       if (robot.killTimer <= 0) {
-        killFrog(this, game, frog, 0.1);
+        if (frog.type === "boxed") {
+          if (frog.damageable) {
+            killFrog(this, game, frog, 0.1);
+          }
+        } else {
+          killFrog(this, game, frog, 0.1);
+        }
         robot.killTimer = 100;
       }
       if (frog.type === "basic") {
-        console.log(robot.health);
         frog.destroy();
         killRobot(this, game, robot, 5);
       }
