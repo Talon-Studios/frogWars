@@ -94,6 +94,7 @@ export class Game extends Phaser.Scene {
     this.load.image("boxedFrog1", "assets/boxedFrog1.png");
     this.load.image("boxedFrog2", "assets/boxedFrog2.png");
     this.load.image("boxedFrog3", "assets/boxedFrog3.png");
+    this.load.image("hurtBoxedFrog", "assets/hurtBoxedFrog.png");
 
     // ---------- Robots ----------
     this.load.image("basicRobot0", "assets/basicRobot0.png");
@@ -232,7 +233,7 @@ export class Game extends Phaser.Scene {
     game.frogs = this.physics.add.group();
     game.robots = this.physics.add.group();
     game.projectiles = this.physics.add.group();
-    game.cannonRobotProjectiles = this.physics.add.group();
+    game.robotProjectiles = this.physics.add.group();
     game.removalBirds = this.physics.add.group();
     game.flies = this.physics.add.group();
     game.explosions = this.physics.add.group();
@@ -299,6 +300,8 @@ export class Game extends Phaser.Scene {
             frog.actionTimer = game.funEnabled ? 10 : 200;
             if (frog.type === "basic") {
               frog.actionTimer = game.fun ? 10 : 100;
+            } else if (frog.type === "boxed") {
+              frog.actionTimer = 600;
             }
             frog.actionTimerMax = frog.actionTimer;
             frog.commanded = false;
@@ -427,9 +430,15 @@ export class Game extends Phaser.Scene {
         frog.body.enable = false;
       }
     });
-    this.physics.add.overlap(game.cannonRobotProjectiles, game.frogs, (projectile, frog) => {
+    this.physics.add.overlap(game.robotProjectiles, game.frogs, (projectile, frog) => {
       projectile.destroy();
-      killFrog(this, game, frog, 1);
+      if (frog.type === "boxed") {
+        if (frog.damageable) {
+          killFrog(this, game, frog, 1);
+        }
+      } else {
+        killFrog(this, game, frog, 1);
+      }
     });
     this.physics.add.collider(game.explosions, game.robots, (explosion, robot) => {
       killRobot(this, game, robot, 0.1);
@@ -440,11 +449,11 @@ export class Game extends Phaser.Scene {
     this.engine.setPhaserInterval(() => {
       game.robots.getChildren().forEach(robot => {
         if (robot.type === "cannon") {
-          let projectile = game.cannonRobotProjectiles.create(robot.x - 40, robot.y + 20, "cannonProjectile").setScale(8).setGravityY(-1500).setVelocityX(-300);
+          let projectile = game.robotProjectiles.create(robot.x - 40, robot.y + 20, "cannonProjectile").setScale(8).setGravityY(-1500).setVelocityX(-300);
           projectile.setSize(2, 2);
           projectile.setOffset(6, 2);
         } else if (robot.type === "missile") {
-          let projectile = game.cannonRobotProjectiles.create(robot.x - 40, robot.y - 4, "missile").setScale(8).setGravityY(-1500).setVelocityX(-300);
+          let projectile = game.robotProjectiles.create(robot.x - 40, robot.y - 4, "missile").setScale(8).setGravityY(-1500).setVelocityX(-300);
           projectile.setSize(8, 7);
           projectile.setOffset(0, 1);
         }
@@ -549,7 +558,7 @@ export class Game extends Phaser.Scene {
     game.tiles.getChildren().forEach(tile => {
       let hasFrog = null;
       game.frogs.getChildren().forEach(frog => {
-        if (frog.x == tile.x && frog.y == tile.y) {
+        if ((frog.x === tile.x || frog.x - 8 === tile.x) && frog.y === tile.y) {
           hasFrog = frog;
         }
       });
@@ -639,13 +648,14 @@ export class Game extends Phaser.Scene {
             });
             break;
           case "boxed":
-            playSound(game, "cannonFrogShoot");
             frog.anims.play("boxedFrogComeUp", true);
+            frog.damageable = true;
             setTimeout(function() {
+              playSound(game, "cannonFrogShoot");
               let projectile = game.projectiles.create(frog.x, frog.y, "cannonProjectile").setScale(8).setGravityY(-1500).setVelocityX(300);
               projectile.type = "cannon";
-              console.log("L");
               frog.anims.play("boxedFrogGoDown", true);
+              frog.damageable = false;
             }, 5000);
             break;
         }
