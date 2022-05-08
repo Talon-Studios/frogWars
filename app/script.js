@@ -205,8 +205,9 @@ export class Game extends Phaser.Scene {
     game.choices = this.physics.add.staticGroup();
     game.choiceBorders = this.physics.add.staticGroup();
     let frogCount = 0;
-    const frogs = ["cannon", "topHat", "basic", "launcher", "toad", "water", "fire", "commander", "bullfrog", "bomber", "bird"];
+    const frogs = ["cannon", "topHat", "basic", "launcher", "toad", "water", "fire", "commander", "bullfrog", "bomber", "boxed", "bird"];
     for (var x = 80; x < frogs.length * (game.TILESIZE + 25); x += game.TILESIZE + 25) {
+      let frog = game.frogTypes[frogs[frogCount]];
       let border = game.choiceBorders.create(x, game.TILESIZE, "optionBorder0");
       border.setScale(8);
       border.setInteractive();
@@ -215,10 +216,13 @@ export class Game extends Phaser.Scene {
         border.clicked = true;
         border.setTexture("optionBorder2");
       }
-      let choice = game.choices.create(x, game.TILESIZE, game.frogTypes[frogs[frogCount]].path);
+      let choice = game.choices.create(x, game.TILESIZE, frog.path);
+      if (frog.name === "boxed") {
+        choice.x += 8;
+      }
       choice.setScale(8);
       choice.setInteractive();
-      choice.frogType = game.frogTypes[frogs[frogCount]].name;
+      choice.frogType = frog.name;
       choice.border = border;
       border.frogType = choice.frogType;
       frogCount++;
@@ -276,6 +280,9 @@ export class Game extends Phaser.Scene {
               frog.setImmovable();
             } else {
               frog = game.frogs.create(tile.x, tile.y, game.frogTypes[game.currentSelection].path);
+            }
+            if (game.currentSelection === "boxed") {
+              frog.x += 8;
             }
             frog.setScale(8);
             frog.setGravityY(-1500);
