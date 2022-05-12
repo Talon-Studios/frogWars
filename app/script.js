@@ -115,6 +115,8 @@ export class Game extends Phaser.Scene {
     this.load.image("missileRobot1", "assets/missileRobot1.png");
     this.load.image("hurtMissileRobot", "assets/hurtMissileRobot.png");
     this.load.image("missile", "assets/missile.png");
+    this.load.image("loudspeakerRobot0", "assets/loudspeakerRobot0.png");
+    this.load.image("loudspeakerRobot1", "assets/loudspeakerRobot1.png");
 
     // ---------- Other ----------
     this.load.image("tile0", "assets/tile0.png");
@@ -249,6 +251,7 @@ export class Game extends Phaser.Scene {
     this.engine.addAnimation("cannonRobotWalk", 5, false, false, "cannonRobot0", "cannonRobot1");
     this.engine.addAnimation("dodgerRobotWalk", 5, false, false, "dodgerRobot0", "dodgerRobot1");
     this.engine.addAnimation("missileRobotWalk", 5, false, false, "missileRobot0", "missileRobot1");
+    this.engine.addAnimation("loudspeakerRobotWalk", 5, false, false, "loudspeakerRobot0", "loudspeakerRobot1");
 
     // Other
     this.engine.addAnimation("jump", 10, false, false, "basicFrog0", "basicFrog1", "basicFrog2", "basicFrog0");
@@ -548,6 +551,9 @@ export class Game extends Phaser.Scene {
           case "missile":
             robot.anims.play("missileRobotWalk", true);
             break;
+          case "loudspeaker":
+            robot.anims.play("loudspeakerRobotWalk", true);
+            break;
         }
         if (robot.fireDamage) {
           if (robot.type === "speed" || robot.type === "dodger") {
@@ -735,22 +741,26 @@ export class Game extends Phaser.Scene {
         type = "armored";
         health = game.robotTypes.armoredRobot.health;
         speed = game.robotTypes.armoredRobot.speed;
-      } else if (randomPercentage >= 75 && randomPercentage < 81.25) {
+      } else if (randomPercentage >= 75 && randomPercentage < 80) {
         type = "speed";
         health = game.robotTypes.speedRobot.health;
         speed = game.robotTypes.speedRobot.speed;
-      } else if (randomPercentage >= 81.25 && randomPercentage < 87.5) {
+      } else if (randomPercentage >= 80 && randomPercentage < 85) {
         type = "cannon";
         health = game.robotTypes.cannonRobot.health;
         speed = game.robotTypes.cannonRobot.speed;
-      } else if (randomPercentage >= 87.5 && randomPercentage < 93.75) {
+      } else if (randomPercentage >= 85 && randomPercentage < 90) {
         type = "dodger";
         health = game.robotTypes.dodgerRobot.health;
         speed = game.robotTypes.dodgerRobot.speed;
-      } else if (randomPercentage >= 93.75) {
+      } else if (randomPercentage >= 90 && randomPercentage < 95) {
         type = "missile";
         health = game.robotTypes.missileRobot.health;
         speed = game.robotTypes.missileRobot.speed;
+      } else if (randomPercentage >= 95 && randomPercentage <= 100) {
+        type = "loudspeaker";
+        health = game.robotTypes.loudspeakerRobot.health;
+        speed = game.robotTypes.loudspeakerRobot.speed;
       }
       let robot = game.robots.create(game.width * game.TILESIZE + 8, (game.TILESIZE / 2 + game.TILESIZE * row) + game.topMargin, `${type}Robot0`).setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0);
       robot.type = type;
