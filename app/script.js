@@ -8,6 +8,7 @@ import {loadingBar} from "../functions/loadingBar.js";
 import {playSound} from "../functions/playSound.js";
 import {killRobot} from "../functions/robotDie.js";
 import {killFrog} from "../functions/frogDie.js";
+import {preloadImages, preloadAudio} from "../functions/preload.js";
 
 import {firebaseConfig} from "../firebaseConfig.js";
 import {initializeApp} from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
@@ -59,109 +60,9 @@ export class Game extends Phaser.Scene {
   preload() {
     this.engine = new Engine(this);
 
-    // ********** Images **********
-    // ---------- Frogs ----------
-    this.load.image("basicFrog0", "assets/basicFrog0.png");
-    this.load.image("basicFrog1", "assets/basicFrog1.png");
-    this.load.image("basicFrog2", "assets/basicFrog2.png");
-    this.load.image("basicFrog3", "assets/basicFrog3.png");
-    this.load.image("cannonFrog0", "assets/cannonFrog0.png");
-    this.load.image("cannonFrog1", "assets/cannonFrog1.png");
-    this.load.image("hurtCannonFrog", "assets/hurtCannonFrog.png");
-    this.load.image("cannonProjectile", "assets/cannonProjectile.png");
-    this.load.image("launcherFrog", "assets/launcherFrog.png");
-    this.load.image("hurtLauncherFrog", "assets/hurtLauncherFrog.png");
-    this.load.image("launcherProjectile", "assets/launcherProjectile.png");
-    this.load.image("toad", "assets/toad.png");
-    this.load.image("hurtToad", "assets/hurtToad.png");
-    this.load.image("waterFrog0", "assets/waterFrog0.png");
-    this.load.image("waterFrog1", "assets/waterFrog1.png");
-    this.load.image("hurtWaterFrog", "assets/hurtWaterFrog.png");
-    this.load.image("water", "assets/water.png");
-    this.load.image("fireFrog0", "assets/fireFrog0.png");
-    this.load.image("fireFrog1", "assets/fireFrog1.png");
-    this.load.image("fireFrog2", "assets/fireFrog2.png");
-    this.load.image("fireball0", "assets/fireball0.png");
-    this.load.image("fireball1", "assets/fireball1.png");
-    this.load.image("hurtFireFrog", "assets/hurtFireFrog.png");
-    this.load.image("commanderFrog", "assets/commanderFrog.png");
-    this.load.image("topHatFrog", "assets/topHatFrog.png");
-    this.load.image("hurtTopHatFrog", "assets/hurtTopHatFrog.png");
-    this.load.image("bullfrog", "assets/bullfrog.png");
-    this.load.image("bomberFrog", "assets/bomberFrog.png");
-    this.load.image("bomb", "assets/bomb.png");
-    this.load.image("boxedFrog0", "assets/boxedFrog0.png");
-    this.load.image("boxedFrog1", "assets/boxedFrog1.png");
-    this.load.image("boxedFrog2", "assets/boxedFrog2.png");
-    this.load.image("boxedFrog3", "assets/boxedFrog3.png");
-    this.load.image("hurtBoxedFrog", "assets/hurtBoxedFrog.png");
-
-    // ---------- Robots ----------
-    this.load.image("basicRobot0", "assets/basicRobot0.png");
-    this.load.image("basicRobot1", "assets/basicRobot1.png");
-    this.load.image("hurtRobot", "assets/hurtRobot.png");
-    this.load.image("armoredRobot0", "assets/armoredRobot0.png");
-    this.load.image("armoredRobot1", "assets/armoredRobot1.png");
-    this.load.image("speedRobot0", "assets/speedRobot0.png");
-    this.load.image("speedRobot1", "assets/speedRobot1.png");
-    this.load.image("hurtSpeedRobot", "assets/speedRobot2.png");
-    this.load.image("cannonRobot0", "assets/cannonRobot0.png");
-    this.load.image("cannonRobot1", "assets/cannonRobot1.png");
-    this.load.image("hurtCannonRobot", "assets/hurtCannonRobot.png");
-    this.load.image("dodgerRobot0", "assets/dodgerRobot0.png");
-    this.load.image("dodgerRobot1", "assets/dodgerRobot1.png");
-    this.load.image("hurtDodgerRobot", "assets/hurtDodgerRobot.png");
-    this.load.image("missileRobot0", "assets/missileRobot0.png");
-    this.load.image("missileRobot1", "assets/missileRobot1.png");
-    this.load.image("hurtMissileRobot", "assets/hurtMissileRobot.png");
-    this.load.image("missile", "assets/missile.png");
-    this.load.image("loudspeakerRobot0", "assets/loudspeakerRobot0.png");
-    this.load.image("loudspeakerRobot1", "assets/loudspeakerRobot1.png");
-    this.load.image("soundWave0", "assets/soundWave0.png");
-    this.load.image("soundWave1", "assets/soundWave1.png");
-    this.load.image("soundWave2", "assets/soundWave2.png");
-
-    // ---------- Other ----------
-    this.load.image("tile0", "assets/tile0.png");
-    this.load.image("tile1", "assets/tile1.png");
-    this.load.image("tile0select", "assets/tile0select.png");
-    this.load.image("tile1select", "assets/tile1select.png");
-    this.load.image("explosion0", "assets/explosion0.png");
-    this.load.image("explosion1", "assets/explosion1.png");
-    this.load.image("explosion2", "assets/explosion2.png");
-    this.load.image("explosion3", "assets/explosion3.png");
-    this.load.image("bigExplosion0", "assets/bigExplosion0.png");
-    this.load.image("bigExplosion1", "assets/bigExplosion1.png");
-    this.load.image("bigExplosion2", "assets/bigExplosion2.png");
-    this.load.image("bigExplosion3", "assets/bigExplosion3.png");
-    this.load.image("bird0", "assets/bird0.png");
-    this.load.image("bird1", "assets/bird1.png");
-    this.load.image("cursor", "assets/cursor.png");
-    this.load.image("optionBorder0", "assets/optionBorder0.png");
-    this.load.image("optionBorder1", "assets/optionBorder1.png");
-    this.load.image("optionBorder2", "assets/optionBorder2.png");
-    this.load.image("fireHat0", "assets/fireHat0.png");
-    this.load.image("fireHat1", "assets/fireHat1.png");
-    this.load.image("fireHat2", "assets/fireHat2.png");
-    this.load.image("X", "assets/X.png");
-    this.load.image("fly0", "assets/fly0.png");
-    this.load.image("fly1", "assets/fly1.png");
-
-    // ********** Sounds **********
-    // ---------- Music ----------
-    this.load.audio("music1-10", "assets/music1-10.mp3");
-
-    // ---------- SFX ----------
-    this.load.audio("cannonFrogShoot", "assets/cannonFrogShoot.mp3");
-    this.load.audio("launcherFrogShoot", "assets/launcherFrogShoot.mp3");
-    this.load.audio("waterFrogShoot", "assets/waterFrogShoot.mp3");
-    this.load.audio("fireFrogShoot", "assets/fireFrogShoot.mp3");
-    this.load.audio("robotDie", "assets/robotDie.mp3");
-    this.load.audio("robotHit", "assets/robotHit.mp3");
-    this.load.audio("basicFrogJump", "assets/basicFrogJump.mp3");
-    this.load.audio("fly", "assets/fly.mp3");
-    this.load.audio("bigExplosion", "assets/bigExplosion.wav");
-    this.load.audio("bullfrog", "assets/bullfrog.wav");
+    // Load assets
+    preloadImages(this);
+    preloadAudio(this);
 
     // Initialize loading bar
     loadingBar(this);
