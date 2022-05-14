@@ -117,6 +117,9 @@ export class Game extends Phaser.Scene {
     this.load.image("missile", "assets/missile.png");
     this.load.image("loudspeakerRobot0", "assets/loudspeakerRobot0.png");
     this.load.image("loudspeakerRobot1", "assets/loudspeakerRobot1.png");
+    this.load.image("soundWave0", "assets/soundWave0.png");
+    this.load.image("soundWave1", "assets/soundWave1.png");
+    this.load.image("soundWave2", "assets/soundWave2.png");
 
     // ---------- Other ----------
     this.load.image("tile0", "assets/tile0.png");
@@ -252,6 +255,7 @@ export class Game extends Phaser.Scene {
     this.engine.addAnimation("dodgerRobotWalk", 5, false, false, "dodgerRobot0", "dodgerRobot1");
     this.engine.addAnimation("missileRobotWalk", 5, false, false, "missileRobot0", "missileRobot1");
     this.engine.addAnimation("loudspeakerRobotWalk", 5, false, false, "loudspeakerRobot0", "loudspeakerRobot1");
+    this.engine.addAnimation("soundWave", 5, false, false, "soundWave0", "soundWave1", "soundWave2");
 
     // Other
     this.engine.addAnimation("jump", 10, false, false, "basicFrog0", "basicFrog1", "basicFrog2", "basicFrog0");
@@ -301,6 +305,9 @@ export class Game extends Phaser.Scene {
             frog.setImmovable();
             frog.type = game.currentSelection;
             frog.isDead = false;
+            frog.stunned = false;
+            frog.stunTimer = 0;
+            frog.stunTimerMax = 500;
             frog.health = game.frogTypes[frog.type].health;
             frog.touchedBird = false;
             frog.actionTimer = game.funEnabled ? 10 : 200;
@@ -445,10 +452,18 @@ export class Game extends Phaser.Scene {
       projectile.destroy();
       if (frog.type === "boxed") {
         if (frog.damageable) {
-          killFrog(this, game, frog, 1);
+          killFrog(this, game, frog, game.projectileStats[projectile.type].damage, () => {
+            if (projectile.type === "soundWave") {
+              frog.stunned = true;
+            }
+          });
         }
       } else {
-        killFrog(this, game, frog, 1);
+        killFrog(this, game, frog, game.projectileStats[projectile.type].damage, () => {
+          if (projectile.type === "soundWave") {
+            frog.stunned = true;
+          }
+        });
       }
     });
     this.physics.add.collider(game.explosions, game.robots, (explosion, robot) => {
@@ -463,12 +478,13 @@ export class Game extends Phaser.Scene {
           let projectile = game.robotProjectiles.create(robot.x - 40, robot.y + 20, "cannonProjectile").setScale(8).setGravityY(-1500).setVelocityX(-300);
           projectile.setSize(2, 2);
           projectile.setOffset(6, 2);
+          projectile.type = "cannon";
         } else if (robot.type === "missile") {
           let projectile = game.robotProjectiles.create(robot.x - 40, robot.y - 4, "missile").setScale(8).setGravityY(-1500).setVelocityX(-300);
           projectile.setSize(8, 7);
           projectile.setOffset(0, 1);
-        }
-        else if (robot.type === "dodger") {
+          projectile.type = "missile";
+        } else if (robot.type === "dodger") {
           let randomDir = Math.floor(Math.random() * 2);
           if (randomDir === 0) {
             robot.y -= game.TILESIZE;
@@ -481,6 +497,9 @@ export class Game extends Phaser.Scene {
               robot.y -= game.TILESIZE * 2;
             }
           }
+        } else if (robot.type === "loudspeaker") {
+          let projectile = game.robotProjectiles.create(robot.x - 40, robot.y, "soundWave0").setScale(8).setGravityY(-1500).setVelocityX(-100);
+          projectile.type = "soundWave";
         }
         if (robot.fireDamage) {
           killRobot(this, game, robot, 0.1);
@@ -580,7 +599,7 @@ export class Game extends Phaser.Scene {
     });
     game.frogs.getChildren().forEach(frog => {
       frog.actionTimer--;
-      if (frog.actionTimer <= 0) {
+      if (frog.actionTimer <= 0 && !frog.stunned) {
         frog.actionTimer = frog.actionTimerMax;
         let robotOnRow = false;
         game.robots.getChildren().forEach(robot => {
@@ -704,6 +723,12 @@ export class Game extends Phaser.Scene {
       if (frog.type === "bullfrog") {
         frog.x += 10;
       }
+      if (frog.stunned) {
+        frog.stunTimer++;
+        if (frog.stunTimer >= frog.stunTimerMax) {
+          frog.stunned = false
+        }
+      }
     });
     game.removalBirds.getChildren().forEach(bird => {
       if (bird.x > game.width * game.TILESIZE) {
@@ -721,6 +746,11 @@ export class Game extends Phaser.Scene {
         projectile.destroy();
       }
     });
+    game.robotProjectiles.getChildren().forEach(projectile => {
+      if (projectile.type === "soundWave") {
+        projectile.anims.play("soundWave", true);
+      }
+    });
     game.flies.getChildren().forEach(fly => {
       fly.anims.play("flies", true);
     });
@@ -729,7 +759,7 @@ export class Game extends Phaser.Scene {
     game.robotSpawnTimer++;
     if (game.robotSpawnTimer >= game.robotSpawnDelay) {
       let row = Math.floor(Math.random() * game.height);
-      let randomPercentage = Math.random() * 100;
+      let randomPercentage = this.engine.randomPercentage();
       let type;
       let health;
       let speed;
