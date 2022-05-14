@@ -16,10 +16,10 @@ import {getFirestore, doc, getDoc} from "https://www.gstatic.com/firebasejs/9.6.
 
 // ********** Game Object **********
 export let game = {
-  width: 20,
-  height: 7,
+  WIDTH: 20,
+  HEIGHT: 7,
   TILESIZE: 64,
-  topMargin: 167,
+  TOPMARGIN: 167,
   sfx: {},
   musicEnabled: (localStorage.getItem("musicEnabled") !== null) ? JSON.parse(localStorage.getItem("musicEnabled")) : true,
   sfxEnabled: (localStorage.getItem("sfxEnabled") !== null) ? JSON.parse(localStorage.getItem("sfxEnabled")) : true,
@@ -94,8 +94,8 @@ export class Game extends Phaser.Scene {
     // Create tiles
     game.tiles = this.physics.add.staticGroup();
     let tileCount = 0;
-    for (var x = game.TILESIZE / 2; x < game.width * game.TILESIZE; x += game.TILESIZE) {
-      for (var y = (game.TILESIZE / 2) + game.topMargin; y < (game.height * game.TILESIZE) + game.topMargin; y += game.TILESIZE) {
+    for (var x = game.TILESIZE / 2; x < game.WIDTH * game.TILESIZE; x += game.TILESIZE) {
+      for (var y = (game.TILESIZE / 2) + game.TOPMARGIN; y < (game.HEIGHT * game.TILESIZE) + game.TOPMARGIN; y += game.TILESIZE) {
         if (tileCount % 2 == 0) {
           let tile = game.tiles.create(x, y, "tile0");
           tile.setScale(8);
@@ -389,12 +389,12 @@ export class Game extends Phaser.Scene {
           let randomDir = Math.floor(Math.random() * 2);
           if (randomDir === 0) {
             robot.y -= game.TILESIZE;
-            if (robot.y < game.topMargin) {
+            if (robot.y < game.TOPMARGIN) {
               robot.y += game.TILESIZE * 2;
             }
           } else {
             robot.y += game.TILESIZE;
-            if (robot.y > (game.height * game.TILESIZE) + game.topMargin) {
+            if (robot.y > (game.HEIGHT * game.TILESIZE) + game.TOPMARGIN) {
               robot.y -= game.TILESIZE * 2;
             }
           }
@@ -597,7 +597,7 @@ export class Game extends Phaser.Scene {
       if (frog.type === "fire") {
         frog.anims.play("fireFrog", true);
       }
-      if (frog.x > game.width * game.TILESIZE || frog.y < 0) {
+      if (frog.x > game.WIDTH * game.TILESIZE || frog.y < 0) {
         frog.destroy();
       }
       if (frog.touchedBird) {
@@ -632,7 +632,7 @@ export class Game extends Phaser.Scene {
       }
     });
     game.removalBirds.getChildren().forEach(bird => {
-      if (bird.x > game.width * game.TILESIZE) {
+      if (bird.x > game.WIDTH * game.TILESIZE) {
         bird.destroy();
       }
       if (bird.touchedFrog) {
@@ -643,7 +643,7 @@ export class Game extends Phaser.Scene {
       if (projectile.type === "fireball") {
         projectile.anims.play("fireball", true);
       }
-      if (projectile.x > game.width * game.TILESIZE || projectile.x < 0) {
+      if (projectile.x > game.WIDTH * game.TILESIZE || projectile.x < 0) {
         projectile.destroy();
       }
     });
@@ -659,7 +659,7 @@ export class Game extends Phaser.Scene {
     // Update timers
     game.robotSpawnTimer++;
     if (game.robotSpawnTimer >= game.robotSpawnDelay) {
-      let row = Math.floor(Math.random() * game.height);
+      let row = Math.floor(Math.random() * game.HEIGHT);
       let randomPercentage = this.engine.randomPercentage();
       let type;
       let health;
@@ -693,7 +693,7 @@ export class Game extends Phaser.Scene {
         health = game.robotTypes.loudspeakerRobot.health;
         speed = game.robotTypes.loudspeakerRobot.speed;
       }
-      let robot = game.robots.create(game.width * game.TILESIZE + 8, (game.TILESIZE / 2 + game.TILESIZE * row) + game.topMargin, `${type}Robot0`).setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0);
+      let robot = game.robots.create(game.WIDTH * game.TILESIZE + 8, (game.TILESIZE / 2 + game.TILESIZE * row) + game.TOPMARGIN, `${type}Robot0`).setScale(8).setGravityY(-1500).setSize(4, 8).setOffset(2, 0);
       robot.type = type;
       robot.health = health;
       robot.speed = speed;
