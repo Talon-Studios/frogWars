@@ -9,6 +9,7 @@ import {playSound} from "../functions/playSound.js";
 import {killRobot} from "../functions/robotDie.js";
 import {killFrog} from "../functions/frogDie.js";
 import {preloadImages, preloadAudio} from "../functions/preload.js";
+import {loadSounds} from "../functions/loadSounds.js";
 
 import {firebaseConfig} from "../firebaseConfig.js";
 import {initializeApp} from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
@@ -68,18 +69,7 @@ export class Game extends Phaser.Scene {
     loadingBar(this);
   }
   create() {
-    // Add sounds
-    game.sfx["cannonFrogShoot"] = this.sound.add("cannonFrogShoot");
-    game.sfx["launcherFrogShoot"] = this.sound.add("launcherFrogShoot");
-    game.sfx["waterFrogShoot"] = this.sound.add("waterFrogShoot");
-    game.sfx["fireFrogShoot"] = this.sound.add("fireFrogShoot");
-    game.sfx["robotDie"] = this.sound.add("robotDie");
-    game.sfx["robotHit"] = this.sound.add("robotHit");
-    game.sfx["basicFrogJump"] = this.sound.add("basicFrogJump");
-    game.sfx["fly"] = this.sound.add("fly");
-    game.sfx["music1"] = this.sound.add("music1-10").setLoop(true);
-    game.sfx["bullfrog"] = this.sound.add("bullfrog");
-    game.sfx["bigExplosion"] = this.sound.add("bigExplosion");
+    loadSounds(game, this);
     if (game.musicEnabled) game.sfx.music1.play({volume: 0.5});
 
     // Nothing here...
