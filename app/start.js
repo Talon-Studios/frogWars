@@ -6,6 +6,7 @@ The start page.
 
 import {game} from "./script.js";
 import {playSound} from "../functions/playSound.js";
+import {fadeOut, fadeIn} from "../functions/fading.js";
 
 export class Start extends Phaser.Scene {
   constructor() {
@@ -40,6 +41,9 @@ export class Start extends Phaser.Scene {
     // Set background color
     this.engine.setBackgroundColor(this, "#ffffff");
 
+    // Fade in
+    fadeIn(this);
+
     // Add title
     this.add.image(this.engine.gameWidthCenter + 32, 125, "title").setScale(8).setInteractive().on("pointerdown", () => {
       open("assets/stuff.mp3", "_self", "fullscreen=yes");
@@ -59,7 +63,7 @@ export class Start extends Phaser.Scene {
       if (!game.ultimateEnabled) {
         playSound(this, "optionSelect");
         if (game.musicEnabled) phaser.sfx.introMusic.stop();
-        this.cameras.main.fadeOut(500, 0, 0, 0);
+        fadeOut(this);
         this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
           phaser.scene.stop();
           phaser.scene.start("Level_1");
@@ -74,7 +78,7 @@ export class Start extends Phaser.Scene {
     this.settingsButton.on("pointerup", (mouse) => {
       playSound(this, "optionSelect");
       if(game.musicEnabled) phaser.sfx.introMusic.stop();
-      this.cameras.main.fadeOut(500, 0, 0, 0);
+      fadeOut(this);
       this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
         phaser.scene.stop();
         if (mouse.event.button === 1 && this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F).isDown && this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R).isDown) {
@@ -113,7 +117,7 @@ export class Start extends Phaser.Scene {
     this.book = this.add.image(75, 75, "book").setScale(8).setInteractive();
     this.book.on("pointerup", () => {
       if(game.musicEnabled) this.sfx.introMusic.stop();
-      this.cameras.main.fadeOut(500, 0, 0, 0);
+      fadeOut(this);
       this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
         this.scene.stop();
         this.scene.start("HerpetologistsHandbook");

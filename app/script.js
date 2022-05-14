@@ -10,6 +10,7 @@ import {killRobot} from "../functions/robotDie.js";
 import {killFrog} from "../functions/frogDie.js";
 import {preloadImages, preloadAudio} from "../functions/preload.js";
 import {loadSounds} from "../functions/loadSounds.js";
+import {fadeIn, fadeOut} from "../functions/fading.js"
 
 import {firebaseConfig} from "../firebaseConfig.js";
 import {initializeApp} from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
@@ -79,7 +80,7 @@ export class Game extends Phaser.Scene {
     this.engine.pixelCursor();
 
     // Fade into game
-    this.cameras.main.fadeIn(500, 0, 0, 0);
+    fadeIn(this);
 
     // Create tiles
     game.tiles = this.physics.add.staticGroup();
