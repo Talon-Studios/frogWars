@@ -12,6 +12,7 @@ import {preloadImages, preloadAudio} from "../functions/preload.js";
 import {loadSounds} from "../functions/loadSounds.js";
 import {fadeIn, fadeOut} from "../functions/fading.js";
 import {animation} from "../functions/animation.js";
+import {createTiles} from "../functions/createTiles.js";
 
 import {firebaseConfig} from "../firebaseConfig.js";
 import {initializeApp} from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
@@ -85,23 +86,7 @@ export class Game extends Phaser.Scene {
 
     // Create tiles
     game.tiles = this.physics.add.staticGroup();
-    let tileCount = 0;
-    for (var x = game.TILESIZE / 2; x < game.WIDTH * game.TILESIZE; x += game.TILESIZE) {
-      for (var y = (game.TILESIZE / 2) + game.TOPMARGIN; y < (game.HEIGHT * game.TILESIZE) + game.TOPMARGIN; y += game.TILESIZE) {
-        if (tileCount % 2 == 0) {
-          let tile = game.tiles.create(x, y, "tile0");
-          tile.setScale(8);
-          tile.setInteractive();
-          tile.textureKey = "tile0";
-        } else {
-          let tile = game.tiles.create(x, y, "tile1").setScale(8).setInteractive();
-          tile.setScale(8);
-          tile.setInteractive();
-          tile.textureKey = "tile1";
-        }
-        tileCount++;
-      }
-    }
+    createTiles(game);
 
     // Create choices to put in game
     game.choices = this.physics.add.staticGroup();
