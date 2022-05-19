@@ -383,7 +383,8 @@
     "yocto-queue": "^0.1.0"
   },
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -400,5 +401,8 @@
   "bugs": {
     "url": "https://github.com/thcheetah777/frogWars/issues"
   },
-  "homepage": "https://github.com/thcheetah777/frogWars#readme"
+  "homepage": "https://github.com/thcheetah777/frogWars#readme",
+  "devDependencies": {
+    "jest": "^28.1.0"
+  }
 }
