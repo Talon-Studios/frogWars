@@ -10,7 +10,7 @@ import {killRobot} from "../functions/robotDie.js";
 import {killFrog} from "../functions/frogDie.js";
 import {preloadImages, preloadAudio} from "../functions/preload.js";
 import {loadSounds} from "../functions/loadSounds.js";
-import {fadeIn, fadeOut} from "../functions/fading.js";
+import {fadeIn} from "../functions/fading.js";
 import {animation} from "../functions/animation.js";
 import {createTiles} from "../functions/createTiles.js";
 
