@@ -4,6 +4,8 @@ herpetologistsHandbook.js
 A catalog of all the types of frogs.
 *^*^*^*^*^*^*^*/
 
+import {fadeIn, fadeOut} from "../functions/fading.js";
+
 export class HerpetologistsHandbook extends Phaser.Scene {
   constructor() {
     super("HerpetologistsHandbook");
@@ -39,7 +41,7 @@ export class HerpetologistsHandbook extends Phaser.Scene {
     this.engine.setBackgroundColor(this, "#ffffff");
 
     // Fade in
-    this.cameras.main.fadeIn(500, 0, 0, 0);
+    fadeIn(this);
 
     // Create arrows
     this.leftArrow = this.add.image(this.engine.gameWidthCenter - 200, this.engine.gameHeight - 50, "leftArrowDisabled").setScale(8).setInteractive();
@@ -85,7 +87,7 @@ export class HerpetologistsHandbook extends Phaser.Scene {
     // Create backbutton
     this.backButton = this.add.image(180, 80, "backSetting").setScale(8).setInteractive();
     this.backButton.on("pointerup", () => {
-      this.cameras.main.fadeOut(500, 0, 0, 0);
+      fadeOut(this);
       this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
         this.scene.stop();
         this.scene.start("Start");

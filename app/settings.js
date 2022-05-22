@@ -5,6 +5,7 @@ The settings page for sfx and music.
 *^*^*^*^*^*^*^*/
 
 import {game} from "./script.js";
+import {fadeIn, fadeOut} from "../functions/fading.js";
 
 export class Settings extends Phaser.Scene {
   constructor() {
@@ -37,7 +38,7 @@ export class Settings extends Phaser.Scene {
     this.engine.setBackgroundColor(this, "#ffffff");
 
     // Fade in
-    this.cameras.main.fadeIn(500, 0, 0, 0);
+    fadeIn(this);
 
     // Create text
     this.musicSetting = this.add.image(this.engine.gameWidthCenter + 42, 200, "musicSetting").setScale(8).setInteractive();
@@ -74,7 +75,7 @@ export class Settings extends Phaser.Scene {
       }
     });
     this.backSetting.on("pointerup", () => {
-      this.cameras.main.fadeOut(500, 0, 0, 0);
+      fadeOut(this);
       this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
         this.scene.stop();
         this.scene.start("Start");
@@ -126,7 +127,7 @@ export class Settings2 extends Phaser.Scene {
     this.engine.setBackgroundColor(this, "#ffffff");
 
     // Fade in
-    this.cameras.main.fadeIn(500, 0, 0, 0);
+    fadeIn(this);
 
     // Create options
     this.add.image(this.engine.gameWidthCenter + 42, 200, "frogsText").setScale(8).setInteractive();
@@ -174,7 +175,7 @@ export class Settings2 extends Phaser.Scene {
     // Create backbutton
     this.backSetting = this.add.image(this.engine.gameWidthCenter, 490, "backSetting").setScale(8).setInteractive();
     this.backSetting.on("pointerup", () => {
-      this.cameras.main.fadeOut(500, 0, 0, 0);
+      fadeOut(this);
       this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
         this.scene.stop();
         this.scene.start("Start");
